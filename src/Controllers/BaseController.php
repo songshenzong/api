@@ -1,6 +1,6 @@
 <?php namespace Songshenzong\Log\Controllers;
 
-use Songshenzong\Log\LaravelDebugbar;
+use Songshenzong\Log\HttpJson;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 
@@ -10,7 +10,7 @@ if (class_exists('Illuminate\Routing\Controller')) {
     {
         protected $debugbar;
 
-        public function __construct(Request $request, LaravelDebugbar $debugbar)
+        public function __construct(Request $request, HttpJson $debugbar)
         {
             $this->debugbar = $debugbar;
 
@@ -26,7 +26,7 @@ if (class_exists('Illuminate\Routing\Controller')) {
     {
         protected $debugbar;
 
-        public function __construct(Request $request, LaravelDebugbar $debugbar)
+        public function __construct(Request $request, HttpJson $debugbar)
         {
             $this->debugbar = $debugbar;
 

@@ -4,7 +4,7 @@ namespace Songshenzong\Log\Controllers;
 
 use Illuminate\Contracts\Foundation\Application;
 use Songshenzong\Log\SongshenzongLog;
-use Songshenzong\Log\LaravelDebugbar;
+use Songshenzong\Log\HttpJson;
 
 class ApiController extends BaseController
 {
@@ -18,7 +18,7 @@ class ApiController extends BaseController
     /**
      * The Songshenzong instance
      *
-     * @var LaravelDebugbar
+     * @var HttpJson
      */
     protected $songshenzong;
 
@@ -34,7 +34,7 @@ class ApiController extends BaseController
      *
      * @param \Illuminate\Contracts\Foundation\Application $app
      */
-    public function __construct(Application $app, LaravelDebugbar $songshenzong)
+    public function __construct(Application $app, HttpJson $songshenzong)
     {
         $this -> app          = $app;
         $this -> songshenzong = $songshenzong;
