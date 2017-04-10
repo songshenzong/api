@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>Songshenzong</title>
+    <meta name="robots" content="noindex,nofollow">
+    <script src='http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js'></script>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="http://apps.bdimg.com/libs/layer/2.1/layer.js"></script>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <script>
+        var List;
+        var loading;
+        var token;
+
+
+        /**---------------------------------------------------------
+         *   Clear Token.
+         *---------------------------------------------------------*/
+        function clearToken() {
+            token = '';
+            jQuery("#token").val('');
+            localStorage.setItem('songshenzong_token', token);
+            jQuery.ajaxSetup({
+                data: {token: token},
+            });
+        }
+        /**---------------------------------------------------------
+         *   Ready Go!
+         *---------------------------------------------------------*/
+        jQuery(document).ready(function () {
+
+            jQuery("#token").val(localStorage.getItem('songshenzong_token'));
+
+            token = jQuery("#token").val().toString();
+
+            jQuery("#token").bind('input propertychange', function () {
+                token = jQuery("#token").val().toString();
+                jQuery.ajaxSetup({
+                    data: {token: token},
+                });
+                localStorage.setItem('songshenzong_token', token);
+                console.log(localStorage.getItem('songshenzong_token'));
+            })
+
+
+            /**---------------------------------------------------------
+             *   Global settings of the Ajax.
+             *---------------------------------------------------------*/
+
+            jQuery.ajaxSetup({
+                cache: false,
+                aysnc: true,
+                url: "",
+                type: "GET",
+                data: {token: token},
+                dataType: "json",
+                beforeSend: function () {
+
+                    if (!token) {
+                        information('Enter Token First.');
+                        return false;
+                        jQuery("#token").focus();
+                    }
+
+                    layer.closeAll();
+                    loading = layer.load(1, {
+                        shade: [0.4, '#000']
+                    });
+
+                },
+                complete: function () {
+                    layer.close(loading);
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    information('May be a network error.');
+                }
+            });
+
+            /**---------------------------------------------------------
+             *   Get list of the logs.
+             *---------------------------------------------------------*/
+            logList('/songshenzong/logs');
+
+
+        });
+
+
+        /**---------------------------------------------------------
+         *   Get list of logs.
+         *---------------------------------------------------------*/
+        function logList(url) {
+            jQuery.getJSON(url,
+                function (result) {
+                    if (!verify(result)) {
+                        return false;
+                    }
+
+                    layer.msg(result.message);
+
+                    if (List) {
+                        List.items = result.data;
+                    } else {
+                        List = new Vue({
+                            el: '#items',
+                            delimiters: ['[[', ']]'],
+                            data: {
+                                items: result.data,
+                            },
+                            methods: {
+                                getClass: function (status_code) {
+                                    if (status_code == 200) {
+                                        return 'success';
+                                    } else if (status_code == 500 || status_code == 404) {
+                                        return 'danger';
+                                    } else if (status_code == 403 || status_code == 400) {
+                                        return 'info';
+                                    } else if (status_code == 422) {
+                                        return 'warning';
+                                    } else {
+                                        return 'active';
+                                    }
+                                },
+                                getDetail: function (item) {
+                                    window.open("/songshenzong/logs/" + item.id + '?token=' + jQuery("#token").val());
+                                },
+                                getNewList: function (url) {
+                                    logList(url);
+                                },
+                                remove: function (id, index) {
+
+
+                                    jQuery.getJSON('/songshenzong/destroy', {
+                                            id: id
+                                        }, function (result) {
+
+                                            List.items.data.splice(index, 1);
+                                        }
+                                    );
+
+                                },
+                            }
+                        });
+                    }
+
+                    jQuery("#token").val(localStorage.getItem('songshenzong_token'));
+                }
+            )
+            ;
+        }
+
+        /**---------------------------------------------------------
+         *   Verify method.
+         *---------------------------------------------------------*/
+        function verify(data) {
+            if (data.status_code != 200) {
+                information(data.message);
+                return false;
+            }
+            return true;
+        }
+
+        /**---------------------------------------------------------
+         *   Layer alert.
+         *---------------------------------------------------------*/
+        function information(message) {
+            layer.alert(message, {
+                closeBtn: 0,
+                title: 'Alert',
+                btn: ['Got It'],
+                time: 20000,
+            });
+        }
+
+
+        /**---------------------------------------------------------
+         *   Destroy all of the logs.
+         *---------------------------------------------------------*/
+        function destroy() {
+            jQuery.getJSON('/songshenzong/destroy', function (result) {
+                    List.items = result.data;
+                }
+            );
+        }
+
+        /**---------------------------------------------------------
+         *   Create Table.
+         *---------------------------------------------------------*/
+        function createTable() {
+            jQuery.getJSON('/songshenzong/create', function (result) {
+                    layer.msg(result.message);
+                }
+            );
+        }
+
+
+    </script>
+    <style>
+        .navbar {
+            background: #3e70a4;
+            color: #F2F4F6;
+            border-radius: 0;
+            margin-bottom: 0;
+        }
+
+        .glyphicon {
+            cursor: pointer;
+        }
+    </style>
+
+</head>
+
+<body>
+
+
+<div id="items" class="bs-example" data-example-id="hoverable-table">
+
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-3">
+
+
+                <div class="navbar-form navbar-left">
+
+
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-addon" id="sizing-addon3">Token</span>
+                        <input type="text" class="form-control" placeholder="Token" name="token" id="token"
+                               aria-describedby="sizing-addon3">
+                        <span class="input-group-btn">
+            <button class="btn btn-default" type="button" onclick="clearToken()">Clear</button>
+          </span>
+                    </div>
+
+                </div>
+
+
+                <div class="navbar-form navbar-right">
+
+
+                    <button onclick="logList('/songshenzong/logs')" type="button" class="btn btn-sm btn-success">Refresh
+                        Home
+                    </button>
+
+                    <button v-if="items.prev_page_url" @click="getNewList(items.prev_page_url)" type="button"
+                            class="btn btn-sm btn-info">Prev Page
+                    </button>
+
+
+                    <button v-if="items.next_page_url" @click="getNewList(items.next_page_url)" type="button
+        " class="btn btn-sm btn-info">Next Page
+                    </button>
+
+                    <button type="button" class="btn btn-sm btn-success">Total:
+                        [[items.total]]
+                    </button>
+
+                    <button onclick="destroy()" v-if="items.total" type="button" class="btn btn-sm btn-warning">Destroy
+                        Logs
+                    </button>
+
+
+                    <button onclick="createTable()" type="button" class="btn btn-sm btn-danger">Create/Recreate Table
+                    </button>
+
+
+                </div>
+
+            </div>
+
+
+        </div>
+    </nav>
+
+    <!--Table Start-->
+    <div class="table-responsive">
+        <table class="table table-hover table-condensed table-striped" id="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>IP</th>
+                <th>Method</th>
+                <th>URI</th>
+                <th>Status</th>
+                <th>Time</th>
+                <th>Delete</th>
+            </tr>
+            </thead>
+            <tbody>
+
+
+            <tr v-for="(item,index) in items.data" :class="getClass(item.data.request.status_code)">
+
+
+                <th scope="row">[[item.id]]</th>
+                <td>[[item.ip]]</td>
+                <td>[[item.method]]</td>
+                <td @click="getDetail(item)" style="word-break:break-all">
+                    [[item.data.request.server.http_host]][[item.uri]]
+                </td>
+                <td>[[item.data.request.status_code]]</td>
+                <td>[[item.time]]</td>
+                <td><span @click="remove(item.id,index)" class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                </td>
+
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+    <!--Table End-->
+</div>
+
+
+</body>
+</html>

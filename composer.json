@@ -1,0 +1,43 @@
+{
+  "name": "songshenzong/http-json",
+  "description": "Http Json Response",
+  "keywords": [
+    "laravel",
+    "request",
+    "log",
+    "debug",
+    "profiler",
+    "web"
+  ],
+  "license": "MIT",
+  "homepage": "http://songshenzong.com",
+  "support": {
+    "issues": "https://github.com/songshenzong/http-json/issues",
+    "source": "https://github.com/songshenzong/http-json"
+  },
+  "authors": [
+    {
+      "name": "Connor Niu",
+      "email": "connor.niu@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.5.9",
+    "illuminate/support": "5.1.*|5.2.*|5.3.*|5.4.*",
+    "symfony/finder": "~2.7|~3.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Songshenzong\\HttpJson\\": "src/"
+    },
+    "files": [
+      "src/Helpers.php"
+    ]
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "0.1-dev"
+    }
+  },
+  "minimum-stability": "dev"
+}

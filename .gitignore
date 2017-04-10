@@ -1,0 +1,5 @@
+.DS_Store
+/.idea
+/src/Storage/SongshenzongLogs.lock
+/composer.lock
+/vendor/
