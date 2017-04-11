@@ -406,21 +406,37 @@ class ResponseJson
     }
 
 
+    /**
+     * @param $message
+     * @param $errors
+     */
     public function deleteResourceFailedException($message, $errors)
     {
         throw new ResourceException($message, $errors);
     }
 
+    /**
+     * @param $message
+     * @param $errors
+     */
     public function resourceException($message, $errors)
     {
         throw new ResourceException($message, $errors);
     }
 
+    /**
+     * @param $message
+     * @param $errors
+     */
     public function storeResourceFailedException($message, $errors)
     {
         throw new ResourceException($message, $errors);
     }
 
+    /**
+     * @param $message
+     * @param $errors
+     */
     public function updateResourceFailedException($message, $errors)
     {
         throw new ResourceException($message, $errors);
