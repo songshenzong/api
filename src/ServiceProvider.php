@@ -24,7 +24,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             return new ResponseJson($app);
         });
 
-        $this -> app -> alias('ResponseJson', 'Songshenzong\ResponseJson\ResponseJson');
+        $this -> app -> alias('ResponseJson', 'Songshenzong\ResponseJson\Facade');
 
 
     }

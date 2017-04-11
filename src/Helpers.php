@@ -6,7 +6,7 @@ if (!function_exists('responseJson')) {
      *
      * @return \Songshenzong\ResponseJson\ResponseJson
      */
-    function httpJson()
+    function responseJson()
     {
         return app('ResponseJson');
     }
