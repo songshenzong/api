@@ -4,7 +4,7 @@ if (!function_exists('responseJson')) {
     /**
      * Get the instance
      *
-     * @return \Songshenzong\HttpJson\HttpJson
+     * @return \Songshenzong\ResponseJson\ResponseJson
      */
     function httpJson()
     {
