@@ -14,9 +14,10 @@ class ResponseJson
     /**
      * Basic Json.
      *
-     * @param $data
+     * @param     $data
+     * @param int $statusCode
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return mixed
      */
     public function json($data, $statusCode = 200)
     {
@@ -25,7 +26,10 @@ class ResponseJson
 
 
     /**
-     * Return an Success response.
+     * 2xx Success
+     *
+     * This class of status codes indicates the action requested by the client was received, understood, accepted, and
+     * processed successfully.
      *
      * @param int    $statusCode
      * @param string $message
@@ -51,13 +55,13 @@ class ResponseJson
 
 
     /**
-     * OK - Success
+     * Success - OK
      *
      * Standard response for successful HTTP requests. The actual response will depend on the request method used. In a
      * GET request, the response will contain an entity corresponding to the requested resource. In a POST request, the
-     * response will contain an entity describing or containing the result of the action.[7]
+     * response will contain an entity describing or containing the result of the action.
      *
-     * @param array $data
+     * @param null $data
      *
      * @return mixed
      */
@@ -67,9 +71,9 @@ class ResponseJson
     }
 
     /**
-     * Created - Success
+     * Success - Created
      *
-     * The request has been fulfilled, resulting in the creation of a new resource.[8]
+     * The request has been fulfilled, resulting in the creation of a new resource.
      *
      * @param array $data
      *
@@ -81,10 +85,10 @@ class ResponseJson
     }
 
     /**
-     * Accepted - Success
+     * Success - Accepted
      *
      * The request has been accepted for processing, but the processing has not been completed. The request might or
-     * might not be eventually acted upon, and may be disallowed when processing occurs.[9]
+     * might not be eventually acted upon, and may be disallowed when processing occurs.
      *
      * @param array $data
      *
@@ -96,9 +100,25 @@ class ResponseJson
     }
 
     /**
-     * No Content - Success
+     * Success - Non-Authoritative Information
      *
-     * The server successfully processed the request and is not returning any content.[12]
+     * The server is a transforming proxy (e.g. a Web accelerator) that received a 200 OK from its origin, but is
+     * returning a modified version of the origin's response.
+     *
+     * @param array $data
+     *
+     * @return mixed
+     */
+    public function nonAuthoritativeInformation($data = null)
+    {
+        return $this -> success(203, 'Non-Authoritative Information', $data);
+    }
+
+
+    /**
+     * Success - No Content
+     *
+     * The server successfully processed the request and is not returning any content.
      *
      * @param array $data
      *
@@ -108,6 +128,23 @@ class ResponseJson
     {
         return $this -> success(204, 'No Content', $data);
     }
+
+
+    /**
+     * Success - Reset Content
+     *
+     * The server successfully processed the request, but is not returning any content. Unlike a 204 response, this
+     * response requires that the requester reset the document view.
+     *
+     * @param array $data
+     *
+     * @return mixed
+     */
+    public function resetContent($data = null)
+    {
+        return $this -> success(205, 'No Content', $data);
+    }
+
 
     /**
      * Return an error response.
@@ -126,13 +163,12 @@ class ResponseJson
 
 
     /**
-     * Bad Request - Client errors
+     * Client errors - Bad Request
      *
      * The server cannot or will not process the request due to an apparent client error (e.g., malformed request
      * syntax, too large size, invalid request message framing, or deceptive request routing).
      *
      * @param string $message
-     * @param int    $status_code
      */
     public function badRequest($message = 'Bad Request')
     {
@@ -140,14 +176,15 @@ class ResponseJson
     }
 
     /**
-     * Unauthorized - Client errors
+     * Client errors - Unauthorized
      *
      * Similar to 403 Forbidden, but specifically for use when authentication is required and has failed or has not yet
      * been provided. The response must include a WWW-Authenticate header field containing a challenge applicable to
-     * the requested resource. See Basic access authentication and Digest access authentication.[33] 401 semantically
-     * means "unauthenticated",[34] i.e. the user does not have the necessary credentials. Note: Some sites issue HTTP
-     * 401 when an IP address is banned from the website (usually the website domain) and that specific address is
-     * refused permission to access a website.
+     * the requested resource. See Basic access authentication and Digest access authentication.[32] 401 semantically
+     * means "unauthenticated",[33] i.e. the user does not have the necessary credentials.
+     *
+     * Note: Some sites issue HTTP 401 when an IP address is banned from the website (usually the website domain) and
+     * that specific address is refused permission to access a website.
      *
      * @param string $message
      *
@@ -159,7 +196,7 @@ class ResponseJson
     }
 
     /**
-     * Forbidden - Client errors
+     * Client errors - Forbidden
      *
      * The request was valid, but the server is refusing action. The user might not have the necessary permissions for
      * a resource.
@@ -174,7 +211,7 @@ class ResponseJson
     }
 
     /**
-     * Not Found - Client errors
+     * Client errors - Not Found
      *
      * The requested resource could not be found but may be available in the future. Subsequent requests by the client
      * are permissible.
@@ -189,7 +226,7 @@ class ResponseJson
     }
 
     /**
-     * Conflict - Client errors
+     * Client errors - Conflict
      *
      * Indicates that the request could not be processed because of conflict in the request, such as an edit conflict
      * between multiple simultaneous updates.
@@ -204,7 +241,7 @@ class ResponseJson
     }
 
     /**
-     * Gone - Client errors
+     * Client errors - Gone
      *
      * Indicates that the resource requested is no longer available and will not be available again. This should be
      * used when a resource has been intentionally removed and the resource should be purged. Upon receiving a 410
@@ -222,7 +259,7 @@ class ResponseJson
     }
 
     /**
-     * Unprocessable Entity - Client errors
+     * Client errors - Unprocessable Entity
      *
      * The request was well-formed but was unable to be followed due to semantic errors.[15].
      *
@@ -235,170 +272,148 @@ class ResponseJson
         return $this -> error(422, $message);
     }
 
+
     /**
-     * Internal Server Error - Server error
+     * Server error - Internal Server Error
      *
      * A generic error message, given when an unexpected condition was encountered and no more specific message is
-     * suitable.[57]
+     * suitable.
      *
      * @param string $message
-     * @param array  $data
-     *
-     * @return mixed
      */
     public function internalServerError($message = 'Internal Server Error')
     {
         return $this -> error(500, $message);
     }
 
+
     /**
-     * Not Implemented - Server error
+     * Server error - Not Implemented
      *
      * The server either does not recognize the request method, or it lacks the ability to fulfill the request. Usually
-     * this implies future availability (e.g., a new feature of a web-service API).[58]
+     * this implies future availability (e.g., a new feature of a web-service API).
      *
      * @param string $message
-     * @param array  $data
-     *
-     * @return mixed
      */
     public function notImplemented($message = 'Not Implemented')
     {
         return $this -> error(501, $message);
     }
 
+
     /**
-     * Bad Gateway - Server error
+     * Server error - Bad Gateway
      *
-     * The server was acting as a gateway or proxy and received an invalid response from the upstream server.[59]
+     * The server was acting as a gateway or proxy and received an invalid response from the upstream server.
      *
      * @param string $message
-     * @param array  $data
-     *
-     * @return mixed
      */
     public function badGateway($message = 'Bad Gateway')
     {
         return $this -> error(502, $message);
     }
 
+
     /**
-     * Service Unavailable - Server error
+     * Server error - Service Unavailable
      *
      * The server is currently unavailable (because it is overloaded or down for maintenance). Generally, this is a
-     * temporary state.[60]
+     * temporary state.
      *
      * @param string $message
-     * @param array  $data
-     *
-     * @return mixed
      */
     public function serviceUnavailable($message = 'Service Unavailable')
     {
         return $this -> error(503, $message);
     }
 
+
     /**
-     * Gateway Time-out - Server error
+     * Server error - Gateway Time-out
      *
-     * The server was acting as a gateway or proxy and did not receive a timely response from the upstream server.[61]
+     * The server was acting as a gateway or proxy and did not receive a timely response from the upstream server.
      *
      * @param string $message
-     * @param array  $data
-     *
-     * @return mixed
      */
     public function gatewayTimeOut($message = 'Gateway Time-out')
     {
         return $this -> error(504, $message);
     }
 
+
     /**
-     * HTTP Version Not Supported - Server error
+     * Server error - HTTP Version Not Supported
      *
-     * The server does not support the HTTP protocol version used in the request.[62]
+     * The server does not support the HTTP protocol version used in the request.
      *
      * @param string $message
-     * @param array  $data
-     *
-     * @return mixed
      */
     public function httpVersionNotSupported($message = 'HTTP Version Not Supported')
     {
         return $this -> error(505, $message);
     }
 
+
     /**
-     * Variant Also Negotiates - Server error
+     * Server error - Variant Also Negotiates
      *
-     * Transparent content negotiation for the request results in a circular reference.[63]
+     * Transparent content negotiation for the request results in a circular reference.
      *
      * @param string $message
-     * @param array  $data
-     *
-     * @return mixed
      */
     public function variantAlsoNegotiates($message = 'Variant Also Negotiates')
     {
         return $this -> error(506, $message);
     }
 
+
     /**
-     * Insufficient Storage - Server error
+     * Server error - Insufficient Storage
      *
-     * The server is unable to store the representation needed to complete the request.[15]
+     * The server is unable to store the representation needed to complete the request.
      *
      * @param string $message
-     * @param array  $data
-     *
-     * @return mixed
      */
     public function insufficientStorage($message = 'Insufficient Storage')
     {
         return $this -> error(507, $message);
     }
 
+
     /**
-     * Loop Detected - Server error
+     * Server error - Loop Detected
      *
      * The server detected an infinite loop while processing the request (sent in lieu of 208 Already Reported).
      *
      * @param string $message
-     * @param array  $data
-     *
-     * @return mixed
      */
     public function loopDetected($message = 'Loop Detected')
     {
         return $this -> error(508, $message);
     }
 
+
     /**
-     * Not Extended - Server error
+     * Server error - Not Extended
      *
-     * Further extensions to the request are required for the server to fulfill it.[64]
+     * Further extensions to the request are required for the server to fulfill it.
      *
      * @param string $message
-     * @param array  $data
-     *
-     * @return mixed
      */
     public function notExtended($message = 'Not Extended')
     {
         return $this -> error(510, $message);
     }
 
+
     /**
-     * Network Authentication Required - Server error
+     * Server error - Network Authentication Required
      *
      * The client needs to authenticate to gain network access. Intended for use by intercepting proxies used to
      * control access to the network (e.g., "captive portals" used to require agreement to Terms of Service before
-     * granting full Internet access via a Wi-Fi hotspot).[53]
+     * granting full Internet access via a Wi-Fi hotspot).
      *
      * @param string $message
-     * @param array  $data
-     *
-     * @return mixed
      */
     public function networkAuthenticationRequired($message = 'Network Authentication Required')
     {
