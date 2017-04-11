@@ -9,6 +9,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class ResponseJson
 {
 
+
     /**
      * Basic Json
      *
@@ -16,7 +17,7 @@ class ResponseJson
      * @param int    $status_code
      * @param null   $data
      *
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     * @return mixed
      */
     public function json($message = 'OK', $status_code = 200, $data = null)
     {
@@ -24,17 +25,10 @@ class ResponseJson
             'status_code' => $status_code,
             'message'     => $message,
         ];
-        if ($data != null) {
-            $result['data'] = $data;
-        }
 
-        /**
-         * 应该用 Return 而不是 Exit，由于一开始设计好，这里有坑，改动前一定要问帅疆
-         */
-        if ($status_code != 200) {
-            header("Content-type: application/json");
-            echo json_encode($result);
-            exit;
+
+        if ($data !== null) {
+            $result['data'] = $data;
         }
 
 
