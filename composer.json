@@ -3,10 +3,7 @@
   "description": "Http Json Response",
   "keywords": [
     "laravel",
-    "request",
-    "log",
-    "debug",
-    "profiler",
+    "response",
     "web"
   ],
   "license": "MIT",
