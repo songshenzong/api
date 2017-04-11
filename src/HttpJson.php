@@ -4,6 +4,9 @@ namespace Songshenzong\HttpJson;
 
 use Dingo\Api\Routing\Helpers;
 
+use Symfony\Component\HttpKernel\Exception\HttpException;
+
+
 class HttpJson
 {
     use Helpers;
@@ -98,6 +101,22 @@ class HttpJson
     {
         return $this -> json('No Content', 204, $data);
     }
+
+    /**
+     * Return an error response.
+     *
+     * @param string $message
+     * @param int    $statusCode
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     *
+     * @return void
+     */
+    public function error($message, $statusCode)
+    {
+        throw new HttpException($statusCode, $message);
+    }
+
 
     /**
      * Bad Request - Client errors
