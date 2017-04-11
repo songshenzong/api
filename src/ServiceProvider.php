@@ -1,6 +1,5 @@
 <?php namespace Songshenzong\ResponseJson;
 
-use Illuminate\Session\SessionManager;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
@@ -22,7 +21,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
 
         $this -> app -> singleton('ResponseJson', function ($app) {
-            return new HttpJson($app);
+            return new ResponseJson($app);
         });
 
         $this -> app -> alias('ResponseJson', 'Songshenzong\ResponseJson\ResponseJson');
