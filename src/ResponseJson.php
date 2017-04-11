@@ -225,6 +225,39 @@ class ResponseJson
         return $this -> error(404, $message);
     }
 
+
+    /**
+     * Client errors - Method Not Allowed
+     *
+     * A request method is not supported for the requested resource; for example, a GET request on a form that requires
+     * data to be presented via POST, or a PUT request on a read-only resource.
+     *
+     * @param string $message
+     *
+     * @return mixed
+     */
+    public function methodNotAllowed($message = 'Method Not Allowed')
+    {
+        return $this -> error(405, $message);
+    }
+
+
+    /**
+     * Client errors - Not Acceptable
+     *
+     * The requested resource is capable of generating only content not acceptable according to the Accept headers sent
+     * in the request.[36] See Content negotiation.
+     *
+     * @param string $message
+     *
+     * @return mixed
+     */
+    public function notAcceptable($message = 'Not Acceptable')
+    {
+        return $this -> error(406, $message);
+    }
+
+
     /**
      * Client errors - Conflict
      *
@@ -258,6 +291,53 @@ class ResponseJson
         return $this -> error(410, $message);
     }
 
+
+    /**
+     * Client errors - Length Required
+     *
+     * The request did not specify the length of its content, which is required by the requested resource.
+     *
+     * @param string $message
+     *
+     * @return mixed
+     */
+    public function lengthRequired($message = 'Length Required')
+    {
+        return $this -> error(411, $message);
+    }
+
+
+    /**
+     * Client errors - Precondition Failed
+     *
+     * The server does not meet one of the preconditions that the requester put on the request.
+     *
+     * @param string $message
+     *
+     * @return mixed
+     */
+    public function preconditionFailed($message = 'Precondition Failed')
+    {
+        return $this -> error(412, $message);
+    }
+
+
+    /**
+     * Client errors - Unsupported Media Type
+     *
+     * The request entity has a media type which the server or resource does not support. For example, the client
+     * uploads an image as image/svg+xml, but the server requires that images use a different format.
+     *
+     * @param string $message
+     *
+     * @return mixed
+     */
+    public function unsupportedMediaType($message = 'Unsupported Media Type')
+    {
+        return $this -> error(415, $message);
+    }
+
+
     /**
      * Client errors - Unprocessable Entity
      *
@@ -272,6 +352,36 @@ class ResponseJson
         return $this -> error(422, $message);
     }
 
+
+    /**
+     * Client errors - Precondition Required
+     *
+     * The origin server requires the request to be conditional. Intended to prevent "the 'lost update' problem, where
+     * a client GETs a resource's state, modifies it, and PUTs it back to the server, when meanwhile a third party has
+     * modified the state on the server, leading to a conflict.
+     *
+     * @param string $message
+     *
+     * @return mixed
+     */
+    public function preconditionRequired($message = 'Precondition Required')
+    {
+        return $this -> error(428, $message);
+    }
+
+    /**
+     * Client errors - Too Many Requests
+     *
+     * The user has sent too many requests in a given amount of time. Intended for use with rate-limiting schemes.
+     *
+     * @param string $message
+     *
+     * @return mixed
+     */
+    public function tooManyRequests($message = 'Too Many Requests')
+    {
+        return $this -> error(429, $message);
+    }
 
     /**
      * Server error - Internal Server Error
