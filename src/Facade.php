@@ -1,9 +1,12 @@
-<?php namespace Songshenzong\ResponseJson;
+<?php
+
+namespace Songshenzong\ResponseJson;
 
 class Facade extends \Illuminate\Support\Facades\Facade
 {
+
     /**
-     * {@inheritDoc}
+     * @return string
      */
     protected static function getFacadeAccessor()
     {

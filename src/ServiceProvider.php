@@ -1,5 +1,6 @@
-<?php namespace Songshenzong\ResponseJson;
+<?php
 
+namespace Songshenzong\ResponseJson;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
@@ -24,6 +25,5 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
         $this -> app -> alias('ResponseJson', 'Songshenzong\ResponseJson\Facade');
     }
-
 
 }
