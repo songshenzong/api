@@ -142,7 +142,7 @@ class ResponseJson
      */
     public function resetContent($data = null)
     {
-        return $this -> success(205, 'No Content', $data);
+        return $this -> success(205, 'Reset Content', $data);
     }
 
 
