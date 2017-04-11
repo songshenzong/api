@@ -441,4 +441,14 @@ class ResponseJson
     {
         throw new ResourceException($message, $errors);
     }
+
+    /**
+     * @param $message
+     * @param $errors
+     */
+    public function validationHttpException($message, $errors)
+    {
+        throw new ResourceException($message, $errors);
+    }
+
 }
