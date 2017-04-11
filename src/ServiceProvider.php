@@ -1,4 +1,4 @@
-<?php namespace Songshenzong\HttpJson;
+<?php namespace Songshenzong\ResponseJson;
 
 use Illuminate\Session\SessionManager;
 
@@ -21,11 +21,11 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     {
 
 
-        $this -> app -> singleton('HttpJson', function ($app) {
+        $this -> app -> singleton('ResponseJson', function ($app) {
             return new HttpJson($app);
         });
 
-        $this -> app -> alias('HttpJson', 'Songshenzong\HttpJson\HttpJson');
+        $this -> app -> alias('ResponseJson', 'Songshenzong\ResponseJson\ResponseJson');
 
 
     }

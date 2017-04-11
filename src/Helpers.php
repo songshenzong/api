@@ -1,6 +1,6 @@
 <?php
 
-if (!function_exists('httpJson')) {
+if (!function_exists('responseJson')) {
     /**
      * Get the instance
      *
@@ -8,6 +8,6 @@ if (!function_exists('httpJson')) {
      */
     function httpJson()
     {
-        return app('HttpJson');
+        return app('ResponseJson');
     }
 }

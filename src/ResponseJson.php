@@ -1,15 +1,13 @@
 <?php
 
-namespace Songshenzong\HttpJson;
+namespace Songshenzong\ResponseJson;
 
-use Dingo\Api\Routing\Helpers;
 
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 
-class HttpJson
+class ResponseJson
 {
-    use Helpers;
 
     /**
      * Basic Json

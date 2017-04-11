@@ -1,4 +1,4 @@
-<?php namespace Songshenzong\Log;
+<?php namespace Songshenzong\ResponseJson;
 
 class Facade extends \Illuminate\Support\Facades\Facade
 {
@@ -7,6 +7,6 @@ class Facade extends \Illuminate\Support\Facades\Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'HttpJson';
+        return 'ResponseJson';
     }
 }
