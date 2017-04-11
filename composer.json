@@ -1,6 +1,6 @@
 {
   "name": "songshenzong/response-json",
-  "description": "Http Json Response",
+  "description": "Response Http Json for Laravel",
   "keywords": [
     "laravel",
     "response",
