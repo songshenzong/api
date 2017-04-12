@@ -2,9 +2,8 @@
 
 namespace Songshenzong\ResponseJson;
 
-use Illuminate\Support\Facades\Response;
+use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Songshenzong\ResponseJson\ResourceException;
 
 
 class ResponseJson
@@ -12,16 +11,18 @@ class ResponseJson
 
 
     /**
-     * Basic Json.
+     * Return a new JSON response from the application.
      *
-     * @param     $data
-     * @param int $statusCode
+     * @param array $data
+     * @param int   $statusCode
+     * @param array $headers
+     * @param int   $options
      *
-     * @return mixed
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function json($data, $statusCode = 200)
+    public function json($data = [], $statusCode = 200, array $headers = [], $options = 0)
     {
-        return Response ::json($data, $statusCode);
+        return new JsonResponse($data, $statusCode, $headers, $options);
     }
 
 
@@ -39,18 +40,18 @@ class ResponseJson
      */
     public function success($statusCode = 200, $message = 'OK', $data = null)
     {
-        $result = [
+        $content = [
             'status_code' => $statusCode,
             'message'     => $message,
         ];
 
 
         if (!is_null($data)) {
-            $result['data'] = $data;
+            $content['data'] = $data;
         }
 
 
-        return $this -> json($result, $statusCode);
+        return $this -> json($content, $statusCode);
     }
 
 
