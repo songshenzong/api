@@ -2,7 +2,7 @@
 
 namespace Songshenzong\ResponseJson;
 
-use Illuminate\Http\JsonResponse;
+
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 
@@ -22,7 +22,7 @@ class ResponseJson
      */
     public function json($data = [], $statusCode = 200, array $headers = [], $options = 0)
     {
-        return new JsonResponse($data, $statusCode, $headers, $options);
+        return response() -> json($data, $statusCode, $headers, $options);
     }
 
 
@@ -159,7 +159,9 @@ class ResponseJson
      */
     public function error($statusCode, $message)
     {
+
         throw new HttpException($statusCode, $message);
+
     }
 
 
