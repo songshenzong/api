@@ -40,10 +40,11 @@ class ResponseJson
      */
     public function success($statusCode = 200, $message = 'OK', $data = null)
     {
-        $content = [
-            'status_code' => $statusCode,
-            'message'     => $message,
-        ];
+        $content = [];
+        // $content = [
+        //     'status_code' => $statusCode,
+        //     'message'     => $message,
+        // ];
 
 
         if (!is_null($data)) {
