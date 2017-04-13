@@ -72,6 +72,36 @@ class ResponseJson
     }
 
     /**
+     * @param null $data
+     *
+     * @return mixed
+     */
+    public function item($data = null)
+    {
+        return $this -> ok($data);
+    }
+
+    /**
+     * @param null $data
+     *
+     * @return mixed
+     */
+    public function collection($data = null)
+    {
+        return $this -> ok($data);
+    }
+
+    /**
+     * @param null $data
+     *
+     * @return mixed
+     */
+    public function paginate($data = null)
+    {
+        return $this -> ok($data);
+    }
+
+    /**
      * Success - Created
      *
      * The request has been fulfilled, resulting in the creation of a new resource.
