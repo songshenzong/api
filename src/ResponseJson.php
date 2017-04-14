@@ -42,8 +42,8 @@ class ResponseJson
     {
         $content = [];
         $content = [
-            'status_code' => $statusCode,
             'message'     => $message,
+            'status_code' => $statusCode,
         ];
 
 
