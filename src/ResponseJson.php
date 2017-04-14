@@ -40,7 +40,6 @@ class ResponseJson
      */
     public function success($statusCode = 200, $message = 'OK', $data = null)
     {
-        $content = [];
         $content = [
             'message'     => $message,
             'status_code' => $statusCode,
@@ -71,6 +70,25 @@ class ResponseJson
     {
         return $this -> success(200, 'OK', $data);
     }
+
+
+    /**
+     * @param $statusCode
+     * @param $message
+     *
+     * @return mixed
+     */
+    public function okMessage($statusCode, $message)
+    {
+        $content = [
+            'message'     => $message,
+            'status_code' => $statusCode,
+        ];
+
+        return response() -> json($content, 200);
+
+    }
+
 
     /**
      * @param null $data
