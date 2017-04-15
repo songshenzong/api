@@ -20,6 +20,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     public function register()
     {
 
+
         $this -> app -> singleton('ResponseJson', function ($app) {
             return new ResponseJson($app);
         });
