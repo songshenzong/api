@@ -3,55 +3,139 @@
 namespace Songshenzong\ResponseJson;
 
 
-use Symfony\Component\HttpKernel\Exception\HttpException;
-
-
 class ResponseJson
 {
 
 
     /**
-     * Return a new JSON response from the application.
-     *
-     * @param array $data
-     * @param int   $statusCode
-     * @param array $headers
-     * @param int   $options
-     *
-     * @return \Illuminate\Http\JsonResponse
+     * @var string
      */
-    public function json($data = [], $statusCode = 200, array $headers = [], $options = 0)
+    protected $message;
+
+    /**
+     * @var int
+     */
+    protected $statusCode;
+
+
+    /**
+     * @var string
+     */
+    protected $content = [];
+
+    /**
+     * @var
+     */
+    protected $data;
+
+    /**
+     * @var
+     */
+    protected $errors;
+
+
+    /**
+     * @param string $message
+     *
+     * @return $this
+     */
+    public function setMessage($message)
     {
-        return response() -> json($data, $statusCode, $headers, $options);
+        $this -> message = $message;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMessage()
+    {
+        return $this -> message;
     }
 
 
     /**
-     * 2xx Success
+     * @param mixed $data
      *
-     * This class of status codes indicates the action requested by the client was received, understood, accepted, and
-     * processed successfully.
-     *
-     * @param int    $statusCode
-     * @param string $message
-     * @param null   $data
-     *
+     * @return $this
+     */
+    public function setData($data)
+    {
+        $this -> data = $data;
+        return $this;
+    }
+
+
+    /**
      * @return mixed
      */
-    public function success($statusCode = 200, $message = 'OK', $data = null)
+    public function getData()
     {
-        $content = [
-            'message'     => $message,
-            'status_code' => $statusCode,
+        return $this -> data;
+    }
+
+
+    /**
+     * @param mixed $errors
+     *
+     * @return $this
+     */
+    public function setErrors($errors)
+    {
+        $this -> errors = $errors;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getErrors()
+    {
+        return $this -> errors;
+    }
+
+    /**
+     * @param int $statusCode
+     *
+     * @return $this
+     */
+    public function setStatusCode($statusCode)
+    {
+        $this -> statusCode = $statusCode;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStatusCode()
+    {
+        return $this -> statusCode;
+    }
+
+
+    /**
+     * Send Responses
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function send()
+    {
+        $this -> content = [
+            'message'     => $this -> message,
+            'status_code' => $this -> statusCode,
         ];
 
+        if (!is_null($this -> getData())) {
+            $this -> content['data'] = $this -> getData();
+        }
 
-        if (!is_null($data)) {
-            $content['data'] = $data;
+        if (!is_null($this -> getErrors())) {
+            $this -> content['errors'] = $this -> getErrors();
         }
 
 
-        return $this -> json($content, $statusCode);
+        return \Response ::json($this -> content, $this -> getStatusCode());
     }
 
 
@@ -68,25 +152,22 @@ class ResponseJson
      */
     public function ok($data = null)
     {
-        return $this -> success(200, 'OK', $data);
-    }
+
+        if (is_null($this -> getMessage())) {
+            $this -> setMessage('OK');
+        }
 
 
-    /**
-     * @param $statusCode
-     * @param $message
-     *
-     * @return mixed
-     */
-    public function okMessage($statusCode, $message)
-    {
-        $content = [
-            'message'     => $message,
-            'status_code' => $statusCode,
-        ];
+        if (is_null($this -> getStatusCode())) {
+            $this -> setStatusCode(200);
+        }
 
-        return response() -> json($content, 200);
 
+        if (is_null($this -> getData())) {
+            $this -> setData($data);
+        }
+
+        return $this -> send();
     }
 
 
@@ -129,9 +210,24 @@ class ResponseJson
      *
      * @return mixed
      */
-    public function created($data = null)
+    public function created($message = 'Created', $data = null)
     {
-        return $this -> success(201, 'Created', $data);
+
+
+        if (is_null($this -> getStatusCode())) {
+            $this -> setStatusCode(201);
+        }
+
+
+        if (is_null($this -> getMessage())) {
+            $this -> setMessage($message);
+        }
+
+        if (is_null($this -> getData())) {
+            $this -> setData($data);
+        }
+
+        return $this -> send();
     }
 
     /**
@@ -144,9 +240,23 @@ class ResponseJson
      *
      * @return mixed
      */
-    public function accepted($data = null)
+    public function accepted($message = 'Accepted', $data = null)
     {
-        return $this -> success(202, 'Accepted', $data);
+
+        if (is_null($this -> getStatusCode())) {
+            $this -> setStatusCode(202);
+        }
+
+
+        if (is_null($this -> getMessage())) {
+            $this -> setMessage($message);
+        }
+
+        if (is_null($this -> getData())) {
+            $this -> setData($data);
+        }
+
+        return $this -> send();
     }
 
     /**
@@ -159,9 +269,24 @@ class ResponseJson
      *
      * @return mixed
      */
-    public function nonAuthoritativeInformation($data = null)
+    public function nonAuthoritativeInformation($message = 'Non-Authoritative Information', $data = null)
     {
-        return $this -> success(203, 'Non-Authoritative Information', $data);
+
+
+        if (is_null($this -> getStatusCode())) {
+            $this -> setStatusCode(203);
+        }
+
+
+        if (is_null($this -> getMessage())) {
+            $this -> setMessage($message);
+        }
+
+        if (is_null($this -> getData())) {
+            $this -> setData($data);
+        }
+
+        return $this -> send();
     }
 
 
@@ -174,9 +299,23 @@ class ResponseJson
      *
      * @return mixed
      */
-    public function noContent($data = null)
+    public function noContent($message = 'No Content', $data = null)
     {
-        return $this -> success(204, 'No Content', $data);
+
+        if (is_null($this -> getStatusCode())) {
+            $this -> setStatusCode(204);
+        }
+
+
+        if (is_null($this -> getMessage())) {
+            $this -> setMessage($message);
+        }
+
+        if (is_null($this -> getData())) {
+            $this -> setData($data);
+        }
+
+        return $this -> send();
     }
 
 
@@ -192,25 +331,22 @@ class ResponseJson
      */
     public function resetContent($data = null)
     {
-        return $this -> success(205, 'Reset Content', $data);
-    }
 
 
-    /**
-     * Return an error response.
-     *
-     * @param string $message
-     * @param int    $statusCode
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
-     *
-     * @return void
-     */
-    public function error($statusCode, $message)
-    {
+        if (is_null($this -> getStatusCode())) {
+            $this -> setStatusCode(205);
+        }
 
-        throw new HttpException($statusCode, $message);
 
+        if (is_null($this -> getMessage())) {
+            $this -> setMessage('Reset Content');
+        }
+
+        if (is_null($this -> getData())) {
+            $this -> setData($data);
+        }
+
+        return $this -> send();
     }
 
 
@@ -222,9 +358,33 @@ class ResponseJson
      *
      * @param string $message
      */
-    public function badRequest($message = 'Bad Request')
+    public function badRequest($message = 'Bad Request', $errors = null)
     {
-        return $this -> error(400, $message);
+
+        if (is_null($this -> getStatusCode())) {
+            $this -> setStatusCode(400);
+        }
+
+
+        if (is_null($this -> getMessage())) {
+            $this -> setMessage($message);
+        }
+
+        if (is_null($this -> getErrors())) {
+            $this -> setErrors($errors);
+        }
+
+        return $this -> send();
+    }
+
+
+    /**
+     * @param string $message
+     * @param null   $errors
+     */
+    public function badRequestException($message = 'Bad Request', $errors = null)
+    {
+        throw new ResourceException(400, $message, $errors);
     }
 
     /**
@@ -242,9 +402,26 @@ class ResponseJson
      *
      * @return mixed
      */
-    public function unauthorized($message = 'Unauthorized')
+    public function unauthorized($message = 'Unauthorized', $data = null)
     {
-        return $this -> error(401, $message);
+        if (is_null($this -> getStatusCode())) {
+            $this -> setStatusCode(401);
+        }
+
+        if (is_null($this -> getMessage())) {
+            $this -> setMessage($message);
+        }
+
+        if (is_null($this -> getErrors())) {
+            $this -> setErrors($errors);
+        }
+
+        return $this -> send();
+    }
+
+    public function unauthorizedException($message = 'Unauthorized', $errors = null)
+    {
+        throw new ResourceException(401, $message, $errors);
     }
 
     /**
@@ -257,9 +434,26 @@ class ResponseJson
      *
      * @return mixed
      */
-    public function forbidden($message = 'Forbidden')
+    public function forbidden($message = 'Forbidden', $data = null)
     {
-        return $this -> error(403, $message);
+        if (is_null($this -> getStatusCode())) {
+            $this -> setStatusCode(403);
+        }
+
+        if (is_null($this -> getMessage())) {
+            $this -> setMessage($message);
+        }
+
+        if (is_null($this -> getErrors())) {
+            $this -> setErrors($errors);
+        }
+
+        return $this -> send();
+    }
+
+    public function forbiddenException($message = 'Forbidden', $errors = null)
+    {
+        throw new ResourceException(403, $message, $errors);
     }
 
     /**
@@ -272,11 +466,28 @@ class ResponseJson
      *
      * @return mixed
      */
-    public function notFound($message = 'Not Found')
+    public function notFound($message = 'Not Found', $data = null)
     {
-        return $this -> error(404, $message);
+        if (is_null($this -> getStatusCode())) {
+            $this -> setStatusCode(404);
+        }
+
+
+        if (is_null($this -> getMessage())) {
+            $this -> setMessage($message);
+        }
+
+        if (is_null($this -> getErrors())) {
+            $this -> setErrors($errors);
+        }
+
+        return $this -> send();
     }
 
+    public function notFoundException($message = 'Not Found', $errors = null)
+    {
+        throw new ResourceException(404, $message, $errors);
+    }
 
     /**
      * Client errors - Method Not Allowed
@@ -288,11 +499,28 @@ class ResponseJson
      *
      * @return mixed
      */
-    public function methodNotAllowed($message = 'Method Not Allowed')
+    public function methodNotAllowed($message = 'Method Not Allowed', $data = null)
     {
-        return $this -> error(405, $message);
+        if (is_null($this -> getStatusCode())) {
+            $this -> setStatusCode(405);
+        }
+
+
+        if (is_null($this -> getMessage())) {
+            $this -> setMessage($message);
+        }
+
+        if (is_null($this -> getErrors())) {
+            $this -> setErrors($errors);
+        }
+
+        return $this -> send();
     }
 
+    public function methodNotAllowedException($message = 'Method Not Allowed', $errors = null)
+    {
+        throw new ResourceException(405, $message, $errors);
+    }
 
     /**
      * Client errors - Not Acceptable
@@ -304,11 +532,28 @@ class ResponseJson
      *
      * @return mixed
      */
-    public function notAcceptable($message = 'Not Acceptable')
+    public function notAcceptable($message = 'Not Acceptable', $data = null)
     {
-        return $this -> error(406, $message);
+        if (is_null($this -> getStatusCode())) {
+            $this -> setStatusCode(406);
+        }
+
+
+        if (is_null($this -> getMessage())) {
+            $this -> setMessage($message);
+        }
+
+        if (is_null($this -> getErrors())) {
+            $this -> setErrors($errors);
+        }
+
+        return $this -> send();
     }
 
+    public function notAcceptableException($message = 'Not Acceptable', $errors = null)
+    {
+        throw new ResourceException(406, $message, $errors);
+    }
 
     /**
      * Client errors - Conflict
@@ -320,9 +565,27 @@ class ResponseJson
      *
      * @return mixed
      */
-    public function conflict($message = 'Conflict')
+    public function conflict($message = 'Conflict', $data = null)
     {
-        return $this -> error(409, $message);
+        if (is_null($this -> getStatusCode())) {
+            $this -> setStatusCode(409);
+        }
+
+
+        if (is_null($this -> getMessage())) {
+            $this -> setMessage($message);
+        }
+
+        if (is_null($this -> getErrors())) {
+            $this -> setErrors($errors);
+        }
+
+        return $this -> send();
+    }
+
+    public function conflictException($message = 'Conflict', $errors = null)
+    {
+        throw new ResourceException(409, $message, $errors);
     }
 
     /**
@@ -338,11 +601,28 @@ class ResponseJson
      *
      * @return mixed
      */
-    public function gone($message = 'Gone')
+    public function gone($message = 'Gone', $data = null)
     {
-        return $this -> error(410, $message);
+        if (is_null($this -> getStatusCode())) {
+            $this -> setStatusCode(410);
+        }
+
+
+        if (is_null($this -> getMessage())) {
+            $this -> setMessage($message);
+        }
+
+        if (is_null($this -> getErrors())) {
+            $this -> setErrors($errors);
+        }
+
+        return $this -> send();
     }
 
+    public function goneException($message = 'Gone', $errors = null)
+    {
+        throw new ResourceException(410, $message, $errors);
+    }
 
     /**
      * Client errors - Length Required
@@ -353,11 +633,28 @@ class ResponseJson
      *
      * @return mixed
      */
-    public function lengthRequired($message = 'Length Required')
+    public function lengthRequired($message = 'Length Required', $data = null)
     {
-        return $this -> error(411, $message);
+        if (is_null($this -> getStatusCode())) {
+            $this -> setStatusCode(411);
+        }
+
+
+        if (is_null($this -> getMessage())) {
+            $this -> setMessage($message);
+        }
+
+        if (is_null($this -> getErrors())) {
+            $this -> setErrors($errors);
+        }
+
+        return $this -> send();
     }
 
+    public function lengthRequiredException($message = 'Length Required', $errors = null)
+    {
+        throw new ResourceException(411, $message, $errors);
+    }
 
     /**
      * Client errors - Precondition Failed
@@ -368,11 +665,28 @@ class ResponseJson
      *
      * @return mixed
      */
-    public function preconditionFailed($message = 'Precondition Failed')
+    public function preconditionFailed($message = 'Precondition Failed', $data = null)
     {
-        return $this -> error(412, $message);
+        if (is_null($this -> getStatusCode())) {
+            $this -> setStatusCode(412);
+        }
+
+
+        if (is_null($this -> getMessage())) {
+            $this -> setMessage($message);
+        }
+
+        if (is_null($this -> getErrors())) {
+            $this -> setErrors($errors);
+        }
+
+        return $this -> send();
     }
 
+    public function preconditionFailedException($message = 'Precondition Failed', $errors = null)
+    {
+        throw new ResourceException(412, $message, $errors);
+    }
 
     /**
      * Client errors - Unsupported Media Type
@@ -384,11 +698,28 @@ class ResponseJson
      *
      * @return mixed
      */
-    public function unsupportedMediaType($message = 'Unsupported Media Type')
+    public function unsupportedMediaType($message = 'Unsupported Media Type', $data = null)
     {
-        return $this -> error(415, $message);
+        if (is_null($this -> getStatusCode())) {
+            $this -> setStatusCode(413);
+        }
+
+
+        if (is_null($this -> getMessage())) {
+            $this -> setMessage($message);
+        }
+
+        if (is_null($this -> getErrors())) {
+            $this -> setErrors($errors);
+        }
+
+        return $this -> send();
     }
 
+    public function unsupportedMediaTypeException($message = 'Unsupported Media Type', $errors = null)
+    {
+        throw new ResourceException(413, $message, $errors);
+    }
 
     /**
      * Client errors - Unprocessable Entity
@@ -399,11 +730,28 @@ class ResponseJson
      *
      * @return mixed
      */
-    public function unprocessableEntity($message = 'Unprocessable Entity')
+    public function unprocessableEntity($message = 'Unprocessable Entity', $data = null)
     {
-        return $this -> error(422, $message);
+        if (is_null($this -> getStatusCode())) {
+            $this -> setStatusCode(422);
+        }
+
+
+        if (is_null($this -> getMessage())) {
+            $this -> setMessage($message);
+        }
+
+        if (is_null($this -> getErrors())) {
+            $this -> setErrors($errors);
+        }
+
+        return $this -> send();
     }
 
+    public function unprocessableEntityException($message = 'Unprocessable Entity', $errors = null)
+    {
+        throw new ResourceException(422, $message, $errors);
+    }
 
     /**
      * Client errors - Precondition Required
@@ -416,9 +764,27 @@ class ResponseJson
      *
      * @return mixed
      */
-    public function preconditionRequired($message = 'Precondition Required')
+    public function preconditionRequired($message = 'Precondition Required', $data = null)
     {
-        return $this -> error(428, $message);
+        if (is_null($this -> getStatusCode())) {
+            $this -> setStatusCode(428);
+        }
+
+
+        if (is_null($this -> getMessage())) {
+            $this -> setMessage($message);
+        }
+
+        if (is_null($this -> getErrors())) {
+            $this -> setErrors($errors);
+        }
+
+        return $this -> send();
+    }
+
+    public function preconditionRequiredException($message = 'Precondition Required', $errors = null)
+    {
+        throw new ResourceException(428, $message, $errors);
     }
 
     /**
@@ -430,9 +796,27 @@ class ResponseJson
      *
      * @return mixed
      */
-    public function tooManyRequests($message = 'Too Many Requests')
+    public function tooManyRequests($message = 'Too Many Requests', $data = null)
     {
-        return $this -> error(429, $message);
+        if (is_null($this -> getStatusCode())) {
+            $this -> setStatusCode(429);
+        }
+
+
+        if (is_null($this -> getMessage())) {
+            $this -> setMessage($message);
+        }
+
+        if (is_null($this -> getErrors())) {
+            $this -> setErrors($errors);
+        }
+
+        return $this -> send();
+    }
+
+    public function tooManyRequestsException($message = 'Too Many Requests', $errors = null)
+    {
+        throw new ResourceException(429, $message, $errors);
     }
 
     /**
@@ -443,11 +827,29 @@ class ResponseJson
      *
      * @param string $message
      */
-    public function internalServerError($message = 'Internal Server Error')
+    public function internalServerError($message = 'Internal Server Error', $data = null)
     {
-        return $this -> error(500, $message);
+        if (is_null($this -> getStatusCode())) {
+            $this -> setStatusCode(500);
+        }
+
+
+        if (is_null($this -> getMessage())) {
+            $this -> setMessage($message);
+        }
+
+        if (is_null($this -> getErrors())) {
+            $this -> setErrors($errors);
+        }
+
+        return $this -> send();
     }
 
+
+    public function internalServerErrorException($message = 'Internal Server Error', $errors = null)
+    {
+        throw new ResourceException(500, $message, $errors);
+    }
 
     /**
      * Server error - Not Implemented
@@ -457,11 +859,28 @@ class ResponseJson
      *
      * @param string $message
      */
-    public function notImplemented($message = 'Not Implemented')
+    public function notImplemented($message = 'Not Implemented', $data = null)
     {
-        return $this -> error(501, $message);
+        if (is_null($this -> getStatusCode())) {
+            $this -> setStatusCode(501);
+        }
+
+
+        if (is_null($this -> getMessage())) {
+            $this -> setMessage($message);
+        }
+
+        if (is_null($this -> getErrors())) {
+            $this -> setErrors($errors);
+        }
+
+        return $this -> send();
     }
 
+    public function notImplementedException($message = 'Not Implemented', $errors = null)
+    {
+        throw new ResourceException(501, $message, $errors);
+    }
 
     /**
      * Server error - Bad Gateway
@@ -470,11 +889,29 @@ class ResponseJson
      *
      * @param string $message
      */
-    public function badGateway($message = 'Bad Gateway')
+    public function badGateway($message = 'Bad Gateway', $data = null)
     {
-        return $this -> error(502, $message);
+        if (is_null($this -> getStatusCode())) {
+            $this -> setStatusCode(502);
+        }
+
+
+        if (is_null($this -> getMessage())) {
+            $this -> setMessage($message);
+        }
+
+        if (is_null($this -> getErrors())) {
+            $this -> setErrors($errors);
+        }
+
+        return $this -> send();
     }
 
+
+    public function badGatewayException($message = 'Bad Gateway', $errors = null)
+    {
+        throw new ResourceException(502, $message, $errors);
+    }
 
     /**
      * Server error - Service Unavailable
@@ -484,11 +921,28 @@ class ResponseJson
      *
      * @param string $message
      */
-    public function serviceUnavailable($message = 'Service Unavailable')
+    public function serviceUnavailable($message = 'Service Unavailable', $data = null)
     {
-        return $this -> error(503, $message);
+        if (is_null($this -> getStatusCode())) {
+            $this -> setStatusCode(503);
+        }
+
+
+        if (is_null($this -> getMessage())) {
+            $this -> setMessage($message);
+        }
+
+        if (is_null($this -> getErrors())) {
+            $this -> setErrors($errors);
+        }
+
+        return $this -> send();
     }
 
+    public function serviceUnavailableException($message = 'Service Unavailable', $errors = null)
+    {
+        throw new ResourceException(503, $message, $errors);
+    }
 
     /**
      * Server error - Gateway Time-out
@@ -497,11 +951,28 @@ class ResponseJson
      *
      * @param string $message
      */
-    public function gatewayTimeOut($message = 'Gateway Time-out')
+    public function gatewayTimeOut($message = 'Gateway Time-out', $data = null)
     {
-        return $this -> error(504, $message);
+        if (is_null($this -> getStatusCode())) {
+            $this -> setStatusCode(504);
+        }
+
+
+        if (is_null($this -> getMessage())) {
+            $this -> setMessage($message);
+        }
+
+        if (is_null($this -> getErrors())) {
+            $this -> setErrors($errors);
+        }
+
+        return $this -> send();
     }
 
+    public function gatewayTimeOutException($message = 'Gateway Time-out', $errors = null)
+    {
+        throw new ResourceException(504, $message, $errors);
+    }
 
     /**
      * Server error - HTTP Version Not Supported
@@ -510,11 +981,28 @@ class ResponseJson
      *
      * @param string $message
      */
-    public function httpVersionNotSupported($message = 'HTTP Version Not Supported')
+    public function httpVersionNotSupported($message = 'HTTP Version Not Supported', $data = null)
     {
-        return $this -> error(505, $message);
+        if (is_null($this -> getStatusCode())) {
+            $this -> setStatusCode(505);
+        }
+
+
+        if (is_null($this -> getMessage())) {
+            $this -> setMessage($message);
+        }
+
+        if (is_null($this -> getErrors())) {
+            $this -> setErrors($errors);
+        }
+
+        return $this -> send();
     }
 
+    public function httpVersionNotSupportedException($message = 'HTTP Version Not Supported', $errors = null)
+    {
+        throw new ResourceException(505, $message, $errors);
+    }
 
     /**
      * Server error - Variant Also Negotiates
@@ -523,11 +1011,28 @@ class ResponseJson
      *
      * @param string $message
      */
-    public function variantAlsoNegotiates($message = 'Variant Also Negotiates')
+    public function variantAlsoNegotiates($message = 'Variant Also Negotiates', $data = null)
     {
-        return $this -> error(506, $message);
+        if (is_null($this -> getStatusCode())) {
+            $this -> setStatusCode(506);
+        }
+
+
+        if (is_null($this -> getMessage())) {
+            $this -> setMessage($message);
+        }
+
+        if (is_null($this -> getErrors())) {
+            $this -> setErrors($errors);
+        }
+
+        return $this -> send();
     }
 
+    public function variantAlsoNegotiatesException($message = 'Variant Also Negotiates', $errors = null)
+    {
+        throw new ResourceException(506, $message, $errors);
+    }
 
     /**
      * Server error - Insufficient Storage
@@ -536,11 +1041,28 @@ class ResponseJson
      *
      * @param string $message
      */
-    public function insufficientStorage($message = 'Insufficient Storage')
+    public function insufficientStorage($message = 'Insufficient Storage', $data = null)
     {
-        return $this -> error(507, $message);
+        if (is_null($this -> getStatusCode())) {
+            $this -> setStatusCode(507);
+        }
+
+
+        if (is_null($this -> getMessage())) {
+            $this -> setMessage($message);
+        }
+
+        if (is_null($this -> getErrors())) {
+            $this -> setErrors($errors);
+        }
+
+        return $this -> send();
     }
 
+    public function insufficientStorageException($message = 'Insufficient Storage', $errors = null)
+    {
+        throw new ResourceException(507, $message, $errors);
+    }
 
     /**
      * Server error - Loop Detected
@@ -549,11 +1071,29 @@ class ResponseJson
      *
      * @param string $message
      */
-    public function loopDetected($message = 'Loop Detected')
+    public function loopDetected($message = 'Loop Detected', $data = null)
     {
-        return $this -> error(508, $message);
+        if (is_null($this -> getStatusCode())) {
+            $this -> setStatusCode(508);
+        }
+
+
+        if (is_null($this -> getMessage())) {
+            $this -> setMessage($message);
+        }
+
+        if (is_null($this -> getErrors())) {
+            $this -> setErrors($errors);
+        }
+
+        return $this -> send();
     }
 
+
+    public function loopDetectedException($message = 'Loop Detected', $errors = null)
+    {
+        throw new ResourceException(508, $message, $errors);
+    }
 
     /**
      * Server error - Not Extended
@@ -562,11 +1102,28 @@ class ResponseJson
      *
      * @param string $message
      */
-    public function notExtended($message = 'Not Extended')
+    public function notExtended($message = 'Not Extended', $data = null)
     {
-        return $this -> error(510, $message);
+        if (is_null($this -> getStatusCode())) {
+            $this -> setStatusCode(510);
+        }
+
+
+        if (is_null($this -> getMessage())) {
+            $this -> setMessage($message);
+        }
+
+        if (is_null($this -> getErrors())) {
+            $this -> setErrors($errors);
+        }
+
+        return $this -> send();
     }
 
+    public function notExtendedException($message = 'Not Extended', $errors = null)
+    {
+        throw new ResourceException(510, $message, $errors);
+    }
 
     /**
      * Server error - Network Authentication Required
@@ -577,55 +1134,26 @@ class ResponseJson
      *
      * @param string $message
      */
-    public function networkAuthenticationRequired($message = 'Network Authentication Required')
+    public function networkAuthenticationRequired($message = 'Network Authentication Required', $data = null)
     {
-        return $this -> error(511, $message);
+        if (is_null($this -> getStatusCode())) {
+            $this -> setStatusCode(511);
+        }
+
+        if (is_null($this -> getMessage())) {
+            $this -> setMessage($message);
+        }
+
+        if (is_null($this -> getErrors())) {
+            $this -> setErrors($errors);
+        }
+
+        return $this -> send();
     }
 
-
-    /**
-     * @param $message
-     * @param $errors
-     */
-    public function deleteResourceFailedException($message, $errors)
+    public function networkAuthenticationRequiredException($message = 'Network Authentication Required', $errors = null)
     {
-        throw new ResourceException($message, $errors);
-    }
-
-    /**
-     * @param $message
-     * @param $errors
-     */
-    public function resourceException($message, $errors)
-    {
-        throw new ResourceException($message, $errors);
-    }
-
-    /**
-     * @param $message
-     * @param $errors
-     */
-    public function storeResourceFailedException($message, $errors)
-    {
-        throw new ResourceException($message, $errors);
-    }
-
-    /**
-     * @param $message
-     * @param $errors
-     */
-    public function updateResourceFailedException($message, $errors)
-    {
-        throw new ResourceException($message, $errors);
-    }
-
-    /**
-     * @param $message
-     * @param $errors
-     */
-    public function validationHttpException($message, $errors)
-    {
-        throw new ResourceException($message, $errors);
+        throw new ResourceException(511, $message, $errors);
     }
 
 }
