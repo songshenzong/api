@@ -17,6 +17,10 @@ class ResponseJson
      */
     protected $statusCode;
 
+    /**
+     * @var int
+     */
+    protected $httpStatusCode;
 
     /**
      * @var string
@@ -105,6 +109,28 @@ class ResponseJson
         return $this;
     }
 
+
+    /**
+     * @param int $httpStatusCode
+     *
+     * @return $this
+     */
+    public function setHttpStatusCode($httpStatusCode)
+    {
+        $this -> httpStatusCode = $httpStatusCode;
+        return $this;
+    }
+
+
+    /**
+     * @return int
+     */
+    public function getHttpStatusCode()
+    {
+        return $this -> httpStatusCode;
+    }
+
+
     /**
      * @return int
      */
@@ -134,8 +160,11 @@ class ResponseJson
             $this -> content['errors'] = $this -> getErrors();
         }
 
+        if (is_null($this -> getHttpStatusCode())) {
+            $this -> setHttpStatusCode($this -> getStatusCode());
+        }
 
-        return \Response ::json($this -> content, $this -> getStatusCode());
+        return \Response ::json($this -> content, $this -> getHttpStatusCode());
     }
 
 
