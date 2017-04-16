@@ -2,7 +2,6 @@
 
 namespace Songshenzong\ResponseJson;
 
-
 class ResponseJson
 {
 
@@ -155,7 +154,6 @@ class ResponseJson
 
         if (is_null($this -> getHttpStatusCode())) {
             $this -> setHttpStatusCode($this -> getStatusCode());
-
         } else {
             $this -> content['http_status_code'] = $this -> getHttpStatusCode();
         }
@@ -186,7 +184,6 @@ class ResponseJson
      */
     public function ok($data = null)
     {
-
         if (is_null($this -> getMessage())) {
             $this -> setMessage('OK');
         }
@@ -246,8 +243,6 @@ class ResponseJson
      */
     public function created($message = 'Created', $data = null)
     {
-
-
         if (is_null($this -> getStatusCode())) {
             $this -> setStatusCode(201);
         }
@@ -276,7 +271,6 @@ class ResponseJson
      */
     public function accepted($message = 'Accepted', $data = null)
     {
-
         if (is_null($this -> getStatusCode())) {
             $this -> setStatusCode(202);
         }
@@ -305,8 +299,6 @@ class ResponseJson
      */
     public function nonAuthoritativeInformation($message = 'Non-Authoritative Information', $data = null)
     {
-
-
         if (is_null($this -> getStatusCode())) {
             $this -> setStatusCode(203);
         }
@@ -335,7 +327,6 @@ class ResponseJson
      */
     public function noContent($message = 'No Content', $data = null)
     {
-
         if (is_null($this -> getStatusCode())) {
             $this -> setStatusCode(204);
         }
@@ -365,8 +356,6 @@ class ResponseJson
      */
     public function resetContent($data = null)
     {
-
-
         if (is_null($this -> getStatusCode())) {
             $this -> setStatusCode(205);
         }
@@ -394,7 +383,6 @@ class ResponseJson
      */
     public function badRequest($message = 'Bad Request', $errors = null)
     {
-
         if (is_null($this -> getStatusCode())) {
             $this -> setStatusCode(400);
         }
@@ -1189,5 +1177,4 @@ class ResponseJson
     {
         throw new ResourceException(511, $message, $errors);
     }
-
 }
