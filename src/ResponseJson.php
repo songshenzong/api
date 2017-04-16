@@ -152,16 +152,19 @@ class ResponseJson
             'status_code' => $this -> statusCode,
         ];
 
+
+        if (is_null($this -> getHttpStatusCode())) {
+            $this -> setHttpStatusCode($this -> getStatusCode());
+        }
+
+        $this -> content['http_status_code'] = $this -> getHttpStatusCode();
+
         if (!is_null($this -> getData())) {
             $this -> content['data'] = $this -> getData();
         }
 
         if (!is_null($this -> getErrors())) {
             $this -> content['errors'] = $this -> getErrors();
-        }
-
-        if (is_null($this -> getHttpStatusCode())) {
-            $this -> setHttpStatusCode($this -> getStatusCode());
         }
 
         return \Response ::json($this -> content, $this -> getHttpStatusCode());
