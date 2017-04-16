@@ -402,7 +402,7 @@ class ResponseJson
      *
      * @return mixed
      */
-    public function unauthorized($message = 'Unauthorized', $data = null)
+    public function unauthorized($message = 'Unauthorized', $errors = null)
     {
         if (is_null($this -> getStatusCode())) {
             $this -> setStatusCode(401);
@@ -434,7 +434,7 @@ class ResponseJson
      *
      * @return mixed
      */
-    public function forbidden($message = 'Forbidden', $data = null)
+    public function forbidden($message = 'Forbidden', $errors = null)
     {
         if (is_null($this -> getStatusCode())) {
             $this -> setStatusCode(403);
@@ -466,7 +466,7 @@ class ResponseJson
      *
      * @return mixed
      */
-    public function notFound($message = 'Not Found', $data = null)
+    public function notFound($message = 'Not Found', $errors = null)
     {
         if (is_null($this -> getStatusCode())) {
             $this -> setStatusCode(404);
@@ -499,7 +499,7 @@ class ResponseJson
      *
      * @return mixed
      */
-    public function methodNotAllowed($message = 'Method Not Allowed', $data = null)
+    public function methodNotAllowed($message = 'Method Not Allowed', $errors = null)
     {
         if (is_null($this -> getStatusCode())) {
             $this -> setStatusCode(405);
@@ -532,7 +532,7 @@ class ResponseJson
      *
      * @return mixed
      */
-    public function notAcceptable($message = 'Not Acceptable', $data = null)
+    public function notAcceptable($message = 'Not Acceptable', $errors = null)
     {
         if (is_null($this -> getStatusCode())) {
             $this -> setStatusCode(406);
@@ -565,7 +565,7 @@ class ResponseJson
      *
      * @return mixed
      */
-    public function conflict($message = 'Conflict', $data = null)
+    public function conflict($message = 'Conflict', $errors = null)
     {
         if (is_null($this -> getStatusCode())) {
             $this -> setStatusCode(409);
@@ -601,7 +601,7 @@ class ResponseJson
      *
      * @return mixed
      */
-    public function gone($message = 'Gone', $data = null)
+    public function gone($message = 'Gone', $errors = null)
     {
         if (is_null($this -> getStatusCode())) {
             $this -> setStatusCode(410);
@@ -633,7 +633,7 @@ class ResponseJson
      *
      * @return mixed
      */
-    public function lengthRequired($message = 'Length Required', $data = null)
+    public function lengthRequired($message = 'Length Required', $errors = null)
     {
         if (is_null($this -> getStatusCode())) {
             $this -> setStatusCode(411);
@@ -665,7 +665,7 @@ class ResponseJson
      *
      * @return mixed
      */
-    public function preconditionFailed($message = 'Precondition Failed', $data = null)
+    public function preconditionFailed($message = 'Precondition Failed', $errors = null)
     {
         if (is_null($this -> getStatusCode())) {
             $this -> setStatusCode(412);
@@ -698,7 +698,7 @@ class ResponseJson
      *
      * @return mixed
      */
-    public function unsupportedMediaType($message = 'Unsupported Media Type', $data = null)
+    public function unsupportedMediaType($message = 'Unsupported Media Type', $errors = null)
     {
         if (is_null($this -> getStatusCode())) {
             $this -> setStatusCode(413);
@@ -730,7 +730,7 @@ class ResponseJson
      *
      * @return mixed
      */
-    public function unprocessableEntity($message = 'Unprocessable Entity', $data = null)
+    public function unprocessableEntity($message = 'Unprocessable Entity', $errors = null)
     {
         if (is_null($this -> getStatusCode())) {
             $this -> setStatusCode(422);
@@ -764,7 +764,7 @@ class ResponseJson
      *
      * @return mixed
      */
-    public function preconditionRequired($message = 'Precondition Required', $data = null)
+    public function preconditionRequired($message = 'Precondition Required', $errors = null)
     {
         if (is_null($this -> getStatusCode())) {
             $this -> setStatusCode(428);
@@ -796,7 +796,7 @@ class ResponseJson
      *
      * @return mixed
      */
-    public function tooManyRequests($message = 'Too Many Requests', $data = null)
+    public function tooManyRequests($message = 'Too Many Requests', $errors = null)
     {
         if (is_null($this -> getStatusCode())) {
             $this -> setStatusCode(429);
@@ -827,7 +827,7 @@ class ResponseJson
      *
      * @param string $message
      */
-    public function internalServerError($message = 'Internal Server Error', $data = null)
+    public function internalServerError($message = 'Internal Server Error', $errors = null)
     {
         if (is_null($this -> getStatusCode())) {
             $this -> setStatusCode(500);
@@ -859,7 +859,7 @@ class ResponseJson
      *
      * @param string $message
      */
-    public function notImplemented($message = 'Not Implemented', $data = null)
+    public function notImplemented($message = 'Not Implemented', $errors = null)
     {
         if (is_null($this -> getStatusCode())) {
             $this -> setStatusCode(501);
@@ -889,7 +889,7 @@ class ResponseJson
      *
      * @param string $message
      */
-    public function badGateway($message = 'Bad Gateway', $data = null)
+    public function badGateway($message = 'Bad Gateway', $errors = null)
     {
         if (is_null($this -> getStatusCode())) {
             $this -> setStatusCode(502);
@@ -921,7 +921,7 @@ class ResponseJson
      *
      * @param string $message
      */
-    public function serviceUnavailable($message = 'Service Unavailable', $data = null)
+    public function serviceUnavailable($message = 'Service Unavailable', $errors = null)
     {
         if (is_null($this -> getStatusCode())) {
             $this -> setStatusCode(503);
@@ -951,7 +951,7 @@ class ResponseJson
      *
      * @param string $message
      */
-    public function gatewayTimeOut($message = 'Gateway Time-out', $data = null)
+    public function gatewayTimeOut($message = 'Gateway Time-out', $errors = null)
     {
         if (is_null($this -> getStatusCode())) {
             $this -> setStatusCode(504);
@@ -981,7 +981,7 @@ class ResponseJson
      *
      * @param string $message
      */
-    public function httpVersionNotSupported($message = 'HTTP Version Not Supported', $data = null)
+    public function httpVersionNotSupported($message = 'HTTP Version Not Supported', $errors = null)
     {
         if (is_null($this -> getStatusCode())) {
             $this -> setStatusCode(505);
@@ -1011,7 +1011,7 @@ class ResponseJson
      *
      * @param string $message
      */
-    public function variantAlsoNegotiates($message = 'Variant Also Negotiates', $data = null)
+    public function variantAlsoNegotiates($message = 'Variant Also Negotiates', $errors = null)
     {
         if (is_null($this -> getStatusCode())) {
             $this -> setStatusCode(506);
@@ -1041,7 +1041,7 @@ class ResponseJson
      *
      * @param string $message
      */
-    public function insufficientStorage($message = 'Insufficient Storage', $data = null)
+    public function insufficientStorage($message = 'Insufficient Storage', $errors = null)
     {
         if (is_null($this -> getStatusCode())) {
             $this -> setStatusCode(507);
@@ -1071,7 +1071,7 @@ class ResponseJson
      *
      * @param string $message
      */
-    public function loopDetected($message = 'Loop Detected', $data = null)
+    public function loopDetected($message = 'Loop Detected', $errors = null)
     {
         if (is_null($this -> getStatusCode())) {
             $this -> setStatusCode(508);
@@ -1102,7 +1102,7 @@ class ResponseJson
      *
      * @param string $message
      */
-    public function notExtended($message = 'Not Extended', $data = null)
+    public function notExtended($message = 'Not Extended', $errors = null)
     {
         if (is_null($this -> getStatusCode())) {
             $this -> setStatusCode(510);
@@ -1134,7 +1134,7 @@ class ResponseJson
      *
      * @param string $message
      */
-    public function networkAuthenticationRequired($message = 'Network Authentication Required', $data = null)
+    public function networkAuthenticationRequired($message = 'Network Authentication Required', $errors = null)
     {
         if (is_null($this -> getStatusCode())) {
             $this -> setStatusCode(511);
