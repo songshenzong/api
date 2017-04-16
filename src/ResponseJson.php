@@ -155,9 +155,11 @@ class ResponseJson
 
         if (is_null($this -> getHttpStatusCode())) {
             $this -> setHttpStatusCode($this -> getStatusCode());
+
+        } else {
+            $this -> content['http_status_code'] = $this -> getHttpStatusCode();
         }
 
-        $this -> content['http_status_code'] = $this -> getHttpStatusCode();
 
         if (!is_null($this -> getData())) {
             $this -> content['data'] = $this -> getData();
