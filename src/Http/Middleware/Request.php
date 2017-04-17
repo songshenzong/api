@@ -73,32 +73,32 @@ class Request
     }
 
 
-    public function dispatch(Request $request)
-    {
-        $this -> currentRoute = null;
-
-        $this -> container -> instance(Request::class, $request);
-
-        $this -> routesDispatched++;
-
-        try {
-            $response = $this -> adapter -> dispatch($request, $request -> version());
-
-            if (property_exists($response, 'exception') && $response -> exception instanceof Exception) {
-                throw $response -> exception;
-            }
-        } catch (Exception $exception) {
-            if ($request instanceof InternalRequest) {
-                throw $exception;
-            }
-
-            $this -> exception -> report($exception);
-
-            $response = $this -> exception -> handle($exception);
-        }
-
-        return $this -> prepareResponse($response, $request, $request -> format());
-    }
+    // public function dispatch(Request $request)
+    // {
+    //     $this -> currentRoute = null;
+    //
+    //     $this -> container -> instance(Request::class, $request);
+    //
+    //     $this -> routesDispatched++;
+    //
+    //     try {
+    //         $response = $this -> adapter -> dispatch($request, $request -> version());
+    //
+    //         if (property_exists($response, 'exception') && $response -> exception instanceof Exception) {
+    //             throw $response -> exception;
+    //         }
+    //     } catch (Exception $exception) {
+    //         if ($request instanceof InternalRequest) {
+    //             throw $exception;
+    //         }
+    //
+    //         $this -> exception -> report($exception);
+    //
+    //         $response = $this -> exception -> handle($exception);
+    //     }
+    //
+    //     return $this -> prepareResponse($response, $request, $request -> format());
+    // }
 
 
 }
