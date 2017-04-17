@@ -123,6 +123,7 @@ class Router
      */
     protected function prepareResponse($response, Request $request, $format)
     {
+
         if ($response instanceof IlluminateResponse) {
             $response = Response ::makeFromExisting($response);
         } elseif ($response instanceof JsonResponse) {

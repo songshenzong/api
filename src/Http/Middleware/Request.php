@@ -23,7 +23,6 @@ class Request
     protected $router;
 
 
-
     protected $middleware = [];
 
     /**
@@ -58,8 +57,11 @@ class Request
 
             $request = $this -> app -> make(HttpRequest::class) -> createFromIlluminate($request);
 
+            $this -> app -> instance('request', $request);
 
-            return $this -> sendRequestThroughRouter($request);
+            return (new Pipeline($this -> app)) -> send($request) -> through($this -> middleware) -> then(function ($request) {
+                return $this -> router -> dispatch($request);
+            });
 
         } catch (Exception $exception) {
 
@@ -98,20 +100,6 @@ class Request
         }
 
         return $this -> prepareResponse($response, $request, $request -> format());
-    }
-
-    /**
-     * Send the request through the Dingo router.
-     *
-     *
-     */
-    protected function sendRequestThroughRouter(HttpRequest $request)
-    {
-        $this -> app -> instance('request', $request);
-
-        return (new Pipeline($this -> app)) -> send($request) -> through($this -> middleware) -> then(function ($request) {
-            return $this -> router -> dispatch($request);
-        });
     }
 
 
