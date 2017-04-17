@@ -13,5 +13,5 @@ interface Request
      *
      * @return \Dingo\Api\Http\Request
      */
-    public function createFromIlluminate(IlluminateRequest $old);
+    // public function createFromIlluminate(IlluminateRequest $old);
 }

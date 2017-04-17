@@ -2,9 +2,6 @@
 
 namespace Songshenzong\ResponseJson;
 
-use Exception;
-use Songshenzong\ResponseJson\Contract\Debug\ExceptionHandler;
-use Illuminate\Container\Container;
 
 class ResponseJson
 {
@@ -167,11 +164,7 @@ class ResponseJson
      */
     protected $container;
 
-    public function __construct(ExceptionHandler $exception, Container $container)
-    {
-        $this -> exception = $exception;
-        $this -> container = $container;
-    }
+
 
 
     /**
@@ -190,7 +183,10 @@ class ResponseJson
         $this -> setStatusCode($statusCode);
 
 
-        $this -> setMessage($message);
+        if (is_null($this -> getMessage())) {
+            $this -> setMessage($message);
+        }
+
         $this -> setData($data);
 
         $this -> content = [
@@ -361,7 +357,7 @@ class ResponseJson
     function errors($statusCode, $message, $errors = null)
     {
 
-        $this -> setStatusCode(400);
+        $this -> setStatusCode($statusCode);
 
 
         $this -> setMessage($message);
