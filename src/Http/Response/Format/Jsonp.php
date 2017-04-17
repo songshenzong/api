@@ -1,6 +1,6 @@
 <?php
 
-namespace Dingo\Api\Http\Response\Format;
+namespace Songshenzong\ResponseJson\Http\Response\Format;
 
 class Jsonp extends Json
 {

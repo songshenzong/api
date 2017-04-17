@@ -1,22 +1,21 @@
 <?php
 
-namespace Dingo\Api\Provider;
+namespace Songshenzong\ResponseJson;
 
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 use RuntimeException;
-use Dingo\Api\Auth\Auth;
-use Dingo\Api\Http\Request;
-use Dingo\Api\Http\Response;
-use Dingo\Api\Exception\Handler as ExceptionHandler;
-use Dingo\Api\Routing\Router;
-use Dingo\Api\Contract\Routing\Adapter;
+use Songshenzong\ResponseJson\Http\Request;
+use Songshenzong\ResponseJson\Http\Response;
+use Songshenzong\ResponseJson\Exception\Handler as ExceptionHandler;
+use Songshenzong\ResponseJson\Routing\Router;
+use Songshenzong\ResponseJson\Contract\Routing\Adapter;
 
-use Dingo\Api\Http\Parser\Accept as AcceptParser;
+use Songshenzong\ResponseJson\Http\Parser\Accept as AcceptParser;
 
 use ReflectionClass;
 use Illuminate\Contracts\Http\Kernel;
-use Dingo\Api\Http\Middleware\Request as RequestMiddleware;
-use Dingo\Api\Routing\Adapter\Laravel;
+use Songshenzong\ResponseJson\Http\Middleware\Request as RequestMiddleware;
+use Songshenzong\ResponseJson\Routing\Adapter\Laravel;
 
 class ServiceProvider extends IlluminateServiceProvider
 {
@@ -38,7 +37,7 @@ class ServiceProvider extends IlluminateServiceProvider
     {
 
         Response ::setFormatters($this -> config('formats'));
-        Request ::setAcceptParser($this -> app['Dingo\Api\Http\Parser\Accept']);
+        Request ::setAcceptParser($this -> app['Songshenzong\ResponseJson\Http\Parser\Accept']);
         $kernel = $this -> app -> make(Kernel::class);
         $kernel -> prependMiddleware(RequestMiddleware::class);
 
@@ -59,9 +58,9 @@ class ServiceProvider extends IlluminateServiceProvider
          *---------------------------------------------------------*/
 
         $aliases = [
-            'responseJson.router'         => 'Dingo\Api\Routing\Router',
-            'responseJson.router.adapter' => 'Dingo\Api\Contract\Routing\Adapter',
-            'responseJson.exception'      => ['Dingo\Api\Exception\Handler', 'Dingo\Api\Contract\Debug\ExceptionHandler'],
+            'responseJson.router'         => 'Songshenzong\ResponseJson\Routing\Router',
+            'responseJson.router.adapter' => 'Songshenzong\ResponseJson\Contract\Routing\Adapter',
+            'responseJson.exception'      => ['Songshenzong\ResponseJson\Exception\Handler', 'Songshenzong\ResponseJson\Contract\Debug\ExceptionHandler'],
         ];
 
         foreach ($aliases as $key => $aliases) {

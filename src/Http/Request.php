@@ -1,8 +1,8 @@
 <?php
 
-namespace Dingo\Api\Http;
+namespace Songshenzong\ResponseJson\Http;
 
-use Dingo\Api\Http\Parser\Accept;
+use Songshenzong\ResponseJson\Http\Parser\Accept;
 use Illuminate\Http\Request as IlluminateRequest;
 
 class Request extends IlluminateRequest
@@ -10,7 +10,6 @@ class Request extends IlluminateRequest
     /**
      * Accept parser instance.
      *
-     * @var \Dingo\Api\Http\Parser\Accept
      */
     protected static $acceptParser;
 
@@ -26,7 +25,6 @@ class Request extends IlluminateRequest
      *
      * @param \Illuminate\Http\Request $old
      *
-     * @return \Dingo\Api\Http\Request
      */
     public function createFromIlluminate(IlluminateRequest $old)
     {
@@ -98,7 +96,6 @@ class Request extends IlluminateRequest
     /**
      * Set the accept parser instance.
      *
-     * @param \Dingo\Api\Http\Parser\Accept $acceptParser
      *
      * @return void
      */
@@ -110,7 +107,6 @@ class Request extends IlluminateRequest
     /**
      * Get the accept parser instance.
      *
-     * @return \Dingo\Api\Http\Parser\Accept
      */
     public static function getAcceptParser()
     {

@@ -1,12 +1,12 @@
 <?php
 
-namespace Dingo\Api\Exception;
+namespace Songshenzong\ResponseJson\Exception;
 
 use Exception;
 use ReflectionFunction;
 use Illuminate\Http\Response;
-use Dingo\Api\Contract\Debug\ExceptionHandler;
-use Dingo\Api\Contract\Debug\MessageBagErrors;
+use Songshenzong\ResponseJson\Contract\Debug\ExceptionHandler;
+use Songshenzong\ResponseJson\Contract\Debug\MessageBagErrors;
 use Symfony\Component\HttpFoundation\Response as BaseResponse;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Illuminate\Contracts\Debug\ExceptionHandler as IlluminateExceptionHandler;
@@ -59,9 +59,9 @@ class Handler implements ExceptionHandler, IlluminateExceptionHandler
      */
     public function __construct(IlluminateExceptionHandler $parentHandler, array $format, $debug)
     {
-        $this->parentHandler = $parentHandler;
-        $this->format = $format;
-        $this->debug = $debug;
+        $this -> parentHandler = $parentHandler;
+        $this -> format        = $format;
+        $this -> debug         = $debug;
     }
 
     /**
@@ -73,13 +73,13 @@ class Handler implements ExceptionHandler, IlluminateExceptionHandler
      */
     public function report(Exception $exception)
     {
-        $this->parentHandler->report($exception);
+        $this -> parentHandler -> report($exception);
     }
 
     /**
      * Render an exception into an HTTP response.
      *
-     * @param \Dingo\Api\Http\Request $request
+     * @param \Songshenzong\ResponseJson\Http\Request $request
      * @param \Exception              $exception
      *
      * @throws \Exception
@@ -88,7 +88,7 @@ class Handler implements ExceptionHandler, IlluminateExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        return $this->handle($exception);
+        return $this -> handle($exception);
     }
 
     /**
@@ -101,7 +101,7 @@ class Handler implements ExceptionHandler, IlluminateExceptionHandler
      */
     public function renderForConsole($output, Exception $exception)
     {
-        return $this->parentHandler->renderForConsole($output, $exception);
+        return $this -> parentHandler -> renderForConsole($output, $exception);
     }
 
     /**
@@ -113,9 +113,9 @@ class Handler implements ExceptionHandler, IlluminateExceptionHandler
      */
     public function register(callable $callback)
     {
-        $hint = $this->handlerHint($callback);
+        $hint = $this -> handlerHint($callback);
 
-        $this->handlers[$hint] = $callback;
+        $this -> handlers[$hint] = $callback;
     }
 
     /**
@@ -127,21 +127,21 @@ class Handler implements ExceptionHandler, IlluminateExceptionHandler
      */
     public function handle(Exception $exception)
     {
-        foreach ($this->handlers as $hint => $handler) {
-            if (! $exception instanceof $hint) {
+        foreach ($this -> handlers as $hint => $handler) {
+            if (!$exception instanceof $hint) {
                 continue;
             }
 
             if ($response = $handler($exception)) {
-                if (! $response instanceof BaseResponse) {
-                    $response = new Response($response, $this->getExceptionStatusCode($exception));
+                if (!$response instanceof BaseResponse) {
+                    $response = new Response($response, $this -> getExceptionStatusCode($exception));
                 }
 
                 return $response;
             }
         }
 
-        return $this->genericResponse($exception);
+        return $this -> genericResponse($exception);
     }
 
     /**
@@ -155,9 +155,9 @@ class Handler implements ExceptionHandler, IlluminateExceptionHandler
      */
     protected function genericResponse(Exception $exception)
     {
-        $replacements = $this->prepareReplacements($exception);
+        $replacements = $this -> prepareReplacements($exception);
 
-        $response = $this->newResponseArray();
+        $response = $this -> newResponseArray();
 
         array_walk_recursive($response, function (&$value, $key) use ($exception, $replacements) {
             if (starts_with($value, ':') && isset($replacements[$value])) {
@@ -165,9 +165,9 @@ class Handler implements ExceptionHandler, IlluminateExceptionHandler
             }
         });
 
-        $response = $this->recursivelyRemoveEmptyReplacements($response);
+        $response = $this -> recursivelyRemoveEmptyReplacements($response);
 
-        return new Response($response, $this->getStatusCode($exception), $this->getHeaders($exception));
+        return new Response($response, $this -> getStatusCode($exception), $this -> getHeaders($exception));
     }
 
     /**
@@ -179,7 +179,7 @@ class Handler implements ExceptionHandler, IlluminateExceptionHandler
      */
     protected function getStatusCode(Exception $exception)
     {
-        return $exception instanceof HttpExceptionInterface ? $exception->getStatusCode() : 500;
+        return $exception instanceof HttpExceptionInterface ? $exception -> getStatusCode() : 500;
     }
 
     /**
@@ -191,7 +191,7 @@ class Handler implements ExceptionHandler, IlluminateExceptionHandler
      */
     protected function getHeaders(Exception $exception)
     {
-        return $exception instanceof HttpExceptionInterface ? $exception->getHeaders() : [];
+        return $exception instanceof HttpExceptionInterface ? $exception -> getHeaders() : [];
     }
 
     /**
@@ -203,35 +203,36 @@ class Handler implements ExceptionHandler, IlluminateExceptionHandler
      */
     protected function prepareReplacements(Exception $exception)
     {
-        $statusCode = $this->getStatusCode($exception);
+        $statusCode = $this -> getStatusCode($exception);
 
-        if (! $message = $exception->getMessage()) {
-            $message = sprintf('%d %s', $statusCode, Response::$statusTexts[$statusCode]);
+        if (!$message = $exception -> getMessage()) {
+            $message = sprintf('%d %s', $statusCode, Response ::$statusTexts[$statusCode]);
         }
 
         $replacements = [
-            ':message' => $message,
-            ':status_code' => $statusCode,
+            ':message'     => $message,
+            ':status_code' => 200,
+            // ':status_code' => $statusCode,
         ];
 
-        if ($exception instanceof MessageBagErrors && $exception->hasErrors()) {
-            $replacements[':errors'] = $exception->getErrors();
+        if ($exception instanceof MessageBagErrors && $exception -> hasErrors()) {
+            $replacements[':errors'] = $exception -> getErrors();
         }
 
-        if ($code = $exception->getCode()) {
+        if ($code = $exception -> getCode()) {
             $replacements[':code'] = $code;
         }
 
-        if ($this->runningInDebugMode()) {
+        if ($this -> runningInDebugMode()) {
             $replacements[':debug'] = [
-                'line' => $exception->getLine(),
-                'file' => $exception->getFile(),
+                'line'  => $exception -> getLine(),
+                'file'  => $exception -> getFile(),
                 'class' => get_class($exception),
-                'trace' => explode("\n", $exception->getTraceAsString()),
+                'trace' => explode("\n", $exception -> getTraceAsString()),
             ];
         }
 
-        return array_merge($replacements, $this->replacements);
+        return array_merge($replacements, $this -> replacements);
     }
 
     /**
@@ -243,7 +244,7 @@ class Handler implements ExceptionHandler, IlluminateExceptionHandler
      */
     public function setReplacements(array $replacements)
     {
-        $this->replacements = $replacements;
+        $this -> replacements = $replacements;
     }
 
     /**
@@ -257,13 +258,13 @@ class Handler implements ExceptionHandler, IlluminateExceptionHandler
     {
         foreach ($input as &$value) {
             if (is_array($value)) {
-                $value = $this->recursivelyRemoveEmptyReplacements($value);
+                $value = $this -> recursivelyRemoveEmptyReplacements($value);
             }
         }
 
         return array_filter($input, function ($value) {
             if (is_string($value)) {
-                return ! starts_with($value, ':');
+                return !starts_with($value, ':');
             }
 
             return true;
@@ -277,7 +278,7 @@ class Handler implements ExceptionHandler, IlluminateExceptionHandler
      */
     protected function newResponseArray()
     {
-        return $this->format;
+        return $this -> format;
     }
 
     /**
@@ -290,7 +291,7 @@ class Handler implements ExceptionHandler, IlluminateExceptionHandler
      */
     protected function getExceptionStatusCode(Exception $exception, $defaultStatusCode = 500)
     {
-        return ($exception instanceof HttpExceptionInterface) ? $exception->getStatusCode() : $defaultStatusCode;
+        return ($exception instanceof HttpExceptionInterface) ? $exception -> getStatusCode() : $defaultStatusCode;
     }
 
     /**
@@ -300,7 +301,7 @@ class Handler implements ExceptionHandler, IlluminateExceptionHandler
      */
     protected function runningInDebugMode()
     {
-        return $this->debug;
+        return $this -> debug;
     }
 
     /**
@@ -314,9 +315,9 @@ class Handler implements ExceptionHandler, IlluminateExceptionHandler
     {
         $reflection = new ReflectionFunction($callback);
 
-        $exception = $reflection->getParameters()[0];
+        $exception = $reflection -> getParameters()[0];
 
-        return $exception->getClass()->getName();
+        return $exception -> getClass() -> getName();
     }
 
     /**
@@ -326,7 +327,7 @@ class Handler implements ExceptionHandler, IlluminateExceptionHandler
      */
     public function getHandlers()
     {
-        return $this->handlers;
+        return $this -> handlers;
     }
 
     /**
@@ -338,7 +339,7 @@ class Handler implements ExceptionHandler, IlluminateExceptionHandler
      */
     public function setErrorFormat(array $format)
     {
-        $this->format = $format;
+        $this -> format = $format;
     }
 
     /**
@@ -350,6 +351,6 @@ class Handler implements ExceptionHandler, IlluminateExceptionHandler
      */
     public function setDebug($debug)
     {
-        $this->debug = $debug;
+        $this -> debug = $debug;
     }
 }

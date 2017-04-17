@@ -1,14 +1,14 @@
 <?php
 
-namespace Dingo\Api\Http\Middleware;
+namespace Songshenzong\ResponseJson\Http\Middleware;
 
 use Closure;
 use Exception;
-use Dingo\Api\Routing\Router;
+use Songshenzong\ResponseJson\Routing\Router;
 use Illuminate\Pipeline\Pipeline;
-use Dingo\Api\Http\Request as HttpRequest;
+use Songshenzong\ResponseJson\Http\Request as HttpRequest;
 use Illuminate\Contracts\Container\Container;
-use Dingo\Api\Contract\Debug\ExceptionHandler;
+use Songshenzong\ResponseJson\Contract\Debug\ExceptionHandler;
 use Illuminate\Contracts\Debug\ExceptionHandler as LaravelExceptionHandler;
 
 class Request
@@ -23,14 +23,12 @@ class Request
     /**
      * Exception handler instance.
      *
-     * @var \Dingo\Api\Contract\Debug\ExceptionHandler
      */
     protected $exception;
 
     /**
      * Router instance.
      *
-     * @var \Dingo\Api\Routing\Router
      */
     protected $router;
 
@@ -46,8 +44,6 @@ class Request
      * Create a new request middleware instance.
      *
      * @param \Illuminate\Contracts\Foundation\Application $app
-     * @param \Dingo\Api\Contract\Debug\ExceptionHandler   $exception
-     * @param \Dingo\Api\Routing\Router                    $router
      *
      * @return void
      */
@@ -122,9 +118,7 @@ class Request
     /**
      * Send the request through the Dingo router.
      *
-     * @param \Dingo\Api\Http\Request $request
      *
-     * @return \Dingo\Api\Http\Response
      */
     protected function sendRequestThroughRouter(HttpRequest $request)
     {

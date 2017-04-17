@@ -1,11 +1,11 @@
 <?php
 
-namespace Dingo\Api\Routing\Adapter;
+namespace Songshenzong\ResponseJson\Routing\Adapter;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use Illuminate\Routing\Router;
-use Dingo\Api\Contract\Routing\Adapter;
+use Songshenzong\ResponseJson\Contract\Routing\Adapter;
 
 class Laravel implements Adapter
 {

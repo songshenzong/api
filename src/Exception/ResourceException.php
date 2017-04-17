@@ -1,10 +1,10 @@
 <?php
 
-namespace Dingo\Api\Exception;
+namespace Songshenzong\ResponseJson\Exception;
 
 use Exception;
 use Illuminate\Support\MessageBag;
-use Dingo\Api\Contract\Debug\MessageBagErrors;
+use Songshenzong\ResponseJson\Contract\Debug\MessageBagErrors;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ResourceException extends HttpException implements MessageBagErrors

@@ -1,6 +1,6 @@
 <?php
 
-namespace Dingo\Api\Http\Parser;
+namespace Songshenzong\ResponseJson\Http\Parser;
 
 use Illuminate\Http\Request;
 

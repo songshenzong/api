@@ -1,19 +1,19 @@
 <?php
 
-namespace Dingo\Api\Routing;
+namespace Songshenzong\ResponseJson\Routing;
 
 use Closure;
 use Exception;
 use RuntimeException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Dingo\Api\Http\Request;
-use Dingo\Api\Http\Response;
+use Songshenzong\ResponseJson\Http\Request;
+use Songshenzong\ResponseJson\Http\Response;
 use Illuminate\Http\JsonResponse;
-use Dingo\Api\Http\InternalRequest;
+use Songshenzong\ResponseJson\Http\InternalRequest;
 use Illuminate\Container\Container;
-use Dingo\Api\Contract\Routing\Adapter;
-use Dingo\Api\Contract\Debug\ExceptionHandler;
+use Songshenzong\ResponseJson\Contract\Routing\Adapter;
+use Songshenzong\ResponseJson\Contract\Debug\ExceptionHandler;
 use Illuminate\Http\Response as IlluminateResponse;
 use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
 
@@ -22,21 +22,18 @@ class Router
     /**
      * Routing adapter instance.
      *
-     * @var \Dingo\Api\Contract\Routing\Adapter
      */
     protected $adapter;
 
     /**
      * Accept parser instance.
      *
-     * @var \Dingo\Api\Http\Parser\Accept
      */
     protected $accept;
 
     /**
      * Exception handler instance.
      *
-     * @var \Dingo\Api\Contract\Debug\ExceptionHandler
      */
     protected $exception;
 
@@ -54,7 +51,6 @@ class Router
     /**
      * The current route being dispatched.
      *
-     * @var \Dingo\Api\Routing\Route
      */
     protected $currentRoute;
 
@@ -69,9 +65,6 @@ class Router
     /**
      * Create a new router instance.
      *
-     * @param \Dingo\Api\Contract\Routing\Adapter        $adapter
-     * @param \Dingo\Api\Http\Parser\Accept              $accept
-     * @param \Dingo\Api\Contract\Debug\ExceptionHandler $exception
      * @param \Illuminate\Container\Container            $container
      * @param string                                     $domain
      * @param string                                     $prefix
@@ -90,11 +83,9 @@ class Router
     /**
      * Dispatch a request via the adapter.
      *
-     * @param \Dingo\Api\Http\Request $request
      *
      * @throws \Exception
      *
-     * @return \Dingo\Api\Http\Response
      */
     public function dispatch(Request $request)
     {
@@ -127,10 +118,8 @@ class Router
      * Prepare a response by transforming and formatting it correctly.
      *
      * @param mixed                   $response
-     * @param \Dingo\Api\Http\Request $request
      * @param string                  $format
      *
-     * @return \Dingo\Api\Http\Response
      */
     protected function prepareResponse($response, Request $request, $format)
     {
