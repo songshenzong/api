@@ -104,7 +104,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         });
 
 
-
         $this -> app -> singleton('ResponseJson', function ($app) {
             return new ResponseJson(
                 $app[ExceptionHandler::class],
@@ -116,7 +115,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this -> registerClassAliases();
         $this -> registerExceptionHandler();
     }
-
 
 
     /**
