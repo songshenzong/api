@@ -4,8 +4,6 @@
 return [
 
 
-
-
     /*
     |--------------------------------------------------------------------------
     | API Subtype
@@ -19,7 +17,6 @@ return [
     */
 
     'subtype' => env('API_SUBTYPE', ''),
-
 
 
     /*
@@ -112,11 +109,12 @@ return [
     */
 
     'errorFormat' => [
-        'message' => ':message',
-        'errors' => ':errors',
-        'code' => ':code',
-        'status_code' => ':status_code',
-        'debug' => ':debug',
+        'message'          => ':message',
+        'errors'           => ':errors',
+        'code'             => ':code',
+        'status_code'      => ':status_code',
+        'http_status_code' => ':http_status_code',
+        'debug'            => ':debug',
     ],
 
     /*
@@ -185,7 +183,6 @@ return [
     | formatter.
     |
     */
-
 
 
     'formats' => [

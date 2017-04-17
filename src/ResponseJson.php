@@ -340,11 +340,7 @@ class ResponseJson
         $this -> setErrors($errors);
 
 
-        if (is_null($this -> getHttpStatusCode())) {
-            $httpStatusCode = $this -> getStatusCode();
-        } else {
-            $httpStatusCode = $this -> getHttpStatusCode();
-        }
+        $httpStatusCode = $this -> getHttpStatusCode() ?: $this -> getStatusCode();
 
 
         throw new ResourceException($httpStatusCode, $this -> getStatusCode(), $this -> getMessage(), $this -> getErrors());

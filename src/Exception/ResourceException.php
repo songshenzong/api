@@ -5,7 +5,7 @@ namespace Songshenzong\ResponseJson\Exception;
 use Exception;
 use Illuminate\Support\MessageBag;
 use Songshenzong\ResponseJson\Contract\Debug\MessageBagErrors;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+
 
 class ResourceException extends HttpException implements MessageBagErrors
 {
@@ -36,7 +36,8 @@ class ResourceException extends HttpException implements MessageBagErrors
             $this -> errors = is_array($errors) ? new MessageBag($errors) : $errors;
         }
 
-        parent ::__construct($statusCode, $message, $previous, $headers, $code);
+        parent ::__construct($httpStatusCode, $statusCode, $message, $previous, $headers, $code);
+        
     }
 
     /**

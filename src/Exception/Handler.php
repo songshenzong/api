@@ -80,7 +80,7 @@ class Handler implements ExceptionHandler, IlluminateExceptionHandler
      * Render an exception into an HTTP response.
      *
      * @param \Songshenzong\ResponseJson\Http\Request $request
-     * @param \Exception              $exception
+     * @param \Exception                              $exception
      *
      * @throws \Exception
      *
@@ -157,17 +157,19 @@ class Handler implements ExceptionHandler, IlluminateExceptionHandler
     {
         $replacements = $this -> prepareReplacements($exception);
 
-        $response = $this -> newResponseArray();
 
-        array_walk_recursive($response, function (&$value, $key) use ($exception, $replacements) {
-            if (starts_with($value, ':') && isset($replacements[$value])) {
-                $value = $replacements[$value];
-            }
-        });
+        // $response = $this -> newResponseArray();
+        //
+        // array_walk_recursive($response, function (&$value, $key) use ($exception, $replacements) {
+        //     if (starts_with($value, ':') && isset($replacements[$value])) {
+        //         $value = $replacements[$value];
+        //     }
+        // });
+        //
+        // $response = $this -> recursivelyRemoveEmptyReplacements($response);
 
-        $response = $this -> recursivelyRemoveEmptyReplacements($response);
-
-        return new Response($response, $this -> getStatusCode($exception), $this -> getHeaders($exception));
+        // return new Response($response, $this -> getHttpStatusCode($exception), $this -> getHeaders($exception));
+        return new Response($replacements, $this -> getHttpStatusCode($exception), $this -> getHeaders($exception));
     }
 
     /**
@@ -181,6 +183,19 @@ class Handler implements ExceptionHandler, IlluminateExceptionHandler
     {
         return $exception instanceof HttpExceptionInterface ? $exception -> getStatusCode() : 500;
     }
+
+    /**
+     * Get the Http status code from the exception.
+     *
+     * @param \Exception $exception
+     *
+     * @return int
+     */
+    protected function getHttpStatusCode(Exception $exception)
+    {
+        return $exception instanceof HttpExceptionInterface ? $exception -> getHttpStatusCode() : 500;
+    }
+
 
     /**
      * Get the headers from the exception.
@@ -203,28 +218,30 @@ class Handler implements ExceptionHandler, IlluminateExceptionHandler
      */
     protected function prepareReplacements(Exception $exception)
     {
-        $statusCode = $this -> getStatusCode($exception);
+        $statusCode     = $this -> getStatusCode($exception);
+        $httpStatusCode = $this -> getHttpStatusCode($exception);
 
         if (!$message = $exception -> getMessage()) {
             $message = sprintf('%d %s', $statusCode, Response ::$statusTexts[$statusCode]);
         }
 
         $replacements = [
-            ':message'     => $message,
-            ':status_code' => 200,
-            // ':status_code' => $statusCode,
+            'message'          => $message,
+            'status_code'      => $statusCode,
+            'http_status_code' => $httpStatusCode,
         ];
 
+
         if ($exception instanceof MessageBagErrors && $exception -> hasErrors()) {
-            $replacements[':errors'] = $exception -> getErrors();
+            $replacements['errors'] = $exception -> getErrors();
         }
 
         if ($code = $exception -> getCode()) {
-            $replacements[':code'] = $code;
+            $replacements['code'] = $code;
         }
 
         if ($this -> runningInDebugMode()) {
-            $replacements[':debug'] = [
+            $replacements['debug'] = [
                 'line'  => $exception -> getLine(),
                 'file'  => $exception -> getFile(),
                 'class' => get_class($exception),
