@@ -331,7 +331,7 @@ class ResponseJson
     function errors($statusCode, $message, $errors = null)
     {
 
-        $this -> setStatusCode(400);
+        $this -> setStatusCode($statusCode);
 
 
         $this -> setMessage($message);

@@ -23,10 +23,8 @@ class Request
     protected $router;
 
 
-    protected $middleware = [];
-
     /**
-     * Create a new request middleware instance.
+     * Create a new request  instance.
      *
      * @param \Illuminate\Contracts\Foundation\Application $app
      *
@@ -59,7 +57,7 @@ class Request
 
             $this -> app -> instance('request', $request);
 
-            return (new Pipeline($this -> app)) -> send($request) -> through($this -> middleware) -> then(function ($request) {
+            return (new Pipeline($this -> app)) -> send($request) -> then(function ($request) {
                 return $this -> router -> dispatch($request);
             });
 
