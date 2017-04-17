@@ -13,31 +13,17 @@ use Illuminate\Contracts\Debug\ExceptionHandler as LaravelExceptionHandler;
 
 class Request
 {
-    /**
-     * Application instance.
-     *
-     * @var \Illuminate\Contracts\Foundation\Application
-     */
+
     protected $app;
 
-    /**
-     * Exception handler instance.
-     *
-     */
+
     protected $exception;
 
-    /**
-     * Router instance.
-     *
-     */
+
     protected $router;
 
 
-    /**
-     * Array of middleware.
-     *
-     * @var array
-     */
+
     protected $middleware = [];
 
     /**
@@ -113,7 +99,6 @@ class Request
 
         return $this -> prepareResponse($response, $request, $request -> format());
     }
-
 
     /**
      * Send the request through the Dingo router.
