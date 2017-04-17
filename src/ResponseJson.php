@@ -5,6 +5,7 @@ namespace Songshenzong\ResponseJson;
 use Exception;
 use Songshenzong\ResponseJson\Contract\Debug\ExceptionHandler;
 use Illuminate\Container\Container;
+use Songshenzong\ResponseJson\Exception\ResourceException;
 
 class ResponseJson
 {
