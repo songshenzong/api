@@ -226,10 +226,13 @@ class Handler implements ExceptionHandler, IlluminateExceptionHandler
         }
 
         $replacements = [
-            'message'          => $message,
-            'status_code'      => $statusCode,
-            'http_status_code' => $httpStatusCode,
+            'message'     => $message,
+            'status_code' => $statusCode,
         ];
+
+        if ($statusCode != $httpStatusCode) {
+            $replacements['http_status_code'] = $httpStatusCode;
+        }
 
 
         if ($exception instanceof MessageBagErrors && $exception -> hasErrors()) {
