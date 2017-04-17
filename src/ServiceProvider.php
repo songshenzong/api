@@ -23,7 +23,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     {
         $this -> app -> singleton('ResponseJson', function ($app) {
             return new ResponseJson(
-                $app[ExceptionHandler::class],
+
                 $app
             );
         });
@@ -46,7 +46,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
 
     }
-
 
 
 }

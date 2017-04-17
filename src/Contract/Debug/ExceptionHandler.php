@@ -1,7 +1,6 @@
 <?php
 
-
-namespace Songshenzong\ResponseJson\Contract\Debug;
+namespace Dingo\Api\Contract\Debug;
 
 use Exception;
 
