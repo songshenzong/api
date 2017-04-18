@@ -122,7 +122,6 @@ class ResponseJson
         return $this;
     }
 
-
     /**
      * @return mixed
      */
