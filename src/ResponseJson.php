@@ -24,7 +24,6 @@ use Songshenzong\ResponseJson\Contract\Routing\Adapter;
 use Illuminate\Http\Response as IlluminateResponse;
 use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
 
-
 class ResponseJson
 {
 
@@ -105,7 +104,6 @@ class ResponseJson
      */
     public function handle($request, Closure $next)
     {
-
         try {
             $this -> app -> singleton(LaravelExceptionHandler::class, function ($app) {
                 return $app[ExceptionHandler::class];
@@ -118,10 +116,7 @@ class ResponseJson
             return (new Pipeline($this -> app)) -> send($request) -> then(function ($request) {
                 return $this -> dispatch($request);
             });
-
         } catch (Exception $exception) {
-
-
             $this -> exception -> report($exception);
 
             return $this -> exception -> handle($exception);
@@ -140,7 +135,6 @@ class ResponseJson
      */
     public function dispatch(Request $request)
     {
-
         $this -> app -> instance(Request::class, $request);
 
 
@@ -172,7 +166,6 @@ class ResponseJson
      */
     protected function prepareResponse($response, Request $request, $format)
     {
-
         if ($response instanceof IlluminateResponse) {
             $response = Response ::makeFromExisting($response);
         } elseif ($response instanceof JsonResponse) {
@@ -333,10 +326,8 @@ class ResponseJson
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public
-    function success($statusCode, $message, $data = null)
+    public function success($statusCode, $message, $data = null)
     {
-
         $this -> setStatusCode($statusCode);
 
 
@@ -352,7 +343,6 @@ class ResponseJson
         if (is_null($this -> getHttpStatusCode())) {
             $statusCode = $this -> getStatusCode();
         } else {
-
             $statusCode                          = $this -> getHttpStatusCode();
             $this -> content['http_status_code'] = $statusCode;
         }
@@ -384,8 +374,7 @@ class ResponseJson
      *
      * @return mixed
      */
-    public
-    function ok($data = null)
+    public function ok($data = null)
     {
         return $this -> success(200, 'OK', $data);
     }
@@ -396,8 +385,7 @@ class ResponseJson
      *
      * @return mixed
      */
-    public
-    function item($data = null)
+    public function item($data = null)
     {
         return $this -> ok($data);
     }
@@ -407,8 +395,7 @@ class ResponseJson
      *
      * @return mixed
      */
-    public
-    function collection($data = null)
+    public function collection($data = null)
     {
         return $this -> ok($data);
     }
@@ -418,8 +405,7 @@ class ResponseJson
      *
      * @return mixed
      */
-    public
-    function paginate($data = null)
+    public function paginate($data = null)
     {
         return $this -> ok($data);
     }
@@ -433,8 +419,7 @@ class ResponseJson
      *
      * @return mixed
      */
-    public
-    function created($message = 'Created', $data = null)
+    public function created($message = 'Created', $data = null)
     {
         return $this -> success(201, $message, $data);
     }
@@ -449,8 +434,7 @@ class ResponseJson
      *
      * @return mixed
      */
-    public
-    function accepted($message = 'Accepted', $data = null)
+    public function accepted($message = 'Accepted', $data = null)
     {
         return $this -> success(202, $message, $data);
     }
@@ -465,8 +449,7 @@ class ResponseJson
      *
      * @return mixed
      */
-    public
-    function nonAuthoritativeInformation($message = 'Non-Authoritative Information', $data = null)
+    public function nonAuthoritativeInformation($message = 'Non-Authoritative Information', $data = null)
     {
         return $this -> success(203, $message, $data);
     }
@@ -481,8 +464,7 @@ class ResponseJson
      *
      * @return mixed
      */
-    public
-    function noContent($message = 'No Content', $data = null)
+    public function noContent($message = 'No Content', $data = null)
     {
         return $this -> success(204, $message, $data);
     }
@@ -498,8 +480,7 @@ class ResponseJson
      *
      * @return mixed
      */
-    public
-    function resetContent($message = 'Reset Content', $data = null)
+    public function resetContent($message = 'Reset Content', $data = null)
     {
         return $this -> success(205, $message, $data);
     }
@@ -508,10 +489,8 @@ class ResponseJson
     /**
      * Public Errors Exception Method.
      */
-    public
-    function errors($statusCode, $message, $errors = null)
+    public function errors($statusCode, $message, $errors = null)
     {
-
         $this -> setStatusCode($statusCode);
 
 
@@ -534,8 +513,6 @@ class ResponseJson
 
 
         throw new ResourceException($httpStatusCode, $this -> getStatusCode(), $this -> getMessage(), $this -> getErrors());
-
-
     }
 
 
@@ -547,8 +524,7 @@ class ResponseJson
      *
      * @param string $message
      */
-    public
-    function badRequest($message = 'Bad Request', $errors = null)
+    public function badRequest($message = 'Bad Request', $errors = null)
     {
         return $this -> errors(400, $message, $errors);
     }
@@ -569,8 +545,7 @@ class ResponseJson
      *
      * @return mixed
      */
-    public
-    function unauthorized($message = 'Unauthorized', $errors = null)
+    public function unauthorized($message = 'Unauthorized', $errors = null)
     {
         return $this -> errors(401, $message, $errors);
     }
@@ -586,8 +561,7 @@ class ResponseJson
      *
      * @return mixed
      */
-    public
-    function forbidden($message = 'Forbidden', $errors = null)
+    public function forbidden($message = 'Forbidden', $errors = null)
     {
         return $this -> errors(403, $message, $errors);
     }
@@ -603,8 +577,7 @@ class ResponseJson
      *
      * @return mixed
      */
-    public
-    function notFound($message = 'Not Found', $errors = null)
+    public function notFound($message = 'Not Found', $errors = null)
     {
         return $this -> errors(404, $message, $errors);
     }
@@ -620,8 +593,7 @@ class ResponseJson
      *
      * @return mixed
      */
-    public
-    function methodNotAllowed($message = 'Method Not Allowed', $errors = null)
+    public function methodNotAllowed($message = 'Method Not Allowed', $errors = null)
     {
         return $this -> errors(405, $message, $errors);
     }
@@ -637,8 +609,7 @@ class ResponseJson
      *
      * @return mixed
      */
-    public
-    function notAcceptable($message = 'Not Acceptable', $errors = null)
+    public function notAcceptable($message = 'Not Acceptable', $errors = null)
     {
         return $this -> errors(406, $message, $errors);
     }
@@ -654,8 +625,7 @@ class ResponseJson
      *
      * @return mixed
      */
-    public
-    function conflict($message = 'Conflict', $errors = null)
+    public function conflict($message = 'Conflict', $errors = null)
     {
         return $this -> errors(409, $message, $errors);
     }
@@ -674,8 +644,7 @@ class ResponseJson
      *
      * @return mixed
      */
-    public
-    function gone($message = 'Gone', $errors = null)
+    public function gone($message = 'Gone', $errors = null)
     {
         return $this -> errors(410, $message, $errors);
     }
@@ -690,8 +659,7 @@ class ResponseJson
      *
      * @return mixed
      */
-    public
-    function lengthRequired($message = 'Length Required', $errors = null)
+    public function lengthRequired($message = 'Length Required', $errors = null)
     {
         return $this -> errors(411, $message, $errors);
     }
@@ -706,8 +674,7 @@ class ResponseJson
      *
      * @return mixed
      */
-    public
-    function preconditionFailed($message = 'Precondition Failed', $errors = null)
+    public function preconditionFailed($message = 'Precondition Failed', $errors = null)
     {
         return $this -> errors(412, $message, $errors);
     }
@@ -723,8 +690,7 @@ class ResponseJson
      *
      * @return mixed
      */
-    public
-    function unsupportedMediaType($message = 'Unsupported Media Type', $errors = null)
+    public function unsupportedMediaType($message = 'Unsupported Media Type', $errors = null)
     {
         return $this -> errors(413, $message, $errors);
     }
@@ -739,8 +705,7 @@ class ResponseJson
      *
      * @return mixed
      */
-    public
-    function unprocessableEntity($message = 'Unprocessable Entity', $errors = null)
+    public function unprocessableEntity($message = 'Unprocessable Entity', $errors = null)
     {
         return $this -> errors(422, $message, $errors);
     }
@@ -757,8 +722,7 @@ class ResponseJson
      *
      * @return mixed
      */
-    public
-    function preconditionRequired($message = 'Precondition Required', $errors = null)
+    public function preconditionRequired($message = 'Precondition Required', $errors = null)
     {
         return $this -> errors(428, $message, $errors);
     }
@@ -773,8 +737,7 @@ class ResponseJson
      *
      * @return mixed
      */
-    public
-    function tooManyRequests($message = 'Too Many Requests', $errors = null)
+    public function tooManyRequests($message = 'Too Many Requests', $errors = null)
     {
         return $this -> errors(429, $message, $errors);
     }
@@ -788,8 +751,7 @@ class ResponseJson
      *
      * @param string $message
      */
-    public
-    function internalServerError($message = 'Internal Server Error', $errors = null)
+    public function internalServerError($message = 'Internal Server Error', $errors = null)
     {
         return $this -> errors(500, $message, $errors);
     }
@@ -803,8 +765,7 @@ class ResponseJson
      *
      * @param string $message
      */
-    public
-    function notImplemented($message = 'Not Implemented', $errors = null)
+    public function notImplemented($message = 'Not Implemented', $errors = null)
     {
         return $this -> errors(501, $message, $errors);
     }
@@ -817,8 +778,7 @@ class ResponseJson
      *
      * @param string $message
      */
-    public
-    function badGateway($message = 'Bad Gateway', $errors = null)
+    public function badGateway($message = 'Bad Gateway', $errors = null)
     {
         return $this -> errors(502, $message, $errors);
     }
@@ -832,8 +792,7 @@ class ResponseJson
      *
      * @param string $message
      */
-    public
-    function serviceUnavailable($message = 'Service Unavailable', $errors = null)
+    public function serviceUnavailable($message = 'Service Unavailable', $errors = null)
     {
         return $this -> errors(503, $message, $errors);
     }
@@ -846,8 +805,7 @@ class ResponseJson
      *
      * @param string $message
      */
-    public
-    function gatewayTimeOut($message = 'Gateway Time-out', $errors = null)
+    public function gatewayTimeOut($message = 'Gateway Time-out', $errors = null)
     {
         return $this -> errors(504, $message, $errors);
     }
@@ -860,8 +818,7 @@ class ResponseJson
      *
      * @param string $message
      */
-    public
-    function httpVersionNotSupported($message = 'HTTP Version Not Supported', $errors = null)
+    public function httpVersionNotSupported($message = 'HTTP Version Not Supported', $errors = null)
     {
         return $this -> errors(505, $message, $errors);
     }
@@ -874,8 +831,7 @@ class ResponseJson
      *
      * @param string $message
      */
-    public
-    function variantAlsoNegotiates($message = 'Variant Also Negotiates', $errors = null)
+    public function variantAlsoNegotiates($message = 'Variant Also Negotiates', $errors = null)
     {
         return $this -> errors(506, $message, $errors);
     }
@@ -888,8 +844,7 @@ class ResponseJson
      *
      * @param string $message
      */
-    public
-    function insufficientStorage($message = 'Insufficient Storage', $errors = null)
+    public function insufficientStorage($message = 'Insufficient Storage', $errors = null)
     {
         return $this -> errors(507, $message, $errors);
     }
@@ -902,8 +857,7 @@ class ResponseJson
      *
      * @param string $message
      */
-    public
-    function loopDetected($message = 'Loop Detected', $errors = null)
+    public function loopDetected($message = 'Loop Detected', $errors = null)
     {
         return $this -> errors(508, $message, $errors);
     }
@@ -916,8 +870,7 @@ class ResponseJson
      *
      * @param string $message
      */
-    public
-    function notExtended($message = 'Not Extended', $errors = null)
+    public function notExtended($message = 'Not Extended', $errors = null)
     {
         return $this -> errors(510, $message, $errors);
     }
@@ -932,10 +885,8 @@ class ResponseJson
      *
      * @param string $message
      */
-    public
-    function networkAuthenticationRequired($message = 'Network Authentication Required', $errors = null)
+    public function networkAuthenticationRequired($message = 'Network Authentication Required', $errors = null)
     {
         return $this -> errors(511, $message, $errors);
     }
-
 }

@@ -9,5 +9,4 @@ use ErrorException;
  */
 trait Helpers
 {
-
 }

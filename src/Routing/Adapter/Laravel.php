@@ -49,6 +49,4 @@ class Laravel implements Adapter
 
         return $response;
     }
-
-
 }

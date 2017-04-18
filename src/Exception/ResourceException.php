@@ -6,7 +6,6 @@ use Exception;
 use Illuminate\Support\MessageBag;
 use Songshenzong\ResponseJson\Contract\Debug\MessageBagErrors;
 
-
 class ResourceException extends HttpException implements MessageBagErrors
 {
     /**
@@ -29,8 +28,6 @@ class ResourceException extends HttpException implements MessageBagErrors
      */
     public function __construct($httpStatusCode, $statusCode, $message = null, $errors = null, Exception $previous = null, $headers = [], $code = 0)
     {
-
-
         if (is_null($errors)) {
             $this -> errors = new MessageBag;
         } else {
@@ -39,7 +36,6 @@ class ResourceException extends HttpException implements MessageBagErrors
 
 
         parent ::__construct($httpStatusCode, $statusCode, $message, $previous, $headers, $code);
-
     }
 
     /**

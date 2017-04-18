@@ -131,8 +131,6 @@ class Response extends IlluminateResponse
      */
     protected function fireMorphedEvent()
     {
-
-
     }
 
     /**
@@ -142,8 +140,6 @@ class Response extends IlluminateResponse
      */
     protected function fireMorphingEvent()
     {
-
-
     }
 
     /**

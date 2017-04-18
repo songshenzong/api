@@ -41,12 +41,10 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     public function boot()
     {
-
         Response ::setFormatters($this -> config('formats'));
         Request ::setAcceptParser($this -> app['Songshenzong\ResponseJson\Http\Parser\Accept']);
         $kernel = $this -> app -> make(Kernel::class);
         $kernel -> prependMiddleware(ResponseJson::class);
-
     }
 
     /**
@@ -166,7 +164,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     protected function registerClassAliases()
     {
-
         $this -> app -> alias('ResponseJson', 'Songshenzong\ResponseJson\Facade');
 
         $aliases = [
@@ -188,7 +185,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     protected function registerExceptionHandler()
     {
-
         $this -> app -> singleton('responseJson.exception', function ($app) {
             $debug = $this -> app['config'] -> get('api.debug');
             return new ExceptionHandler($app['Illuminate\Contracts\Debug\ExceptionHandler'], $debug);
