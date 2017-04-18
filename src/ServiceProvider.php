@@ -95,7 +95,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
 
         $this -> app -> singleton('responseJson.exception', function ($app) {
-            return new ExceptionHandler($app['Illuminate\Contracts\Debug\ExceptionHandler'], $this -> config('errorFormat'), $this -> config('debug'));
+            return new ExceptionHandler($app['Illuminate\Contracts\Debug\ExceptionHandler'],  $this -> config('debug'));
         });
 
 
@@ -202,9 +202,8 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     {
 
         $this -> app -> singleton('responseJson.exception', function ($app) {
-            $errorFormat = $this -> app['config'] -> get('api.errorFormat');
             $debug       = $this -> app['config'] -> get('api.debug');
-            return new ExceptionHandler($app['Illuminate\Contracts\Debug\ExceptionHandler'], $errorFormat, $debug);
+            return new ExceptionHandler($app['Illuminate\Contracts\Debug\ExceptionHandler'], $debug);
         });
     }
 }

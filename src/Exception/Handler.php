@@ -20,12 +20,6 @@ class Handler implements ExceptionHandler, IlluminateExceptionHandler
      */
     protected $handlers = [];
 
-    /**
-     * Generic response format.
-     *
-     * @var array
-     */
-    protected $format;
 
     /**
      * Indicates if we are in debug mode.
@@ -52,15 +46,13 @@ class Handler implements ExceptionHandler, IlluminateExceptionHandler
      * Create a new exception handler instance.
      *
      * @param \Illuminate\Contracts\Debug\ExceptionHandler $parentHandler
-     * @param array                                        $format
      * @param bool                                         $debug
      *
      * @return void
      */
-    public function __construct(IlluminateExceptionHandler $parentHandler, array $format, $debug)
+    public function __construct(IlluminateExceptionHandler $parentHandler, $debug)
     {
         $this -> parentHandler = $parentHandler;
-        $this -> format        = $format;
         $this -> debug         = $debug;
     }
 
@@ -157,18 +149,6 @@ class Handler implements ExceptionHandler, IlluminateExceptionHandler
     {
         $replacements = $this -> prepareReplacements($exception);
 
-
-        // $response = $this -> newResponseArray();
-        //
-        // array_walk_recursive($response, function (&$value, $key) use ($exception, $replacements) {
-        //     if (starts_with($value, ':') && isset($replacements[$value])) {
-        //         $value = $replacements[$value];
-        //     }
-        // });
-        //
-        // $response = $this -> recursivelyRemoveEmptyReplacements($response);
-
-        // return new Response($response, $this -> getHttpStatusCode($exception), $this -> getHeaders($exception));
         return new Response($replacements, $this -> getHttpStatusCode($exception), $this -> getHeaders($exception));
     }
 
@@ -239,6 +219,7 @@ class Handler implements ExceptionHandler, IlluminateExceptionHandler
             $replacements['errors'] = $exception -> getErrors();
         }
 
+
         if ($code = $exception -> getCode()) {
             $replacements['code'] = $code;
         }
@@ -267,39 +248,6 @@ class Handler implements ExceptionHandler, IlluminateExceptionHandler
         $this -> replacements = $replacements;
     }
 
-    /**
-     * Recursirvely remove any empty replacement values in the response array.
-     *
-     * @param array $input
-     *
-     * @return array
-     */
-    protected function recursivelyRemoveEmptyReplacements(array $input)
-    {
-        foreach ($input as &$value) {
-            if (is_array($value)) {
-                $value = $this -> recursivelyRemoveEmptyReplacements($value);
-            }
-        }
-
-        return array_filter($input, function ($value) {
-            if (is_string($value)) {
-                return !starts_with($value, ':');
-            }
-
-            return true;
-        });
-    }
-
-    /**
-     * Create a new response array with replacement values.
-     *
-     * @return array
-     */
-    protected function newResponseArray()
-    {
-        return $this -> format;
-    }
 
     /**
      * Get the exception status code.
@@ -350,17 +298,6 @@ class Handler implements ExceptionHandler, IlluminateExceptionHandler
         return $this -> handlers;
     }
 
-    /**
-     * Set the error format array.
-     *
-     * @param array $format
-     *
-     * @return void
-     */
-    public function setErrorFormat(array $format)
-    {
-        $this -> format = $format;
-    }
 
     /**
      * Set the debug mode.

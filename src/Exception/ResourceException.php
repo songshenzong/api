@@ -38,9 +38,8 @@ class ResourceException extends HttpException implements MessageBagErrors
         }
 
 
-
         parent ::__construct($httpStatusCode, $statusCode, $message, $previous, $headers, $code);
-        
+
     }
 
     /**
@@ -60,6 +59,7 @@ class ResourceException extends HttpException implements MessageBagErrors
      */
     public function hasErrors()
     {
-        return !$this -> errors -> isEmpty();
+        return !empty($this -> errors);
+        // return !$this -> errors -> isEmpty();
     }
 }
