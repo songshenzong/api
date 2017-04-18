@@ -55,14 +55,7 @@ class ResponseJson
     protected $exception;
 
 
-
-
     protected $notException;
-
-
-
-
-
 
 
     /**
@@ -220,13 +213,14 @@ class ResponseJson
         }
 
 
-        if (!is_null($this -> getData())) {
-            $this -> setData($data);
-            $this -> content['data'] = $this -> getData();
-        }
-
         if (!is_null($this -> getErrors())) {
             $this -> content['errors'] = $this -> getErrors();
+        }
+
+
+        if (!is_null($this -> getData()) && $this -> getData() != $this -> getErrors()) {
+            $this -> setData($data);
+            $this -> content['data'] = $this -> getData();
         }
 
 
@@ -373,7 +367,6 @@ class ResponseJson
     function errors($statusCode, $message, $errors = null)
     {
 
-
         $this -> setStatusCode($statusCode);
 
 
@@ -383,17 +376,16 @@ class ResponseJson
         $this -> setErrors($errors);
 
 
+        if ($this -> getNotException()) {
+            return $this -> success($statusCode, $message, $errors);
+        }
+
+
         if ($this -> getHttpStatusCode()) {
             $httpStatusCode = $this -> getHttpStatusCode();
         } else {
             $httpStatusCode = $this -> getStatusCode();
         }
-
-
-        if ($this -> getNotException()) {
-            return $this -> success($statusCode, $message, $errors);
-        }
-
 
 
         throw new ResourceException($httpStatusCode, $this -> getStatusCode(), $this -> getMessage(), $this -> getErrors());

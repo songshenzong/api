@@ -45,8 +45,8 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
         Response ::setFormatters($this -> config('formats'));
         Request ::setAcceptParser($this -> app['Songshenzong\ResponseJson\Http\Parser\Accept']);
-        $kernel = $this -> app -> make(Kernel::class);
-        $kernel -> prependMiddleware(RequestMiddleware::class);
+        // $kernel = $this -> app -> make(Kernel::class);
+        // $kernel -> prependMiddleware(RequestMiddleware::class);
 
     }
 
@@ -71,7 +71,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
                 $this -> app -> alias($key, $alias);
             }
         }
-
 
 
         $this -> app -> singleton(AcceptParser::class, function ($app) {
