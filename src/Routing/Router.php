@@ -10,7 +10,6 @@ use Illuminate\Support\Str;
 use Songshenzong\ResponseJson\Http\Request;
 use Songshenzong\ResponseJson\Http\Response;
 use Illuminate\Http\JsonResponse;
-use Songshenzong\ResponseJson\Http\InternalRequest;
 use Illuminate\Container\Container;
 use Songshenzong\ResponseJson\Contract\Routing\Adapter;
 use Songshenzong\ResponseJson\Contract\Debug\ExceptionHandler;
