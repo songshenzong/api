@@ -99,34 +99,9 @@ return [
 
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | Authentication Providers
-    |--------------------------------------------------------------------------
-    |
-    | The authentication providers that should be used when attempting to
-    | authenticate an incoming API request.
-    |
-    */
 
-    'auth' => [
 
-    ],
 
-    /*
-    |--------------------------------------------------------------------------
-    | Throttling / Rate Limiting
-    |--------------------------------------------------------------------------
-    |
-    | Consumers of your API can be limited to the amount of requests they can
-    | make. You can create your own throttles or simply change the default
-    | throttles.
-    |
-    */
-
-    'throttling' => [
-
-    ],
 
     /*
     |--------------------------------------------------------------------------

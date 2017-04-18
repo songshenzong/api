@@ -14,7 +14,6 @@ namespace Songshenzong\ResponseJson\Exception;
 /**
  * HttpException.
  *
- * @author Kris Wallsmith <kris@symfony.com>
  */
 class HttpException extends \RuntimeException implements \Symfony\Component\HttpKernel\Exception\HttpExceptionInterface
 {
