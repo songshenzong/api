@@ -1,28 +1,36 @@
 <?php
 
-namespace Songshenzong\ResponseJson\Routing;
+namespace Songshenzong\ResponseJson\Http\Middleware;
 
 use Closure;
 use Exception;
+use Illuminate\Pipeline\Pipeline;
+use Songshenzong\ResponseJson\Http\Request as HttpRequest;
+use Illuminate\Contracts\Container\Container;
+use Songshenzong\ResponseJson\Contract\Debug\ExceptionHandler;
+use Illuminate\Contracts\Debug\ExceptionHandler as LaravelExceptionHandler;
+
+
 use RuntimeException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Songshenzong\ResponseJson\Http\Request;
 use Songshenzong\ResponseJson\Http\Response;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Container\Container;
 use Songshenzong\ResponseJson\Contract\Routing\Adapter;
-use Songshenzong\ResponseJson\Contract\Debug\ExceptionHandler;
 use Illuminate\Http\Response as IlluminateResponse;
 use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
 
-class Router
+class RequestMiddleware
 {
+
     /**
      * Routing adapter instance.
      *
      */
     protected $adapter;
+    protected $app;
+
 
     /**
      * Accept parser instance.
@@ -35,15 +43,6 @@ class Router
      *
      */
     protected $exception;
-
-    /**
-     * Application container instance.
-     *
-     * @var \Illuminate\Container\Container
-     */
-    protected $container;
-
-
 
 
 
@@ -62,21 +61,56 @@ class Router
 
 
     /**
-     * Create a new router instance.
+     * Create a new request  instance.
      *
-     * @param \Illuminate\Container\Container            $container
-     * @param string                                     $domain
-     * @param string                                     $prefix
+     * @param \Illuminate\Contracts\Foundation\Application $app
      *
      * @return void
      */
-    public function __construct(Adapter $adapter, ExceptionHandler $exception, Container $container)
+    public function __construct(Container $app, ExceptionHandler $exception, Adapter $adapter)
     {
-        $this -> adapter   = $adapter;
+        $this -> app       = $app;
         $this -> exception = $exception;
-        $this -> container = $container;
-
+        $this -> adapter   = $adapter;
     }
+
+    /**
+     * Handle an incoming request.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure                 $next
+     *
+     * @return mixed
+     */
+    public function handle($request, Closure $next)
+    {
+
+        try {
+            $this -> app -> singleton(LaravelExceptionHandler::class, function ($app) {
+                return $app[ExceptionHandler::class];
+            });
+
+            $request = $this -> app -> make(HttpRequest::class) -> createFromIlluminate($request);
+
+            $this -> app -> instance('request', $request);
+
+            return (new Pipeline($this -> app)) -> send($request) -> then(function ($request) {
+                return $this ->  dispatch($request);
+            });
+
+        } catch (Exception $exception) {
+
+
+            $this -> exception -> report($exception);
+
+            return $this -> exception -> handle($exception);
+        }
+
+        return $next($request);
+    }
+
+
+
 
 
     /**
@@ -90,7 +124,7 @@ class Router
     {
         $this -> currentRoute = null;
 
-        $this -> container -> instance(Request::class, $request);
+        $this -> app -> instance(Request::class, $request);
 
         $this -> routesDispatched++;
 
@@ -146,6 +180,4 @@ class Router
 
         return $response;
     }
-
-
 }

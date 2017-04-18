@@ -8,14 +8,13 @@ use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 use RuntimeException;
 use Songshenzong\ResponseJson\Http\Request;
 use Songshenzong\ResponseJson\Http\Response;
-use Songshenzong\ResponseJson\Routing\Router;
 use Songshenzong\ResponseJson\Contract\Routing\Adapter;
 
 use Songshenzong\ResponseJson\Http\Parser\Accept as AcceptParser;
 
 use ReflectionClass;
 use Illuminate\Contracts\Http\Kernel;
-use Songshenzong\ResponseJson\Http\Middleware\Request as RequestMiddleware;
+use Songshenzong\ResponseJson\Http\Middleware\RequestMiddleware as RequestMiddleware;
 use Songshenzong\ResponseJson\Routing\Adapter\Laravel;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
@@ -63,7 +62,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
          *---------------------------------------------------------*/
 
         $aliases = [
-            'responseJson.router'         => 'Songshenzong\ResponseJson\Routing\Router',
             'responseJson.router.adapter' => 'Songshenzong\ResponseJson\Contract\Routing\Adapter',
             'responseJson.exception'      => ['Songshenzong\ResponseJson\Exception\Handler', 'Songshenzong\ResponseJson\Contract\Debug\ExceptionHandler'],
         ];
@@ -74,14 +72,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             }
         }
 
-        $this -> app -> singleton('responseJson.router', function ($app) {
-            $router = new Router(
-                $app[Adapter::class],
-                $app[ExceptionHandler::class],
-                $app
-            );
-            return $router;
-        });
 
 
         $this -> app -> singleton(AcceptParser::class, function ($app) {
@@ -95,7 +85,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
 
         $this -> app -> singleton('responseJson.exception', function ($app) {
-            return new ExceptionHandler($app['Illuminate\Contracts\Debug\ExceptionHandler'],  $this -> config('debug'));
+            return new ExceptionHandler($app['Illuminate\Contracts\Debug\ExceptionHandler'], $this -> config('debug'));
         });
 
 
@@ -105,11 +95,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
 
         $this -> app -> singleton('ResponseJson', function ($app) {
-            return new ResponseJson(
-                $app,
-                $app[ExceptionHandler::class],
-                $app[Router::class]
-            );
+            return new ResponseJson($app);
         });
 
 
@@ -202,7 +188,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     {
 
         $this -> app -> singleton('responseJson.exception', function ($app) {
-            $debug       = $this -> app['config'] -> get('api.debug');
+            $debug = $this -> app['config'] -> get('api.debug');
             return new ExceptionHandler($app['Illuminate\Contracts\Debug\ExceptionHandler'], $debug);
         });
     }
