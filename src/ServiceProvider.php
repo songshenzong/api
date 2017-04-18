@@ -14,7 +14,6 @@ use Songshenzong\ResponseJson\Http\Parser\Accept as AcceptParser;
 
 use ReflectionClass;
 use Illuminate\Contracts\Http\Kernel;
-use Songshenzong\ResponseJson\Http\Middleware\RequestMiddleware as RequestMiddleware;
 use Songshenzong\ResponseJson\Routing\Adapter\Laravel;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
@@ -45,8 +44,8 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
         Response ::setFormatters($this -> config('formats'));
         Request ::setAcceptParser($this -> app['Songshenzong\ResponseJson\Http\Parser\Accept']);
-        // $kernel = $this -> app -> make(Kernel::class);
-        // $kernel -> prependMiddleware(RequestMiddleware::class);
+        $kernel = $this -> app -> make(Kernel::class);
+        $kernel -> prependMiddleware(ResponseJson::class);
 
     }
 
@@ -94,7 +93,11 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
 
         $this -> app -> singleton('ResponseJson', function ($app) {
-            return new ResponseJson($app);
+            return new ResponseJson(
+                $app,
+                $app[ExceptionHandler::class],
+                $app[Adapter::class]
+            );
         });
 
 
