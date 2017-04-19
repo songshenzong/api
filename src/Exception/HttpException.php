@@ -72,5 +72,4 @@ class HttpException extends \RuntimeException implements HttpExceptionInterface
         return !empty($this -> errors);
     }
 
-
 }
