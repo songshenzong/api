@@ -2,26 +2,24 @@
 
 namespace Songshenzong\ResponseJson;
 
-use Exception;
-use Songshenzong\ResponseJson\Contract\Debug\ExceptionHandler;
-use Illuminate\Container\Container;
-use Songshenzong\ResponseJson\Exception\ResourceException;
-
-
 use Closure;
-use Illuminate\Pipeline\Pipeline;
-use Songshenzong\ResponseJson\Http\Request as HttpRequest;
-use Illuminate\Contracts\Debug\ExceptionHandler as LaravelExceptionHandler;
-
-
+use Exception;
 use RuntimeException;
-use Illuminate\Support\Arr;
+
 use Illuminate\Support\Str;
-use Songshenzong\ResponseJson\Http\Request;
-use Songshenzong\ResponseJson\Http\Response;
+use Illuminate\Support\Arr;
+use Illuminate\Container\Container;
+use Illuminate\Pipeline\Pipeline;
+use Illuminate\Contracts\Debug\ExceptionHandler as LaravelExceptionHandler;
 use Illuminate\Http\JsonResponse;
-use Songshenzong\ResponseJson\Contract\Routing\Adapter;
 use Illuminate\Http\Response as IlluminateResponse;
+
+use Songshenzong\ResponseJson\Contract\Debug\ExceptionHandler;
+use Songshenzong\ResponseJson\Contract\Routing\Adapter;
+use Songshenzong\ResponseJson\Exception\ResourceException;
+use Songshenzong\ResponseJson\Http\Request as HttpRequest;
+use Songshenzong\ResponseJson\Http\Response;
+
 use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
 
 class ResponseJson
@@ -104,6 +102,7 @@ class ResponseJson
      */
     public function handle($request, Closure $next)
     {
+
         try {
             $this -> app -> singleton(LaravelExceptionHandler::class, function ($app) {
                 return $app[ExceptionHandler::class];
@@ -133,7 +132,7 @@ class ResponseJson
      * @throws \Exception
      *
      */
-    public function dispatch(Request $request)
+    public function dispatch(HttpRequest $request)
     {
         $this -> app -> instance(Request::class, $request);
 
@@ -164,7 +163,7 @@ class ResponseJson
      * @param string $format
      *
      */
-    protected function prepareResponse($response, Request $request, $format)
+    protected function prepareResponse($response, HttpRequest $request, $format)
     {
         if ($response instanceof IlluminateResponse) {
             $response = Response ::makeFromExisting($response);
