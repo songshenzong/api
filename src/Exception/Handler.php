@@ -6,13 +6,13 @@ use Exception;
 use ReflectionFunction;
 
 use Illuminate\Http\Response;
-use Illuminate\Contracts\Debug\ExceptionHandler as IlluminateExceptionHandler;
+use Illuminate\Contracts\Debug\ExceptionHandler;
 
 
 use Symfony\Component\HttpFoundation\Response as BaseResponse;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
-class Handler implements IlluminateExceptionHandler
+class Handler implements ExceptionHandler
 {
     /**
      * Array of exception handlers.
@@ -47,7 +47,7 @@ class Handler implements IlluminateExceptionHandler
      *
      *
      */
-    public function __construct(IlluminateExceptionHandler $parentHandler, $debug)
+    public function __construct(ExceptionHandler $parentHandler, $debug)
     {
         $this -> parentHandler = $parentHandler;
         $this -> debug         = $debug;
