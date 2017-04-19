@@ -90,7 +90,6 @@ class ResponseJson
         $this -> exception = $exception;
         $this -> router    = $router;
         // $this -> adapter   = $adapter;
-
     }
 
 
@@ -119,8 +118,6 @@ class ResponseJson
             return (new Pipeline($this -> app)) -> send($request) -> then(function ($request) {
                 return $this -> dispatch($request);
             });
-
-
         } catch (Exception $exception) {
             $this -> exception -> report($exception);
 
@@ -169,11 +166,7 @@ class ResponseJson
             if (property_exists($response, 'exception') && $response -> exception instanceof Exception) {
                 throw $response -> exception;
             }
-
-
         } catch (Exception $exception) {
-
-
             $this -> exception -> report($exception);
 
             $response = $this -> exception -> handle($exception);
