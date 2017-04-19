@@ -61,7 +61,7 @@ class ResponseJson
 
 
     /**---------------------------------------------------------
-     *   Midleware Part
+     *   Middleware Part
      *---------------------------------------------------------*/
 
 
@@ -162,12 +162,15 @@ class ResponseJson
         return $this -> prepareResponse($response, $request, $request -> format());
     }
 
+
     /**
      * Prepare a response by transforming and formatting it correctly.
      *
-     * @param mixed  $response
-     * @param string $format
+     * @param                                         $response
+     * @param \Songshenzong\ResponseJson\Http\Request $request
+     * @param                                         $format
      *
+     * @return $this|\Illuminate\Http\Response|static
      */
     protected function prepareResponse($response, HttpRequest $request, $format)
     {
@@ -197,7 +200,7 @@ class ResponseJson
 
 
     /**---------------------------------------------------------
-     *   Midleware Part End
+     *   Middleware Part End
      *---------------------------------------------------------*/
 
 
