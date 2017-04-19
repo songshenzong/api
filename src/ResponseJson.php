@@ -377,7 +377,7 @@ class ResponseJson
      *
      * @param null $data
      *
-     * @return mixed
+     * @return object
      */
     public function ok($data = null)
     {
@@ -420,9 +420,10 @@ class ResponseJson
      *
      * The request has been fulfilled, resulting in the creation of a new resource.
      *
-     * @param array $data
+     * @param string $message
+     * @param null   $data
      *
-     * @return mixed
+     * @return object
      */
     public function created($message = 'Created', $data = null)
     {
@@ -435,9 +436,10 @@ class ResponseJson
      * The request has been accepted for processing, but the processing has not been completed. The request might or
      * might not be eventually acted upon, and may be disallowed when processing occurs.
      *
-     * @param array $data
+     * @param string $message
+     * @param null   $data
      *
-     * @return mixed
+     * @return object
      */
     public function accepted($message = 'Accepted', $data = null)
     {
@@ -450,9 +452,10 @@ class ResponseJson
      * The server is a transforming proxy (e.g. a Web accelerator) that received a 200 OK from its origin, but is
      * returning a modified version of the origin's response.
      *
-     * @param array $data
+     * @param string $message
+     * @param null   $data
      *
-     * @return mixed
+     * @return object
      */
     public function nonAuthoritativeInformation($message = 'Non-Authoritative Information', $data = null)
     {
@@ -465,9 +468,10 @@ class ResponseJson
      *
      * The server successfully processed the request and is not returning any content.
      *
-     * @param array $data
+     * @param string $message
+     * @param null   $data
      *
-     * @return mixed
+     * @return object
      */
     public function noContent($message = 'No Content', $data = null)
     {
@@ -481,9 +485,10 @@ class ResponseJson
      * The server successfully processed the request, but is not returning any content. Unlike a 204 response, this
      * response requires that the requester reset the document view.
      *
-     * @param array $data
+     * @param string $message
+     * @param null   $data
      *
-     * @return mixed
+     * @return object
      */
     public function resetContent($message = 'Reset Content', $data = null)
     {
@@ -528,6 +533,9 @@ class ResponseJson
      * syntax, too large size, invalid request message framing, or deceptive request routing).
      *
      * @param string $message
+     * @param null   $errors
+     *
+     * @return object
      */
     public function badRequest($message = 'Bad Request', $errors = null)
     {
@@ -547,8 +555,9 @@ class ResponseJson
      * that specific address is refused permission to access a website.
      *
      * @param string $message
+     * @param null   $errors
      *
-     * @return mixed
+     * @return object
      */
     public function unauthorized($message = 'Unauthorized', $errors = null)
     {
@@ -563,8 +572,9 @@ class ResponseJson
      * a resource.
      *
      * @param string $message
+     * @param null   $errors
      *
-     * @return mixed
+     * @return object
      */
     public function forbidden($message = 'Forbidden', $errors = null)
     {
@@ -579,8 +589,9 @@ class ResponseJson
      * are permissible.
      *
      * @param string $message
+     * @param null   $errors
      *
-     * @return mixed
+     * @return object
      */
     public function notFound($message = 'Not Found', $errors = null)
     {
@@ -595,8 +606,9 @@ class ResponseJson
      * data to be presented via POST, or a PUT request on a read-only resource.
      *
      * @param string $message
+     * @param null   $errors
      *
-     * @return mixed
+     * @return object
      */
     public function methodNotAllowed($message = 'Method Not Allowed', $errors = null)
     {
@@ -611,8 +623,9 @@ class ResponseJson
      * in the request.[36] See Content negotiation.
      *
      * @param string $message
+     * @param null   $errors
      *
-     * @return mixed
+     * @return object
      */
     public function notAcceptable($message = 'Not Acceptable', $errors = null)
     {
@@ -627,8 +640,9 @@ class ResponseJson
      * between multiple simultaneous updates.
      *
      * @param string $message
+     * @param null   $errors
      *
-     * @return mixed
+     * @return object
      */
     public function conflict($message = 'Conflict', $errors = null)
     {
@@ -646,8 +660,9 @@ class ResponseJson
      * the resource, and a "404 Not Found" may be used instead.
      *
      * @param string $message
+     * @param null   $errors
      *
-     * @return mixed
+     * @return object
      */
     public function gone($message = 'Gone', $errors = null)
     {
@@ -661,8 +676,9 @@ class ResponseJson
      * The request did not specify the length of its content, which is required by the requested resource.
      *
      * @param string $message
+     * @param null   $errors
      *
-     * @return mixed
+     * @return object
      */
     public function lengthRequired($message = 'Length Required', $errors = null)
     {
@@ -676,8 +692,9 @@ class ResponseJson
      * The server does not meet one of the preconditions that the requester put on the request.
      *
      * @param string $message
+     * @param null   $errors
      *
-     * @return mixed
+     * @return object
      */
     public function preconditionFailed($message = 'Precondition Failed', $errors = null)
     {
@@ -692,8 +709,9 @@ class ResponseJson
      * uploads an image as image/svg+xml, but the server requires that images use a different format.
      *
      * @param string $message
+     * @param null   $errors
      *
-     * @return mixed
+     * @return object
      */
     public function unsupportedMediaType($message = 'Unsupported Media Type', $errors = null)
     {
@@ -707,8 +725,9 @@ class ResponseJson
      * The request was well-formed but was unable to be followed due to semantic errors.[15].
      *
      * @param string $message
+     * @param null   $errors
      *
-     * @return mixed
+     * @return object
      */
     public function unprocessableEntity($message = 'Unprocessable Entity', $errors = null)
     {
@@ -724,8 +743,9 @@ class ResponseJson
      * modified the state on the server, leading to a conflict.
      *
      * @param string $message
+     * @param null   $errors
      *
-     * @return mixed
+     * @return object
      */
     public function preconditionRequired($message = 'Precondition Required', $errors = null)
     {
@@ -739,8 +759,9 @@ class ResponseJson
      * The user has sent too many requests in a given amount of time. Intended for use with rate-limiting schemes.
      *
      * @param string $message
+     * @param null   $errors
      *
-     * @return mixed
+     * @return object
      */
     public function tooManyRequests($message = 'Too Many Requests', $errors = null)
     {
@@ -755,6 +776,9 @@ class ResponseJson
      * suitable.
      *
      * @param string $message
+     * @param null   $errors
+     *
+     * @return object
      */
     public function internalServerError($message = 'Internal Server Error', $errors = null)
     {
@@ -769,6 +793,9 @@ class ResponseJson
      * this implies future availability (e.g., a new feature of a web-service API).
      *
      * @param string $message
+     * @param null   $errors
+     *
+     * @return object
      */
     public function notImplemented($message = 'Not Implemented', $errors = null)
     {
@@ -782,6 +809,9 @@ class ResponseJson
      * The server was acting as a gateway or proxy and received an invalid response from the upstream server.
      *
      * @param string $message
+     * @param null   $errors
+     *
+     * @return object
      */
     public function badGateway($message = 'Bad Gateway', $errors = null)
     {
@@ -796,6 +826,9 @@ class ResponseJson
      * temporary state.
      *
      * @param string $message
+     * @param null   $errors
+     *
+     * @return object
      */
     public function serviceUnavailable($message = 'Service Unavailable', $errors = null)
     {
@@ -809,6 +842,9 @@ class ResponseJson
      * The server was acting as a gateway or proxy and did not receive a timely response from the upstream server.
      *
      * @param string $message
+     * @param null   $errors
+     *
+     * @return object
      */
     public function gatewayTimeOut($message = 'Gateway Time-out', $errors = null)
     {
@@ -822,6 +858,9 @@ class ResponseJson
      * The server does not support the HTTP protocol version used in the request.
      *
      * @param string $message
+     * @param null   $errors
+     *
+     * @return object
      */
     public function httpVersionNotSupported($message = 'HTTP Version Not Supported', $errors = null)
     {
@@ -835,6 +874,9 @@ class ResponseJson
      * Transparent content negotiation for the request results in a circular reference.
      *
      * @param string $message
+     * @param null   $errors
+     *
+     * @return object
      */
     public function variantAlsoNegotiates($message = 'Variant Also Negotiates', $errors = null)
     {
@@ -848,6 +890,9 @@ class ResponseJson
      * The server is unable to store the representation needed to complete the request.
      *
      * @param string $message
+     * @param null   $errors
+     *
+     * @return object
      */
     public function insufficientStorage($message = 'Insufficient Storage', $errors = null)
     {
@@ -861,6 +906,9 @@ class ResponseJson
      * The server detected an infinite loop while processing the request (sent in lieu of 208 Already Reported).
      *
      * @param string $message
+     * @param null   $errors
+     *
+     * @return object
      */
     public function loopDetected($message = 'Loop Detected', $errors = null)
     {
@@ -874,6 +922,9 @@ class ResponseJson
      * Further extensions to the request are required for the server to fulfill it.
      *
      * @param string $message
+     * @param null   $errors
+     *
+     * @return object
      */
     public function notExtended($message = 'Not Extended', $errors = null)
     {
@@ -889,6 +940,9 @@ class ResponseJson
      * granting full Internet access via a Wi-Fi hotspot).
      *
      * @param string $message
+     * @param null   $errors
+     *
+     * @return object
      */
     public function networkAuthenticationRequired($message = 'Network Authentication Required', $errors = null)
     {
