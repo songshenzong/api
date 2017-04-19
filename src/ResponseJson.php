@@ -67,29 +67,20 @@ class ResponseJson
      *   Midleware Part
      *---------------------------------------------------------*/
 
-    /**
-     * Routing adapter instance.
-     *
-     */
-    protected $adapter;
+
     protected $app;
     protected $exception;
-    protected $request;
     protected $router;
 
     /**
      * Create a new request  instance.
      *
-     * @param \Illuminate\Contracts\Foundation\Application $app
-     *
-     * @return void
      */
     public function __construct(Container $app, ExceptionHandler $exception, \Illuminate\Routing\Router $router)
     {
         $this -> app       = $app;
         $this -> exception = $exception;
         $this -> router    = $router;
-        // $this -> adapter   = $adapter;
     }
 
 
@@ -133,7 +124,6 @@ class ResponseJson
      * Dispatch a request.
      *
      * @param \Illuminate\Http\Request $request
-     * @param string                   $version
      *
      * @return mixed
      */
