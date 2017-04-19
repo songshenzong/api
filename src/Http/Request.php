@@ -29,16 +29,16 @@ class Request extends IlluminateRequest
     public function createFromIlluminate(IlluminateRequest $old)
     {
         $new = new static(
-            $old->query->all(), $old->request->all(), $old->attributes->all(),
-            $old->cookies->all(), $old->files->all(), $old->server->all(), $old->content
+            $old -> query -> all(), $old -> request -> all(), $old -> attributes -> all(),
+            $old -> cookies -> all(), $old -> files -> all(), $old -> server -> all(), $old -> content
         );
 
-        if ($session = $old->getSession()) {
-            $new->setSession($old->getSession());
+        if ($session = $old -> getSession()) {
+            $new -> setSession($old -> getSession());
         }
 
-        $new->setRouteResolver($old->getRouteResolver());
-        $new->setUserResolver($old->getUserResolver());
+        $new -> setRouteResolver($old -> getRouteResolver());
+        $new -> setUserResolver($old -> getUserResolver());
 
         return $new;
     }
@@ -50,9 +50,9 @@ class Request extends IlluminateRequest
      */
     public function version()
     {
-        $this->parseAcceptHeader();
+        $this -> parseAcceptHeader();
 
-        return $this->accept['version'];
+        return $this -> accept['version'];
     }
 
     /**
@@ -62,9 +62,9 @@ class Request extends IlluminateRequest
      */
     public function subtype()
     {
-        $this->parseAcceptHeader();
+        $this -> parseAcceptHeader();
 
-        return $this->accept['subtype'];
+        return $this -> accept['subtype'];
     }
 
     /**
@@ -74,9 +74,9 @@ class Request extends IlluminateRequest
      */
     public function format($default = 'html')
     {
-        $this->parseAcceptHeader();
+        $this -> parseAcceptHeader();
 
-        return $this->accept['format'] ?: parent::format($default);
+        return $this -> accept['format'] ?: parent ::format($default);
     }
 
     /**
@@ -86,11 +86,11 @@ class Request extends IlluminateRequest
      */
     protected function parseAcceptHeader()
     {
-        if ($this->accept) {
+        if ($this -> accept) {
             return;
         }
 
-        $this->accept = static::$acceptParser->parse($this);
+        $this -> accept = static ::$acceptParser -> parse($this);
     }
 
     /**
@@ -101,7 +101,7 @@ class Request extends IlluminateRequest
      */
     public static function setAcceptParser(Accept $acceptParser)
     {
-        static::$acceptParser = $acceptParser;
+        static ::$acceptParser = $acceptParser;
     }
 
     /**
@@ -110,6 +110,6 @@ class Request extends IlluminateRequest
      */
     public static function getAcceptParser()
     {
-        return static::$acceptParser;
+        return static ::$acceptParser;
     }
 }

@@ -8,13 +8,11 @@ use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 use RuntimeException;
 use Songshenzong\ResponseJson\Http\Request;
 use Songshenzong\ResponseJson\Http\Response;
-use Songshenzong\ResponseJson\Contract\Routing\Adapter;
 
 use Songshenzong\ResponseJson\Http\Parser\Accept as AcceptParser;
 
 use ReflectionClass;
 use Illuminate\Contracts\Http\Kernel;
-use Songshenzong\ResponseJson\Routing\Adapter\Laravel;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
@@ -59,7 +57,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
          *---------------------------------------------------------*/
 
         $aliases = [
-            'responseJson.router.adapter' => 'Songshenzong\ResponseJson\Contract\Routing\Adapter',
             'responseJson.exception'      => ['Songshenzong\ResponseJson\Exception\Handler', 'Songshenzong\ResponseJson\Contract\Debug\ExceptionHandler'],
         ];
 
@@ -85,16 +82,13 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         });
 
 
-        $this -> app -> singleton('responseJson.router.adapter', function ($app) {
-            return new Laravel($app['router']);
-        });
 
 
         $this -> app -> singleton('ResponseJson', function ($app) {
             return new ResponseJson(
                 $app,
                 $app[ExceptionHandler::class],
-                $app[Adapter::class]
+                $app[\Illuminate\Routing\Router::class]
             );
         });
 

@@ -15,7 +15,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response as IlluminateResponse;
 
 use Songshenzong\ResponseJson\Contract\Debug\ExceptionHandler;
-use Songshenzong\ResponseJson\Contract\Routing\Adapter;
 use Songshenzong\ResponseJson\Exception\ResourceException;
 use Songshenzong\ResponseJson\Http\Request as HttpRequest;
 use Songshenzong\ResponseJson\Http\Response;
@@ -75,7 +74,8 @@ class ResponseJson
     protected $adapter;
     protected $app;
     protected $exception;
-
+    protected $request;
+    protected $router;
 
     /**
      * Create a new request  instance.
@@ -84,11 +84,13 @@ class ResponseJson
      *
      * @return void
      */
-    public function __construct(Container $app, ExceptionHandler $exception, Adapter $adapter)
+    public function __construct(Container $app, ExceptionHandler $exception, \Illuminate\Routing\Router $router)
     {
         $this -> app       = $app;
         $this -> exception = $exception;
-        $this -> adapter   = $adapter;
+        $this -> router    = $router;
+        // $this -> adapter   = $adapter;
+
     }
 
 
@@ -102,7 +104,8 @@ class ResponseJson
      */
     public function handle($request, Closure $next)
     {
-
+        $this -> request = $request;
+        // return $next($request);
         try {
             $this -> app -> singleton(LaravelExceptionHandler::class, function ($app) {
                 return $app[ExceptionHandler::class];
@@ -110,20 +113,43 @@ class ResponseJson
 
             $request = $this -> app -> make(HttpRequest::class) -> createFromIlluminate($request);
 
-            $this -> app -> instance('request', $request);
+            // $this -> app -> instance('request', $request);
+
 
             return (new Pipeline($this -> app)) -> send($request) -> then(function ($request) {
                 return $this -> dispatch($request);
             });
+
+
         } catch (Exception $exception) {
             $this -> exception -> report($exception);
 
             return $this -> exception -> handle($exception);
         }
 
+
         return $next($request);
     }
 
+
+    /**
+     * Dispatch a request.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param string                   $version
+     *
+     * @return mixed
+     */
+    public function adapterdispatch(\Illuminate\Http\Request $request)
+    {
+        $router = clone $this -> router;
+
+        $response = $router -> dispatch($request);
+
+        unset($router);
+
+        return $response;
+    }
 
     /**
      * Dispatch a request via the adapter.
@@ -134,19 +160,19 @@ class ResponseJson
      */
     public function dispatch(HttpRequest $request)
     {
-        $this -> app -> instance(Request::class, $request);
+        // $this -> app -> instance(HttpRequest::class, $request);
 
 
         try {
-            $response = $this -> adapter -> dispatch($request, $request -> version());
+            $response = $this -> adapterdispatch($request);
 
             if (property_exists($response, 'exception') && $response -> exception instanceof Exception) {
                 throw $response -> exception;
             }
+
+
         } catch (Exception $exception) {
-            if ($request instanceof InternalRequest) {
-                throw $exception;
-            }
+
 
             $this -> exception -> report($exception);
 

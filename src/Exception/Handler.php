@@ -4,12 +4,15 @@ namespace Songshenzong\ResponseJson\Exception;
 
 use Exception;
 use ReflectionFunction;
+
 use Illuminate\Http\Response;
+use Illuminate\Contracts\Debug\ExceptionHandler as IlluminateExceptionHandler;
+
 use Songshenzong\ResponseJson\Contract\Debug\ExceptionHandler;
 use Songshenzong\ResponseJson\Contract\Debug\MessageBagErrors;
+
 use Symfony\Component\HttpFoundation\Response as BaseResponse;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
-use Illuminate\Contracts\Debug\ExceptionHandler as IlluminateExceptionHandler;
 
 class Handler implements ExceptionHandler, IlluminateExceptionHandler
 {
@@ -38,17 +41,13 @@ class Handler implements ExceptionHandler, IlluminateExceptionHandler
     /**
      * The parent Illuminate exception handler instance.
      *
-     * @var \Illuminate\Contracts\Debug\ExceptionHandler
      */
     protected $parentHandler;
 
     /**
      * Create a new exception handler instance.
      *
-     * @param \Illuminate\Contracts\Debug\ExceptionHandler $parentHandler
-     * @param bool                                         $debug
      *
-     * @return void
      */
     public function __construct(IlluminateExceptionHandler $parentHandler, $debug)
     {
