@@ -49,8 +49,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     public function register()
     {
-
-
         $this -> app -> singleton(AcceptParser::class, function ($app) {
             return new AcceptParser(
                 'x',
@@ -132,5 +130,4 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
         return $value;
     }
-
 }
