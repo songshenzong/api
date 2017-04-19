@@ -8,7 +8,6 @@ use ReflectionFunction;
 use Illuminate\Http\Response;
 use Illuminate\Contracts\Debug\ExceptionHandler as IlluminateExceptionHandler;
 
-use Songshenzong\ResponseJson\Contract\Debug\MessageBagErrors;
 
 use Symfony\Component\HttpFoundation\Response as BaseResponse;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
@@ -213,7 +212,7 @@ class Handler implements IlluminateExceptionHandler
         }
 
 
-        if ($exception instanceof MessageBagErrors && $exception -> hasErrors()) {
+        if ($exception instanceof ResourceException && $exception -> hasErrors()) {
             $replacements['errors'] = $exception -> getErrors();
         }
 

@@ -4,9 +4,8 @@ namespace Songshenzong\ResponseJson\Exception;
 
 use Exception;
 use Illuminate\Support\MessageBag;
-use Songshenzong\ResponseJson\Contract\Debug\MessageBagErrors;
 
-class ResourceException extends HttpException implements MessageBagErrors
+class ResourceException extends HttpException
 {
     /**
      * MessageBag errors.
