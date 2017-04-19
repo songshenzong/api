@@ -2,7 +2,7 @@
 
 namespace Songshenzong\ResponseJson;
 
-use Songshenzong\ResponseJson\Exception\Handler as ExceptionHandler;
+use Songshenzong\ResponseJson\Exception\Handler;
 
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 use RuntimeException;
@@ -57,7 +57,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
          *---------------------------------------------------------*/
 
         $aliases = [
-            'responseJson.exception'      => ['Songshenzong\ResponseJson\Exception\Handler', 'Songshenzong\ResponseJson\Contract\Debug\ExceptionHandler'],
+            'responseJson.exception'      => ['Songshenzong\ResponseJson\Exception\Handler'],
         ];
 
         foreach ($aliases as $key => $aliases) {
@@ -87,7 +87,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this -> app -> singleton('ResponseJson', function ($app) {
             return new ResponseJson(
                 $app,
-                $app[ExceptionHandler::class],
+                $app[Handler::class],
                 $app[\Illuminate\Routing\Router::class]
             );
         });
@@ -161,7 +161,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this -> app -> alias('ResponseJson', 'Songshenzong\ResponseJson\Facade');
 
         $aliases = [
-            'responseJson.exception' => ['Songshenzong\ResponseJson\Exception\Handler', 'Songshenzong\ResponseJson\Contract\Debug\ExceptionHandler'],
+            'responseJson.exception' => ['Songshenzong\ResponseJson\Exception\Handler'],
         ];
 
         foreach ($aliases as $key => $aliases) {
@@ -181,7 +181,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     {
         $this -> app -> singleton('responseJson.exception', function ($app) {
             $debug = $this -> app['config'] -> get('api.debug');
-            return new ExceptionHandler($app['Illuminate\Contracts\Debug\ExceptionHandler'], $debug);
+            return new Handler($app['Illuminate\Contracts\Debug\ExceptionHandler'], $debug);
         });
     }
 }

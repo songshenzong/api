@@ -10,11 +10,11 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use Illuminate\Container\Container;
 use Illuminate\Pipeline\Pipeline;
-use Illuminate\Contracts\Debug\ExceptionHandler as LaravelExceptionHandler;
+use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response as IlluminateResponse;
 
-use Songshenzong\ResponseJson\Contract\Debug\ExceptionHandler;
+use Songshenzong\ResponseJson\Exception\Handler;
 use Songshenzong\ResponseJson\Exception\ResourceException;
 use Songshenzong\ResponseJson\Http\Request as HttpRequest;
 use Songshenzong\ResponseJson\Http\Response;
@@ -76,7 +76,7 @@ class ResponseJson
      * Create a new request  instance.
      *
      */
-    public function __construct(Container $app, ExceptionHandler $exception, \Illuminate\Routing\Router $router)
+    public function __construct(Container $app, Handler $exception, \Illuminate\Routing\Router $router)
     {
         $this -> app       = $app;
         $this -> exception = $exception;
@@ -97,8 +97,8 @@ class ResponseJson
         $this -> request = $request;
         // return $next($request);
         try {
-            $this -> app -> singleton(LaravelExceptionHandler::class, function ($app) {
-                return $app[ExceptionHandler::class];
+            $this -> app -> singleton(ExceptionHandler::class, function ($app) {
+                return $app[Handler::class];
             });
 
             $request = $this -> app -> make(HttpRequest::class) -> createFromIlluminate($request);
