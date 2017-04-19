@@ -212,7 +212,7 @@ class Handler implements IlluminateExceptionHandler
         }
 
 
-        if ($exception instanceof ResourceException && $exception -> hasErrors()) {
+        if ($exception instanceof HttpException && $exception -> hasErrors()) {
             $replacements['errors'] = $exception -> getErrors();
         }
 

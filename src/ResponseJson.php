@@ -4,10 +4,6 @@ namespace Songshenzong\ResponseJson;
 
 use Closure;
 use Exception;
-use RuntimeException;
-
-use Illuminate\Support\Str;
-use Illuminate\Support\Arr;
 use Illuminate\Container\Container;
 use Illuminate\Pipeline\Pipeline;
 use Illuminate\Contracts\Debug\ExceptionHandler;
@@ -15,7 +11,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response as IlluminateResponse;
 
 use Songshenzong\ResponseJson\Exception\Handler;
-use Songshenzong\ResponseJson\Exception\ResourceException;
+use Songshenzong\ResponseJson\Exception\HttpException;
+
 use Songshenzong\ResponseJson\Http\Request as HttpRequest;
 use Songshenzong\ResponseJson\Http\Response;
 
@@ -520,7 +517,7 @@ class ResponseJson
         }
 
 
-        throw new ResourceException($httpStatusCode, $this -> getStatusCode(), $this -> getMessage(), $this -> getErrors());
+        throw new HttpException($httpStatusCode, $this -> getStatusCode(), $this -> getMessage(), $this -> getErrors());
     }
 
 

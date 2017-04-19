@@ -40,85 +40,90 @@ class Response extends IlluminateResponse
     protected static $transformer;
 
 
-
     /**
      * Create a new response instance.
      *
-     * @param mixed                          $content
-     * @param int                            $status
-     * @param array                          $headers
+     * @param mixed $content
+     * @param int   $status
+     * @param array $headers
      *
      * @return void
      */
     public function __construct($content, $status = 200, $headers = [], Binding $binding = null)
     {
-        parent::__construct($content, $status, $headers);
+        parent ::__construct($content, $status, $headers);
 
-        $this->binding = $binding;
+        $this -> binding = $binding;
     }
+
 
     /**
      * Make an API response from an existing Illuminate response.
      *
      * @param \Illuminate\Http\Response $old
      *
+     * @return static
      */
     public static function makeFromExisting(IlluminateResponse $old)
     {
-        $new = static::create($old->getOriginalContent(), $old->getStatusCode());
+        $new = static ::create($old -> getOriginalContent(), $old -> getStatusCode());
 
-        $new->headers = $old->headers;
+        $new -> headers = $old -> headers;
 
         return $new;
     }
+
 
     /**
      * Make an API response from an existing JSON response.
      *
      * @param \Illuminate\Http\JsonResponse $json
      *
+     * @return static
      */
     public static function makeFromJson(JsonResponse $json)
     {
-        $new = static::create(json_decode($json->getContent(), true), $json->getStatusCode());
+        $new = static ::create(json_decode($json -> getContent(), true), $json -> getStatusCode());
 
-        $new->headers = $json->headers;
+        $new -> headers = $json -> headers;
 
         return $new;
     }
+
 
     /**
      * Morph the API response to the appropriate format.
      *
      * @param string $format
      *
+     * @return $this
      */
     public function morph($format = 'json')
     {
-        $this->content = $this->getOriginalContent();
+        $this -> content = $this -> getOriginalContent();
 
-        $this->fireMorphingEvent();
+        $this -> fireMorphingEvent();
 
-        if (isset(static::$transformer) && static::$transformer->transformableResponse($this->content)) {
-            $this->content = static::$transformer->transform($this->content);
+        if (isset(static ::$transformer) && static ::$transformer -> transformableResponse($this -> content)) {
+            $this -> content = static ::$transformer -> transform($this -> content);
         }
 
-        $formatter = static::getFormatter($format);
+        $formatter = static ::getFormatter($format);
 
-        $defaultContentType = $this->headers->get('Content-Type');
+        $defaultContentType = $this -> headers -> get('Content-Type');
 
-        $this->headers->set('Content-Type', $formatter->getContentType());
+        $this -> headers -> set('Content-Type', $formatter -> getContentType());
 
-        $this->fireMorphedEvent();
+        $this -> fireMorphedEvent();
 
-        if ($this->content instanceof EloquentModel) {
-            $this->content = $formatter->formatEloquentModel($this->content);
-        } elseif ($this->content instanceof EloquentCollection) {
-            $this->content = $formatter->formatEloquentCollection($this->content);
-        } elseif (is_array($this->content) || $this->content instanceof ArrayObject || $this->content instanceof Arrayable) {
-            $this->content = $formatter->formatArray($this->content);
+        if ($this -> content instanceof EloquentModel) {
+            $this -> content = $formatter -> formatEloquentModel($this -> content);
+        } elseif ($this -> content instanceof EloquentCollection) {
+            $this -> content = $formatter -> formatEloquentCollection($this -> content);
+        } elseif (is_array($this -> content) || $this -> content instanceof ArrayObject || $this -> content instanceof Arrayable) {
+            $this -> content = $formatter -> formatArray($this -> content);
         } else {
-            $this->headers->set('Content-Type', $defaultContentType);
+            $this -> headers -> set('Content-Type', $defaultContentType);
         }
 
         return $this;
@@ -152,14 +157,13 @@ class Response extends IlluminateResponse
         // case we'll simply leave the content as null and set the original
         // content value and continue.
         try {
-            return parent::setContent($content);
+            return parent ::setContent($content);
         } catch (UnexpectedValueException $exception) {
-            $this->original = $content;
+            $this -> original = $content;
 
             return $this;
         }
     }
-
 
 
     /**
@@ -167,16 +171,15 @@ class Response extends IlluminateResponse
      *
      * @param string $format
      *
-     * @throws \RuntimeException
      *
      */
     public static function getFormatter($format)
     {
-        if (! static::hasFormatter($format)) {
+        if (!static ::hasFormatter($format)) {
             throw new NotAcceptableHttpException('Unable to format response according to Accept header.');
         }
 
-        return static::$formatters[$format];
+        return static ::$formatters[$format];
     }
 
     /**
@@ -188,7 +191,7 @@ class Response extends IlluminateResponse
      */
     public static function hasFormatter($format)
     {
-        return isset(static::$formatters[$format]);
+        return isset(static ::$formatters[$format]);
     }
 
     /**
@@ -200,34 +203,33 @@ class Response extends IlluminateResponse
      */
     public static function setFormatters(array $formatters)
     {
-        static::$formatters = $formatters;
+        static ::$formatters = $formatters;
     }
 
     /**
      * Add a response formatter.
      *
-     * @param string                                 $key
+     * @param string $key
      *
      * @return void
      */
     public static function addFormatter($key, $formatter)
     {
-        static::$formatters[$key] = $formatter;
+        static ::$formatters[$key] = $formatter;
     }
-
-
 
 
     /**
      * Add a meta key and value pair.
      *
-     * @param string $key
-     * @param mixed  $value
+     * @param $key
+     * @param $value
      *
+     * @return $this
      */
     public function addMeta($key, $value)
     {
-        $this->binding->addMeta($key, $value);
+        $this -> binding -> addMeta($key, $value);
 
         return $this;
     }
@@ -235,24 +237,27 @@ class Response extends IlluminateResponse
     /**
      * Add a meta key and value pair.
      *
-     * @param string $key
-     * @param mixed  $value
+     * @param $key
+     * @param $value
      *
+     * @return \Songshenzong\ResponseJson\Http\Response
      */
     public function meta($key, $value)
     {
-        return $this->addMeta($key, $value);
+        return $this -> addMeta($key, $value);
     }
+
 
     /**
      * Set the meta data for the response.
      *
      * @param array $meta
      *
+     * @return $this
      */
     public function setMeta(array $meta)
     {
-        $this->binding->setMeta($meta);
+        $this -> binding -> setMeta($meta);
 
         return $this;
     }
@@ -264,41 +269,47 @@ class Response extends IlluminateResponse
      */
     public function getMeta()
     {
-        return $this->binding->getMeta();
+        return $this -> binding -> getMeta();
     }
+
 
     /**
      * Add a cookie to the response.
      *
-     * @param \Symfony\Component\HttpFoundation\Cookie|mixed $cookie
+     * @param mixed|\Symfony\Component\HttpFoundation\Cookie $cookie
      *
+     * @return $this
      */
     public function cookie($cookie)
     {
-        return $this->withCookie($cookie);
+        return $this -> withCookie($cookie);
     }
+
 
     /**
      * Add a header to the response.
      *
-     * @param string $key
-     * @param string $value
-     * @param bool   $replace
+     * @param      $key
+     * @param      $value
+     * @param bool $replace
      *
+     * @return $this
      */
     public function withHeader($key, $value, $replace = true)
     {
-        return $this->header($key, $value, $replace);
+        return $this -> header($key, $value, $replace);
     }
+
 
     /**
      * Set the response status code.
      *
-     * @param int $statusCode
+     * @param $statusCode
      *
+     * @return $this
      */
     public function statusCode($statusCode)
     {
-        return $this->setStatusCode($statusCode);
+        return $this -> setStatusCode($statusCode);
     }
 }

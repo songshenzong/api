@@ -20,11 +20,13 @@ class Request extends IlluminateRequest
      */
     protected $accept;
 
+
     /**
      * Create a new Dingo request instance from an Illuminate request instance.
      *
      * @param \Illuminate\Http\Request $old
      *
+     * @return static
      */
     public function createFromIlluminate(IlluminateRequest $old)
     {
