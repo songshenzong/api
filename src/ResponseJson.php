@@ -100,7 +100,7 @@ class ResponseJson
 
             $request = $this -> app -> make(HttpRequest::class) -> createFromIlluminate($request);
 
-            // $this -> app -> instance('request', $request);
+            $this -> app -> instance('request', $request);
 
 
             return (new Pipeline($this -> app)) -> send($request) -> then(function ($request) {
@@ -144,7 +144,7 @@ class ResponseJson
      */
     public function dispatch(HttpRequest $request)
     {
-        // $this -> app -> instance(HttpRequest::class, $request);
+        $this -> app -> instance(HttpRequest::class, $request);
 
 
         try {
