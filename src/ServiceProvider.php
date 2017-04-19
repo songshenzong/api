@@ -49,19 +49,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     public function register()
     {
-        /**---------------------------------------------------------
-         *   Class
-         *---------------------------------------------------------*/
-
-        $aliases = [
-            'responseJson.exception'      => ['Songshenzong\ResponseJson\Exception\Handler'],
-        ];
-
-        foreach ($aliases as $key => $aliases) {
-            foreach ((array)$aliases as $alias) {
-                $this -> app -> alias($key, $alias);
-            }
-        }
 
 
         $this -> app -> singleton(AcceptParser::class, function ($app) {
@@ -74,13 +61,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         });
 
 
-        $this -> app -> singleton('responseJson.exception', function ($app) {
-            return new ExceptionHandler($app['Illuminate\Contracts\Debug\ExceptionHandler'], $this -> config('debug'));
-        });
-
-
-
-
         $this -> app -> singleton('ResponseJson', function ($app) {
             return new ResponseJson(
                 $app,
@@ -90,18 +70,23 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         });
 
 
-        $this -> registerClassAliases();
-        $this -> registerExceptionHandler();
+        $this -> app -> singleton('responseJson.exception', function ($app) {
+            return new Handler($app['Illuminate\Contracts\Debug\ExceptionHandler'], env('APP_DEBUG'));
+        });
+
+
+        $this -> app -> alias('ResponseJson', 'Songshenzong\ResponseJson\Facade');
+        $this -> app -> alias('responseJson.exception', 'Songshenzong\ResponseJson\Exception\Handler');
     }
 
 
     /**
      * Retrieve and instantiate a config value if it exists and is a class.
      *
-     * @param string $key
-     * @param bool   $instantiate
+     * @param      $item
+     * @param bool $instantiate
      *
-     * @return mixed
+     * @return array|mixed
      */
     protected function config($item, $instantiate = true)
     {
@@ -148,37 +133,4 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         return $value;
     }
 
-    /**
-     * Register the class aliases.
-     *
-     * @return void
-     */
-    protected function registerClassAliases()
-    {
-        $this -> app -> alias('ResponseJson', 'Songshenzong\ResponseJson\Facade');
-
-        $aliases = [
-            'responseJson.exception' => ['Songshenzong\ResponseJson\Exception\Handler'],
-        ];
-
-        foreach ($aliases as $key => $aliases) {
-            foreach ((array)$aliases as $alias) {
-                $this -> app -> alias($key, $alias);
-            }
-        }
-    }
-
-
-    /**
-     * Register the exception handler.
-     *
-     * @return void
-     */
-    protected function registerExceptionHandler()
-    {
-        $this -> app -> singleton('responseJson.exception', function ($app) {
-            $debug = $this -> app['config'] -> get('api.debug');
-            return new Handler($app['Illuminate\Contracts\Debug\ExceptionHandler'], $debug);
-        });
-    }
 }

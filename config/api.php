@@ -83,19 +83,6 @@ return [
 
     'strict' => env('API_STRICT', false),
 
-    /*
-    |--------------------------------------------------------------------------
-    | Debug Mode
-    |--------------------------------------------------------------------------
-    |
-    | Enabling debug mode will result in error responses caused by thrown
-    | exceptions to have a "debug" key that will be populated with
-    | more detailed information on the exception.
-    |
-    */
-
-    'debug' => env('API_DEBUG', false),
-
 
     /*
     |--------------------------------------------------------------------------
