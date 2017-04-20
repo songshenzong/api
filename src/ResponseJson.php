@@ -91,49 +91,36 @@ class ResponseJson
      */
     public function handle($request, Closure $next)
     {
-        $this -> request = $request;
+        // $this -> request = $request;
         // return $next($request);
+
         try {
-            $this -> app -> singleton(ExceptionHandler::class, function ($app) {
-                return $app[Handler::class];
-            });
+            // $this -> app -> singleton(ExceptionHandler::class, function ($app) {
+            //     return $app[Handler::class];
+            // });
 
             $request = $this -> app -> make(HttpRequest::class) -> createFromIlluminate($request);
 
-            $this -> app -> instance('request', $request);
+            // $this -> app -> instance('request', $request);
 
 
             return (new Pipeline($this -> app)) -> send($request) -> then(function ($request) {
                 return $this -> dispatch($request);
             });
-        } catch (Exception $exception) {
-            $this -> exception -> report($exception);
 
-            return $this -> exception -> handle($exception);
+
+        } catch (Exception $exception) {
+
+            // $this -> exception -> report($exception);
+            //
+            // return $this -> exception -> handle($exception);
+
         }
 
 
         return $next($request);
     }
 
-
-    /**
-     * Dispatch a request.
-     *
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return mixed
-     */
-    public function adapterdispatch(\Illuminate\Http\Request $request)
-    {
-        $router = clone $this -> router;
-
-        $response = $router -> dispatch($request);
-
-        unset($router);
-
-        return $response;
-    }
 
     /**
      * Dispatch a request via the adapter.
@@ -144,22 +131,33 @@ class ResponseJson
      */
     public function dispatch(HttpRequest $request)
     {
-        $this -> app -> instance(HttpRequest::class, $request);
+        // $this -> app -> instance(HttpRequest::class, $request);
 
 
         try {
-            $response = $this -> adapterdispatch($request);
+
+            $router = clone $this -> router;
+
+            $response = $router -> dispatch($request);
+
+            unset($router);
+
 
             if (property_exists($response, 'exception') && $response -> exception instanceof Exception) {
                 throw $response -> exception;
             }
+
+
         } catch (Exception $exception) {
             $this -> exception -> report($exception);
 
-            $response = $this -> exception -> handle($exception);
+
+            return $this -> exception -> handle($exception);
+            // $response = $this -> exception -> handle($exception);
         }
 
-        return $this -> prepareResponse($response, $request, $request -> format());
+        // return $response;
+        // return $this -> prepareResponse($response, $request, $request -> format());
     }
 
 
@@ -172,31 +170,31 @@ class ResponseJson
      *
      * @return $this|\Illuminate\Http\Response|static
      */
-    protected function prepareResponse($response, HttpRequest $request, $format)
-    {
-        if ($response instanceof IlluminateResponse) {
-            $response = Response ::makeFromExisting($response);
-        } elseif ($response instanceof JsonResponse) {
-            $response = Response ::makeFromJson($response);
-        }
-
-        if ($response instanceof Response) {
-            // If we try and get a formatter that does not exist we'll let the exception
-            // handler deal with it. At worst we'll get a generic JSON response that
-            // a consumer can hopefully deal with. Ideally they won't be using
-            // an unsupported format.
-            try {
-                $response -> getFormatter($format) -> setResponse($response) -> setRequest($request);
-            } catch (NotAcceptableHttpException $exception) {
-                return $this -> exception -> handle($exception);
-            }
-
-            $response = $response -> morph($format);
-        }
-
-
-        return $response;
-    }
+    // protected function prepareResponse($response, HttpRequest $request, $format)
+    // {
+    //     if ($response instanceof IlluminateResponse) {
+    //         $response = Response ::makeFromExisting($response);
+    //     } elseif ($response instanceof JsonResponse) {
+    //         $response = Response ::makeFromJson($response);
+    //     }
+    //
+    //     if ($response instanceof Response) {
+    //         // If we try and get a formatter that does not exist we'll let the exception
+    //         // handler deal with it. At worst we'll get a generic JSON response that
+    //         // a consumer can hopefully deal with. Ideally they won't be using
+    //         // an unsupported format.
+    //         try {
+    //             $response -> getFormatter($format) -> setResponse($response) -> setRequest($request);
+    //         } catch (NotAcceptableHttpException $exception) {
+    //             return $this -> exception -> handle($exception);
+    //         }
+    //
+    //         $response = $response -> morph($format);
+    //     }
+    //
+    //
+    //     return $response;
+    // }
 
 
     /**---------------------------------------------------------

@@ -11,6 +11,7 @@ use Illuminate\Contracts\Debug\ExceptionHandler;
 
 use Symfony\Component\HttpFoundation\Response as BaseResponse;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Songshenzong\ResponseJson\Exception\HttpException;
 
 class Handler implements ExceptionHandler
 {
@@ -158,7 +159,7 @@ class Handler implements ExceptionHandler
      */
     protected function getStatusCode(Exception $exception)
     {
-        return $exception instanceof HttpExceptionInterface ? $exception -> getStatusCode() : 500;
+        return $exception instanceof HttpException ? $exception -> getStatusCode() : 500;
     }
 
     /**
@@ -170,7 +171,7 @@ class Handler implements ExceptionHandler
      */
     protected function getHttpStatusCode(Exception $exception)
     {
-        return $exception instanceof HttpExceptionInterface ? $exception -> getHttpStatusCode() : 500;
+        return $exception instanceof HttpException ? $exception -> getHttpStatusCode() : 500;
     }
 
 
@@ -183,7 +184,7 @@ class Handler implements ExceptionHandler
      */
     protected function getHeaders(Exception $exception)
     {
-        return $exception instanceof HttpExceptionInterface ? $exception -> getHeaders() : [];
+        return $exception instanceof HttpException ? $exception -> getHeaders() : [];
     }
 
     /**
@@ -256,7 +257,7 @@ class Handler implements ExceptionHandler
      */
     protected function getExceptionStatusCode(Exception $exception, $defaultStatusCode = 500)
     {
-        return ($exception instanceof HttpExceptionInterface) ? $exception -> getStatusCode() : $defaultStatusCode;
+        return ($exception instanceof HttpException) ? $exception -> getStatusCode() : $defaultStatusCode;
     }
 
     /**
