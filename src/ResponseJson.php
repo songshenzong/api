@@ -92,7 +92,7 @@ class ResponseJson
     public function handle($request, Closure $next)
     {
         // $this -> request = $request;
-        // return $next($request);
+        return $next($request);
 
         try {
             // $this -> app -> singleton(ExceptionHandler::class, function ($app) {
@@ -152,11 +152,10 @@ class ResponseJson
             $this -> exception -> report($exception);
 
 
-            return $this -> exception -> handle($exception);
-            // $response = $this -> exception -> handle($exception);
+            $response = $this -> exception -> handle($exception);
         }
 
-        // return $response;
+        return $response;
         // return $this -> prepareResponse($response, $request, $request -> format());
     }
 
