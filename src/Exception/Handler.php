@@ -4,14 +4,9 @@ namespace Songshenzong\ResponseJson\Exception;
 
 use Exception;
 use ReflectionFunction;
-
 use Illuminate\Http\Response;
 use Illuminate\Contracts\Debug\ExceptionHandler;
-
-
 use Symfony\Component\HttpFoundation\Response as BaseResponse;
-use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
-use Songshenzong\ResponseJson\Exception\HttpException;
 
 class Handler implements ExceptionHandler
 {
@@ -69,8 +64,7 @@ class Handler implements ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param \Songshenzong\ResponseJson\Http\Request $request
-     * @param \Exception                              $exception
+     * @param \Exception $exception
      *
      * @throws \Exception
      *

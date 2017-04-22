@@ -2,28 +2,13 @@
 
 namespace Songshenzong\ResponseJson;
 
-use Closure;
 use Exception;
 use Illuminate\Container\Container;
-use Illuminate\Pipeline\Pipeline;
-use Illuminate\Contracts\Debug\ExceptionHandler;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response as IlluminateResponse;
-
 use Songshenzong\ResponseJson\Exception\Handler;
 use Songshenzong\ResponseJson\Exception\HttpException;
 
-use Songshenzong\ResponseJson\Http\Request as HttpRequest;
-use Songshenzong\ResponseJson\Http\Response;
-
-use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
-
 class ResponseJson
 {
-
-    /**---------------------------------------------------------
-     *   Json Part
-     *---------------------------------------------------------*/
 
 
     /**
@@ -57,168 +42,61 @@ class ResponseJson
     protected $errors;
 
 
-    protected $notException;
-
-
-    /**---------------------------------------------------------
-     *   Middleware Part
-     *---------------------------------------------------------*/
-
-
+    /**
+     * @var \Illuminate\Container\Container
+     */
     protected $app;
+
+    /**
+     * @var \Songshenzong\ResponseJson\Exception\Handler
+     */
     protected $exception;
-    protected $router;
 
     /**
      * Create a new request  instance.
      *
      */
-    public function __construct(Container $app, Handler $exception, \Illuminate\Routing\Router $router)
+    public function __construct(Container $app, Handler $exception)
     {
         $this -> app       = $app;
         $this -> exception = $exception;
-        $this -> router    = $router;
     }
 
 
     /**
-     * Handle an incoming request.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param \Closure                 $next
-     *
-     * @return mixed
+     * Public Errors Exception Method.
      */
-    public function handle($request, Closure $next)
+    public function errors($statusCode, $message, $errors = null)
     {
-        // $this -> request = $request;
-        return $next($request);
-
-        try {
-            // $this -> app -> singleton(ExceptionHandler::class, function ($app) {
-            //     return $app[Handler::class];
-            // });
-
-            $request = $this -> app -> make(HttpRequest::class) -> createFromIlluminate($request);
-
-            // $this -> app -> instance('request', $request);
+        $this -> setStatusCode($statusCode);
 
 
-            return (new Pipeline($this -> app)) -> send($request) -> then(function ($request) {
-                return $this -> dispatch($request);
-            });
+        $this -> setMessage($message);
 
 
-        } catch (Exception $exception) {
+        $this -> setErrors($errors);
 
-            // $this -> exception -> report($exception);
-            //
-            // return $this -> exception -> handle($exception);
 
+        if ($this -> getHttpStatusCode()) {
+            $httpStatusCode = $this -> getHttpStatusCode();
+        } else {
+            $httpStatusCode = $this -> getStatusCode();
         }
 
 
-        return $next($request);
-    }
-
-
-    /**
-     * Dispatch a request via the adapter.
-     *
-     *
-     * @throws \Exception
-     *
-     */
-    public function dispatch(HttpRequest $request)
-    {
-        // $this -> app -> instance(HttpRequest::class, $request);
-
-
         try {
-
-            $router = clone $this -> router;
-
-            $response = $router -> dispatch($request);
-
-            unset($router);
-
-
-            if (property_exists($response, 'exception') && $response -> exception instanceof Exception) {
-                throw $response -> exception;
-            }
-
+            throw new HttpException($httpStatusCode, $this -> getStatusCode(), $this -> getMessage(), $this -> getErrors());
 
         } catch (Exception $exception) {
             $this -> exception -> report($exception);
-
-
             $response = $this -> exception -> handle($exception);
         }
 
         return $response;
-        // return $this -> prepareResponse($response, $request, $request -> format());
+
+
     }
 
-
-    /**
-     * Prepare a response by transforming and formatting it correctly.
-     *
-     * @param                                         $response
-     * @param \Songshenzong\ResponseJson\Http\Request $request
-     * @param                                         $format
-     *
-     * @return $this|\Illuminate\Http\Response|static
-     */
-    // protected function prepareResponse($response, HttpRequest $request, $format)
-    // {
-    //     if ($response instanceof IlluminateResponse) {
-    //         $response = Response ::makeFromExisting($response);
-    //     } elseif ($response instanceof JsonResponse) {
-    //         $response = Response ::makeFromJson($response);
-    //     }
-    //
-    //     if ($response instanceof Response) {
-    //         // If we try and get a formatter that does not exist we'll let the exception
-    //         // handler deal with it. At worst we'll get a generic JSON response that
-    //         // a consumer can hopefully deal with. Ideally they won't be using
-    //         // an unsupported format.
-    //         try {
-    //             $response -> getFormatter($format) -> setResponse($response) -> setRequest($request);
-    //         } catch (NotAcceptableHttpException $exception) {
-    //             return $this -> exception -> handle($exception);
-    //         }
-    //
-    //         $response = $response -> morph($format);
-    //     }
-    //
-    //
-    //     return $response;
-    // }
-
-
-    /**---------------------------------------------------------
-     *   Middleware Part End
-     *---------------------------------------------------------*/
-
-
-    /**
-     * @param mixed $notException
-     *
-     * @return $this
-     */
-    public function setNotException($notException = true)
-    {
-        $this -> notException = $notException;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getNotException()
-    {
-        return $this -> notException;
-    }
 
     /**
      * @param string $message
@@ -493,36 +371,6 @@ class ResponseJson
     public function resetContent($message = 'Reset Content', $data = null)
     {
         return $this -> success(205, $message, $data);
-    }
-
-
-    /**
-     * Public Errors Exception Method.
-     */
-    public function errors($statusCode, $message, $errors = null)
-    {
-        $this -> setStatusCode($statusCode);
-
-
-        $this -> setMessage($message);
-
-
-        $this -> setErrors($errors);
-
-
-        if ($this -> getNotException()) {
-            return $this -> success($statusCode, $message, $errors);
-        }
-
-
-        if ($this -> getHttpStatusCode()) {
-            $httpStatusCode = $this -> getHttpStatusCode();
-        } else {
-            $httpStatusCode = $this -> getStatusCode();
-        }
-
-
-        throw new HttpException($httpStatusCode, $this -> getStatusCode(), $this -> getMessage(), $this -> getErrors());
     }
 
 

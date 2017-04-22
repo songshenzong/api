@@ -4,12 +4,6 @@ namespace Songshenzong\ResponseJson;
 
 use Songshenzong\ResponseJson\Exception\Handler;
 
-use Songshenzong\ResponseJson\Http\Request;
-use Songshenzong\ResponseJson\Http\Response;
-
-use Songshenzong\ResponseJson\Http\Parser\Accept as AcceptParser;
-
-use Illuminate\Contracts\Http\Kernel;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
@@ -29,18 +23,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         'middleware', 'transformer', 'formats',
     ];
 
-    /**
-     * Boot the service provider.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        Response ::setFormatters($this -> config('formats'));
-        Request ::setAcceptParser($this -> app['Songshenzong\ResponseJson\Http\Parser\Accept']);
-        $kernel = $this -> app -> make(Kernel::class);
-        $kernel -> prependMiddleware(ResponseJson::class);
-    }
 
     /**
      * Register the service provider.
@@ -49,21 +31,13 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     public function register()
     {
-        $this -> app -> singleton(AcceptParser::class, function ($app) {
-            return new AcceptParser(
-                'x',
-                '',
-                'v1',
-                'json'
-            );
-        });
 
 
         $this -> app -> singleton('ResponseJson', function ($app) {
+
             return new ResponseJson(
                 $app,
-                $app[Handler::class],
-                $app[\Illuminate\Routing\Router::class]
+                $app[Handler::class]
             );
         });
 
