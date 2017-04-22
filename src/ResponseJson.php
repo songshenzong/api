@@ -86,15 +86,12 @@ class ResponseJson
 
         try {
             throw new HttpException($httpStatusCode, $this -> getStatusCode(), $this -> getMessage(), $this -> getErrors());
-
         } catch (Exception $exception) {
             $this -> exception -> report($exception);
             $response = $this -> exception -> handle($exception);
         }
 
         return $response;
-
-
     }
 
 
