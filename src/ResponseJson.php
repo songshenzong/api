@@ -2,10 +2,15 @@
 
 namespace Songshenzong\ResponseJson;
 
+use Dingo\Api\Routing\Router;
 use Exception;
 use Illuminate\Container\Container;
+use Illuminate\Pipeline\Pipeline;
 use Songshenzong\ResponseJson\Exception\Handler;
 use Songshenzong\ResponseJson\Exception\HttpException;
+use Dingo\Api\Http\Request;
+use Illuminate\Contracts\Debug\ExceptionHandler as LaravelExceptionHandler;
+use Dingo\Api\Contract\Debug\ExceptionHandler;
 
 class ResponseJson
 {
@@ -51,15 +56,20 @@ class ResponseJson
      * @var \Songshenzong\ResponseJson\Exception\Handler
      */
     protected $exception;
+    protected $router;
+    protected $request;
 
     /**
      * Create a new request  instance.
      *
      */
-    public function __construct(Container $app, Handler $exception)
+    public function __construct(Container $app, Request $request, Router $router)
     {
-        $this -> app       = $app;
-        $this -> exception = $exception;
+
+
+        $this -> app     = $app;
+        $this -> router  = $router;
+        $this -> request = $request;
     }
 
 
@@ -73,7 +83,6 @@ class ResponseJson
 
         $this -> setMessage($message);
 
-
         $this -> setErrors($errors);
 
 
@@ -83,17 +92,57 @@ class ResponseJson
             $httpStatusCode = $this -> getStatusCode();
         }
 
+        $this -> exception = new Handler($this -> app[Handler::class], env('APP_DEBUG', true));
+
 
         try {
+
+            $this -> app -> singleton(LaravelExceptionHandler::class, function ($app) {
+                return $app[ExceptionHandler::class];
+            });
+
+            // return (new Pipeline($this -> app)) -> send($this->request) -> then(function ($request) {
+            //     return $this -> router -> dispatch($request);
+            // });
             throw new HttpException($httpStatusCode, $this -> getStatusCode(), $this -> getMessage(), $this -> getErrors());
+
         } catch (Exception $exception) {
+
             $this -> exception -> report($exception);
+            return $this -> exception -> handle($exception);
+        }
+
+
+    }
+
+
+    public function dispatch(Request $request)
+    {
+
+        $this -> currentRoute = null;
+
+        $this -> container -> instance(Request::class, $request);
+
+        $this -> routesDispatched++;
+
+        try {
+            $response = $this -> adapter -> dispatch($request, $request -> version());
+
+            if (property_exists($response, 'exception') && $response -> exception instanceof Exception) {
+                throw $response -> exception;
+            }
+        } catch (Exception $exception) {
+            if ($request instanceof InternalRequest) {
+                throw $exception;
+            }
+
+            $this -> exception -> report($exception);
+
             $response = $this -> exception -> handle($exception);
         }
 
-        return $response;
+        return $this -> prepareResponse($response, $request, $request -> format());
     }
-
 
     /**
      * @param string $message

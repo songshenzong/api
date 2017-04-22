@@ -2,7 +2,9 @@
 
 namespace Songshenzong\ResponseJson;
 
+use Illuminate\Http\Request;
 use Songshenzong\ResponseJson\Exception\Handler;
+use Dingo\Api\Routing\Router;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
@@ -31,9 +33,11 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     public function register()
     {
         $this -> app -> singleton('ResponseJson', function ($app) {
+
             return new ResponseJson(
                 $app,
-                $app[Handler::class]
+                $app[Request::class],
+                $app[Router::class]
             );
         });
 
