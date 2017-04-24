@@ -4,9 +4,14 @@ namespace Songshenzong\ResponseJson\Exception;
 
 use Exception;
 use ReflectionFunction;
+
 use Illuminate\Http\Response;
 use Illuminate\Contracts\Debug\ExceptionHandler;
+
+
 use Symfony\Component\HttpFoundation\Response as BaseResponse;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Songshenzong\ResponseJson\Exception\HttpException;
 
 class Handler implements ExceptionHandler
 {
@@ -64,7 +69,8 @@ class Handler implements ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param \Exception $exception
+     * @param \Songshenzong\ResponseJson\Http\Request $request
+     * @param \Exception                              $exception
      *
      * @throws \Exception
      *
@@ -153,7 +159,7 @@ class Handler implements ExceptionHandler
      */
     protected function getStatusCode(Exception $exception)
     {
-        return $exception instanceof HttpException ? $exception -> getStatusCode() : 500;
+        return $exception instanceof Exception ? $exception -> getStatusCode() : 500;
     }
 
     /**
@@ -165,7 +171,7 @@ class Handler implements ExceptionHandler
      */
     protected function getHttpStatusCode(Exception $exception)
     {
-        return $exception instanceof HttpException ? $exception -> getHttpStatusCode() : 500;
+        return $exception instanceof HttpException ? $exception -> getHttpStatusCode() : $exception -> getStatusCode();
     }
 
 

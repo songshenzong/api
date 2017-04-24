@@ -2,18 +2,30 @@
 
 namespace Songshenzong\ResponseJson;
 
-use Dingo\Api\Routing\Router;
+use Closure;
 use Exception;
 use Illuminate\Container\Container;
+use Illuminate\Http\Request;
 use Illuminate\Pipeline\Pipeline;
+use Illuminate\Contracts\Debug\ExceptionHandler;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response as IlluminateResponse;
+
 use Songshenzong\ResponseJson\Exception\Handler;
 use Songshenzong\ResponseJson\Exception\HttpException;
-use Dingo\Api\Http\Request;
-use Illuminate\Contracts\Debug\ExceptionHandler as LaravelExceptionHandler;
-use Dingo\Api\Contract\Debug\ExceptionHandler;
+
+use Songshenzong\ResponseJson\Http\Request as HttpRequest;
+use Songshenzong\ResponseJson\Http\Response;
+
+use \Illuminate\Routing\Router;
+use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
 
 class ResponseJson
 {
+
+    /**---------------------------------------------------------
+     *   Json Part
+     *---------------------------------------------------------*/
 
 
     /**
@@ -47,29 +59,70 @@ class ResponseJson
     protected $errors;
 
 
-    /**
-     * @var \Illuminate\Container\Container
-     */
-    protected $app;
+    /**---------------------------------------------------------
+     *   Middleware Part
+     *---------------------------------------------------------*/
 
-    /**
-     * @var \Songshenzong\ResponseJson\Exception\Handler
-     */
+
+    protected $app;
     protected $exception;
     protected $router;
     protected $request;
+    protected $response;
 
     /**
      * Create a new request  instance.
      *
      */
-    public function __construct(Container $app, Request $request, Router $router)
+    public function __construct(Container $app, Handler $exception, Router $router)
     {
+        $this -> app       = $app;
+        $this -> exception = $exception;
+        $this -> router    = $router;
+    }
 
 
-        $this -> app     = $app;
-        $this -> router  = $router;
+    /**
+     * Handle an incoming request.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure                 $next
+     *
+     * @return mixed
+     */
+    public function handle($request, Closure $next)
+    {
         $this -> request = $request;
+
+        try {
+
+            $req      = $this -> app -> make(HttpRequest::class) -> createFromIlluminate($request);
+            $router   = clone $this -> router;
+            $response = $router -> dispatch($request);
+
+
+        } catch (Exception $exception) {
+
+
+            // 如果是404，不能直接抛出，要交给下一个中间件处理，因为很有可能是第三方插件的路由没有被检测到
+            if ($exception -> getStatusCode() === 404) {
+                return $next($this -> request);
+            } else {
+                return $response;
+            }
+
+
+            $this -> exception -> report($exception);
+            $response = $this -> exception -> handle($exception);
+            return $response;
+
+
+        }
+
+
+        return $next($request);
+
+
     }
 
 
@@ -78,12 +131,19 @@ class ResponseJson
      */
     public function errors($statusCode, $message, $errors = null)
     {
+
         $this -> setStatusCode($statusCode);
 
 
         $this -> setMessage($message);
 
+
         $this -> setErrors($errors);
+
+
+        if ($this -> getNotException()) {
+            return $this -> success($statusCode, $message, $errors);
+        }
 
 
         if ($this -> getHttpStatusCode()) {
@@ -92,57 +152,20 @@ class ResponseJson
             $httpStatusCode = $this -> getStatusCode();
         }
 
-        $this -> exception = new Handler($this -> app[Handler::class], env('APP_DEBUG', true));
 
-
-        try {
-
-            $this -> app -> singleton(LaravelExceptionHandler::class, function ($app) {
-                return $app[ExceptionHandler::class];
-            });
-
-            // return (new Pipeline($this -> app)) -> send($this->request) -> then(function ($request) {
-            //     return $this -> router -> dispatch($request);
-            // });
-            throw new HttpException($httpStatusCode, $this -> getStatusCode(), $this -> getMessage(), $this -> getErrors());
-
-        } catch (Exception $exception) {
-
-            $this -> exception -> report($exception);
-            return $this -> exception -> handle($exception);
-        }
+        throw new HttpException($httpStatusCode, $this -> getStatusCode(), $this -> getMessage(), $this -> getErrors());
 
 
     }
 
 
-    public function dispatch(Request $request)
-    {
 
-        $this -> currentRoute = null;
 
-        $this -> container -> instance(Request::class, $request);
 
-        $this -> routesDispatched++;
+    /**---------------------------------------------------------
+     *   Middleware Part End
+     *---------------------------------------------------------*/
 
-        try {
-            $response = $this -> adapter -> dispatch($request, $request -> version());
-
-            if (property_exists($response, 'exception') && $response -> exception instanceof Exception) {
-                throw $response -> exception;
-            }
-        } catch (Exception $exception) {
-            if ($request instanceof InternalRequest) {
-                throw $exception;
-            }
-
-            $this -> exception -> report($exception);
-
-            $response = $this -> exception -> handle($exception);
-        }
-
-        return $this -> prepareResponse($response, $request, $request -> format());
-    }
 
     /**
      * @param string $message
