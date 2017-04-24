@@ -214,9 +214,7 @@ class Handler implements ExceptionHandler
 
 
         if ($exception instanceof HttpException && $exception -> hasErrors()) {
-
             $replacements['errors'] = $exception -> getErrors();
-
         }
 
 
@@ -233,7 +231,9 @@ class Handler implements ExceptionHandler
             ];
         }
 
-        return array_merge($replacements, $this -> replacements);
+        $response = array_merge($replacements, $this -> replacements);
+
+        return $response;
     }
 
     /**
