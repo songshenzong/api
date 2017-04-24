@@ -141,11 +141,6 @@ class ResponseJson
         $this -> setErrors($errors);
 
 
-        if ($this -> getNotException()) {
-            return $this -> success($statusCode, $message, $errors);
-        }
-
-
         if ($this -> getHttpStatusCode()) {
             $httpStatusCode = $this -> getHttpStatusCode();
         } else {
