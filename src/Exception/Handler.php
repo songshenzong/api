@@ -214,7 +214,9 @@ class Handler implements ExceptionHandler
 
 
         if ($exception instanceof HttpException && $exception -> hasErrors()) {
+
             $replacements['errors'] = $exception -> getErrors();
+
         }
 
 
