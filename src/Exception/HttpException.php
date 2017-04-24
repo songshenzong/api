@@ -10,7 +10,6 @@
 
 namespace Songshenzong\ResponseJson\Exception;
 
-use Illuminate\Support\MessageBag;
 use Exception;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
@@ -29,13 +28,8 @@ class HttpException extends \RuntimeException implements HttpExceptionInterface
 
     public function __construct($httpStatusCode, $statusCode, $message = null, $errors = null, Exception $previous = null, $headers = [], $code = 0)
     {
-        if (is_null($errors)) {
-            $this -> errors = new MessageBag;
-        } else {
-            $this -> errors = is_array($errors) ? new MessageBag($errors) : $errors;
-        }
 
-
+        $this -> errors         = $errors;
         $this -> httpStatusCode = $httpStatusCode;
         $this -> statusCode     = $statusCode;
         $this -> headers        = $headers;
