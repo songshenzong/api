@@ -95,18 +95,14 @@ class ResponseJson
         $this -> request = $request;
 
         try {
-            // $req      = $this -> app -> make(HttpRequest::class) -> createFromIlluminate($request);
+            // $request      = $this -> app -> make(HttpRequest::class) -> createFromIlluminate($request);
             $router   = clone $this -> router;
             $response = $router -> dispatch($request);
         } catch (Exception $exception) {
 
 
-            // // 如果是404，不能直接抛出，要交给下一个中间件处理，因为很有可能是第三方插件的路由没有被检测到
-            if (!method_exists($exception, 'getStatusCode')) {
-                return $next($this -> request);
-            }
-
-            if ($exception -> getStatusCode() === 404) {
+            // 如果是404，不能直接抛出，要交给下一个中间件处理，因为很有可能是第三方插件的路由没有被检测到
+            if (method_exists($exception, 'getStatusCode') && $exception -> getStatusCode() === 404) {
                 return $next($this -> request);
             }
 

@@ -159,7 +159,7 @@ class Handler implements ExceptionHandler
      */
     protected function getStatusCode(Exception $exception)
     {
-        return $exception instanceof Exception ? $exception -> getStatusCode() : 500;
+        return $exception instanceof HttpException ? $exception -> getStatusCode() : 500;
     }
 
     /**
@@ -171,7 +171,8 @@ class Handler implements ExceptionHandler
      */
     protected function getHttpStatusCode(Exception $exception)
     {
-        return $exception instanceof HttpException ? $exception -> getHttpStatusCode() : $exception -> getStatusCode();
+        $statusCode = method_exists($exception, 'getStatusCode') ? $exception -> getStatusCode() : 500;
+        return $exception instanceof HttpException ? $exception -> getHttpStatusCode() : $statusCode;
     }
 
 
