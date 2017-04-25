@@ -22,13 +22,12 @@ class HttpException extends \RuntimeException implements HttpExceptionInterface
      * @var \Illuminate\Support\MessageBag
      */
     protected $errors;
-    private   $httpStatusCode;
-    private   $statusCode;
-    private   $headers;
+    private $httpStatusCode;
+    private $statusCode;
+    private $headers;
 
     public function __construct($httpStatusCode, $statusCode, $message = null, $errors = null, Exception $previous = null, $headers = [], $code = 0)
     {
-
         $this -> errors         = $errors;
         $this -> httpStatusCode = $httpStatusCode;
         $this -> statusCode     = $statusCode;

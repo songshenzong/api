@@ -110,13 +110,10 @@ class ResponseJson
             $response = $this -> exception -> handle($exception);
 
             return $response;
-
         }
 
 
         return $next($request);
-
-
     }
 
 
@@ -125,7 +122,6 @@ class ResponseJson
      */
     public function errors($statusCode, $message, $errors = null)
     {
-
         $this -> setStatusCode($statusCode);
 
 
@@ -143,8 +139,6 @@ class ResponseJson
 
 
         throw new HttpException($httpStatusCode, $this -> getStatusCode(), $this -> getMessage(), $this -> getErrors());
-
-
     }
 
 
