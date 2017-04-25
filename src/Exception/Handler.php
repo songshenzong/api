@@ -209,10 +209,6 @@ class Handler implements ExceptionHandler
             'status_code' => $statusCode,
         ];
 
-        if ($statusCode != $httpStatusCode) {
-            $replacements['http_status_code'] = $httpStatusCode;
-        }
-
 
         if ($exception instanceof HttpException && $exception -> hasErrors()) {
             $replacements['errors'] = $exception -> getErrors();

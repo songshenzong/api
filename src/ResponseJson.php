@@ -270,8 +270,6 @@ class ResponseJson
     public function success($statusCode, $message, $data = null)
     {
         $this -> setStatusCode($statusCode);
-
-
         $this -> setMessage($message);
         $this -> setData($data);
 
@@ -284,8 +282,7 @@ class ResponseJson
         if (is_null($this -> getHttpStatusCode())) {
             $statusCode = $this -> getStatusCode();
         } else {
-            $statusCode                          = $this -> getHttpStatusCode();
-            $this -> content['http_status_code'] = $statusCode;
+            $statusCode = $this -> getHttpStatusCode();
         }
 
 

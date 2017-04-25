@@ -70,7 +70,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
 
         $this -> app -> singleton('responseJson.exception', function ($app) {
-            return new Handler($app['Illuminate\Contracts\Debug\ExceptionHandler'], env('APP_DEBUG', false));
+            return new Handler($app['Illuminate\Contracts\Debug\ExceptionHandler'], env('RESPONSE_JSON_DEBUG', false));
         });
 
 
