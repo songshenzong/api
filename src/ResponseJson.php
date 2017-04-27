@@ -110,8 +110,6 @@ class ResponseJson
                 $this -> exception -> report($exception);
                 $response = $this -> exception -> handle($exception);
             }
-
-
         }
 
         return $response;

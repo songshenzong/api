@@ -131,6 +131,7 @@ class Handler implements ExceptionHandler
             }
         }
 
+
         return $this -> genericResponse($exception);
     }
 
@@ -200,6 +201,7 @@ class Handler implements ExceptionHandler
         $statusCode     = $this -> getStatusCode($exception);
         $httpStatusCode = $this -> getHttpStatusCode($exception);
 
+
         if (!$message = $exception -> getMessage()) {
             $message = sprintf('%d %s', $statusCode, Response ::$statusTexts[$statusCode]);
         }
@@ -256,7 +258,7 @@ class Handler implements ExceptionHandler
      */
     protected function getExceptionStatusCode(Exception $exception, $defaultStatusCode = 500)
     {
-        return ($exception instanceof HttpException) ? $exception -> getStatusCode() : $defaultStatusCode;
+        return ($exception instanceof Exception) ? $exception -> getStatusCode() : $defaultStatusCode;
     }
 
     /**
