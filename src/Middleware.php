@@ -51,9 +51,12 @@ class Middleware
                 throw $response -> exception;
             }
         } catch (Exception $exception) {
+
             // For dingo/api
             if (method_exists($exception, 'getStatusCode') && $exception -> getStatusCode() == 404) {
-                return $next($request);
+                if ($this -> app['request'] -> segment(1) == env('API_PREFIX')) {
+                    return $next($request);
+                }
             }
 
             // dd($exception);
