@@ -27,7 +27,7 @@ class SongshenzongException extends \RuntimeException implements HttpExceptionIn
     private   $headers;
     protected $code;
 
-    public function __construct($httpStatusCode, $statusCode, $message = null, $errors = null, Exception $previous = null, $headers = [], $code = 0)
+    public function __construct($httpStatusCode, $statusCode, $message = null, $errors = null, $code = 0, Exception $previous = null, $headers = [])
     {
 
 

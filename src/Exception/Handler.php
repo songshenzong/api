@@ -148,8 +148,6 @@ class Handler implements ExceptionHandler
         $replacements = $this -> prepareReplacements($exception);
 
 
-
-
         return new Response($replacements, $this -> getHttpStatusCode($exception), $this -> getHeaders($exception));
     }
 

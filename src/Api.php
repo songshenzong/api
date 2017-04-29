@@ -132,7 +132,8 @@ class Api
             $this -> getHttpStatusCode() ?: $this -> getStatusCode(),
             $this -> getStatusCode(),
             $this -> getMessage(),
-            $this -> getErrors()
+            $this -> getErrors(),
+            $this -> getCode()
         );
     }
 
@@ -146,6 +147,14 @@ class Api
     {
         $this -> code = $code;
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCode()
+    {
+        return $this -> code;
     }
 
     /**
@@ -282,6 +291,10 @@ class Api
             $content['errors'] = $this -> getErrors();
         }
 
+
+        if ($this -> getCode()) {
+            $content['code'] = $this -> getCode();
+        }
 
         if ($this -> getData() && $this -> getData() != $this -> getErrors()) {
             $this -> setData($data);

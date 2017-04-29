@@ -22,3 +22,12 @@ Songshenzong\Api\ServiceProvider::class,
 ## Documentation
 
 Please refer to our extensive [Wiki documentation](https://github.com/songshenzong/api/wiki) for more information.
+
+
+## Support
+
+For answers you may not find in the Wiki, avoid posting issues.
+
+## License
+
+This package is licensed under the [BSD 3-Clause license](http://opensource.org/licenses/BSD-3-Clause).
