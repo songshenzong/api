@@ -2,10 +2,8 @@
 
 namespace Songshenzong\Api;
 
-use \Illuminate\Routing\Router;
+use Illuminate\Routing\Router;
 use Songshenzong\Api\Exception\Handler;
-
-
 use Illuminate\Contracts\Http\Kernel;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
