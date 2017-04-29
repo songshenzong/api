@@ -18,7 +18,6 @@ After updating composer, add the ServiceProvider to the providers array in `conf
 Songshenzong\Api\ServiceProvider::class,
 ```
 
-
 ### Debug Information
 If you not defined `SONGSHENZONG_API_DEBUG` in `.env`, it will use `APP_DEBUG`
 
