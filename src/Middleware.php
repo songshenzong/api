@@ -2,6 +2,7 @@
 
 namespace Songshenzong\Api;
 
+use Closure;
 use Exception;
 use Illuminate\Container\Container;
 use Songshenzong\Api\Exception\Handler;
@@ -32,7 +33,7 @@ class Middleware
      *
      * @return mixed
      */
-    public function handle($request)
+    public function handle($request, Closure $next)
     {
         // return $next($request);
 
@@ -41,8 +42,11 @@ class Middleware
 
             $response = $router -> dispatch($request);
 
+
             if (property_exists($response, 'exception') && $response -> exception instanceof Exception) {
+
                 if (method_exists($response, 'getStatusCode')) {
+
                     $response -> exception -> responseStatusCode = $response -> getStatusCode();
                 }
 
@@ -53,6 +57,8 @@ class Middleware
             // if (isset($response) && $response -> getStatusCode() === 404) {
             //     return $next($request);
             // }
+
+            // dd($exception);
             $this -> exception -> report($exception);
             $response = $this -> exception -> handle($exception);
         }
