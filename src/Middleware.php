@@ -53,7 +53,7 @@ class Middleware
 
         } catch (Exception $exception) {
             // For dingo/api
-            // if ($response -> getStatusCode() === 404) {
+            // if (isset($response) && $response -> getStatusCode() === 404) {
             //     return $next($request);
             // }
             $this -> exception -> report($exception);
