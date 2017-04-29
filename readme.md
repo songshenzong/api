@@ -17,3 +17,11 @@ After updating composer, add the ServiceProvider to the providers array in `conf
 ```php
 Songshenzong\ResponseJson\ServiceProvider::class,
 ```
+
+
+### Debug Information
+If you not defined `RESPONSE_JSON_DEBUG` in `.env`, it will use `APP_DEBUG`
+
+```
+RESPONSE_JSON_DEBUG=true
+```

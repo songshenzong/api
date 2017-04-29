@@ -43,10 +43,6 @@ class ResponseJson
      */
     protected $httpStatusCode;
 
-    /**
-     * @var string
-     */
-    protected $content = [];
 
     /**
      * @var
@@ -67,8 +63,6 @@ class ResponseJson
     protected $app;
     protected $exception;
     protected $router;
-    protected $request;
-    protected $response;
 
     /**
      * Create a new request  instance.
@@ -94,24 +88,31 @@ class ResponseJson
     {
 
 
-        // $this -> request = $request;
+        // return $next($request);
 
         try {
             // $req      = $this -> app -> make(HttpRequest::class) -> createFromIlluminate($request);
             $router   = clone $this -> router;
             $response = $router -> dispatch($request);
-        } catch (Exception $exception) {
-            // 如果是404，不能直接抛出，要交给下一个中间件处理，因为很有可能是第三方插件的路由没有被检测到
-            if (method_exists($exception, 'getStatusCode') && $exception -> getStatusCode() === 404) {
-                return $next($request);
-            } else {
-                $this -> exception -> report($exception);
-                $response = $this -> exception -> handle($exception);
+
+            if (property_exists($response, 'exception') && $response -> exception instanceof Exception) {
+                $response -> exception -> responseStatusCode = $response -> getStatusCode();
+                throw $response -> exception;
             }
+
+        } catch (Exception $exception) {
+            // For dingo/api
+            // if ($response -> getStatusCode() === 404) {
+            //     return $next($request);
+            // }
+
+            // Will response Json with httpStatusCode
+            $this -> exception -> report($exception);
+            $response = $this -> exception -> handle($exception);
+            // dd($exception);
         }
 
         return $response;
-        // return $next($request);
     }
 
 
@@ -129,14 +130,14 @@ class ResponseJson
         $this -> setErrors($errors);
 
 
-        if ($this -> getHttpStatusCode()) {
-            $httpStatusCode = $this -> getHttpStatusCode();
-        } else {
-            $httpStatusCode = $this -> getStatusCode();
-        }
+        throw new HttpException(
+            $this -> getHttpStatusCode() ?: $this -> getStatusCode(),
+            $this -> getStatusCode(),
+            $this -> getMessage(),
+            $this -> getErrors()
+        );
 
 
-        throw new HttpException($httpStatusCode, $this -> getStatusCode(), $this -> getMessage(), $this -> getErrors());
     }
 
 
@@ -265,31 +266,24 @@ class ResponseJson
         $this -> setMessage($message);
         $this -> setData($data);
 
-        $this -> content = [
+        $content = [
             'message'     => $this -> message,
             'status_code' => $this -> statusCode,
         ];
 
 
-        if (is_null($this -> getHttpStatusCode())) {
-            $statusCode = $this -> getStatusCode();
-        } else {
-            $statusCode = $this -> getHttpStatusCode();
+        if ($this -> getErrors()) {
+            $content['errors'] = $this -> getErrors();
         }
 
 
-        if (!is_null($this -> getErrors())) {
-            $this -> content['errors'] = $this -> getErrors();
-        }
-
-
-        if (!is_null($this -> getData()) && $this -> getData() != $this -> getErrors()) {
+        if ($this -> getData() && $this -> getData() != $this -> getErrors()) {
             $this -> setData($data);
-            $this -> content['data'] = $this -> getData();
+            $content['data'] = $this -> getData();
         }
 
 
-        return \Response ::json($this -> content, $statusCode);
+        return \Response ::json($content, $this -> getHttpStatusCode() ?: $this -> getStatusCode());
     }
 
 

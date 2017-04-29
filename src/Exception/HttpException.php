@@ -21,16 +21,18 @@ class HttpException extends \RuntimeException implements HttpExceptionInterface
      *
      * @var \Illuminate\Support\MessageBag
      */
+    private   $httpStatusCode;
+    private   $statusCode;
     protected $errors;
-    private $httpStatusCode;
-    private $statusCode;
-    private $headers;
+    private   $headers;
 
     public function __construct($httpStatusCode, $statusCode, $message = null, $errors = null, Exception $previous = null, $headers = [], $code = 0)
     {
-        $this -> errors         = $errors;
+
+
         $this -> httpStatusCode = $httpStatusCode;
         $this -> statusCode     = $statusCode;
+        $this -> errors         = $errors;
         $this -> headers        = $headers;
 
 
@@ -45,18 +47,29 @@ class HttpException extends \RuntimeException implements HttpExceptionInterface
 
     public function getStatusCode()
     {
+        // if (!$this -> httpStatusCode) {
+        //     return $this -> statusCode;
+        // }
+        // if ($this -> httpStatusCode != $this -> statusCode) {
+        //     return $this -> httpStatusCode;
+        // }
         return $this -> statusCode;
     }
 
-    public function getHeaders()
-    {
-        return $this -> headers;
-    }
-
+    // public function getOriginalStatusCode()
+    // {
+    //     return $this -> statusCode;
+    // }
 
     public function getErrors()
     {
         return $this -> errors;
+    }
+
+
+    public function getHeaders()
+    {
+        return $this -> headers;
     }
 
 

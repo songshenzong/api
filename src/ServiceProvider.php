@@ -37,8 +37,8 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     public function boot()
     {
-        Response ::setFormatters($this -> config('formats'));
-        Request ::setAcceptParser($this -> app['Songshenzong\ResponseJson\Http\Parser\Accept']);
+        // Response ::setFormatters($this -> config('formats'));
+        // Request ::setAcceptParser($this -> app['Songshenzong\ResponseJson\Http\Parser\Accept']);
         $kernel = $this -> app -> make(Kernel::class);
         $kernel -> prependMiddleware(ResponseJson::class);
     }
@@ -50,14 +50,14 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     public function register()
     {
-        $this -> app -> singleton(AcceptParser::class, function ($app) {
-            return new AcceptParser(
-                'x',
-                '',
-                'v1',
-                'json'
-            );
-        });
+        // $this -> app -> singleton(AcceptParser::class, function ($app) {
+        //     return new AcceptParser(
+        //         'x',
+        //         '',
+        //         'v1',
+        //         'json'
+        //     );
+        // });
 
 
         $this -> app -> singleton('ResponseJson', function ($app) {
@@ -70,7 +70,10 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
 
         $this -> app -> singleton('responseJson.exception', function ($app) {
-            return new Handler($app['Illuminate\Contracts\Debug\ExceptionHandler'], env('RESPONSE_JSON_DEBUG', false));
+            return new Handler(
+                $app['Illuminate\Contracts\Debug\ExceptionHandler'],
+                env('RESPONSE_JSON_DEBUG', env('APP_DEBUG'))
+            );
         });
 
 
@@ -87,16 +90,16 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      *
      * @return array|mixed
      */
-    protected function config($item, $instantiate = true)
-    {
-        $value = $this -> app['config'] -> get('api.' . $item);
-
-        if (is_array($value)) {
-            return $instantiate ? $this -> instantiateConfigValues($item, $value) : $value;
-        }
-
-        return $instantiate ? $this -> instantiateConfigValue($item, $value) : $value;
-    }
+    // protected function config($item, $instantiate = true)
+    // {
+    //     $value = $this -> app['config'] -> get('api.' . $item);
+    //
+    //     if (is_array($value)) {
+    //         return $instantiate ? $this -> instantiateConfigValues($item, $value) : $value;
+    //     }
+    //
+    //     return $instantiate ? $this -> instantiateConfigValue($item, $value) : $value;
+    // }
 
     /**
      * Instantiate an array of instantiable configuration values.
