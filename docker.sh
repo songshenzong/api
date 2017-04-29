@@ -70,8 +70,6 @@ clear(){
 style(){
 	./vendor/bin/phpcbf app/ --standard=PSR2
 	./vendor/bin/phpcbf vendor/songshenzong --standard=PSR2
-	php php-cs-fixer.phar fix ./ --rules=@PSR2
-	php php-cs-fixer.phar fix ./vendor/songshenzong/ --rules=@PSR2
 }
 echo ""
 echo "--------------- Docker Helper ---------------"
