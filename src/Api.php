@@ -1,6 +1,6 @@
 <?php
 
-namespace Songshenzong\ResponseJson;
+namespace Songshenzong\Api;
 
 use Closure;
 use Exception;
@@ -11,16 +11,16 @@ use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response as IlluminateResponse;
 
-use Songshenzong\ResponseJson\Exception\Handler;
-use Songshenzong\ResponseJson\Exception\HttpException;
+use Songshenzong\Api\Exception\Handler;
+use Songshenzong\Api\Exception\HttpException;
 
-use Songshenzong\ResponseJson\Http\Request as HttpRequest;
-use Songshenzong\ResponseJson\Http\Response;
+use Songshenzong\Api\Http\Request as HttpRequest;
+use Songshenzong\Api\Http\Response;
 
 use \Illuminate\Routing\Router;
 use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
 
-class ResponseJson
+class Api
 {
 
     /**---------------------------------------------------------

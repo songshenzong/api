@@ -1,14 +1,14 @@
 <?php
 
-namespace Songshenzong\ResponseJson;
+namespace Songshenzong\Api;
 
 use \Illuminate\Routing\Router;
-use Songshenzong\ResponseJson\Exception\Handler;
+use Songshenzong\Api\Exception\Handler;
 
-use Songshenzong\ResponseJson\Http\Request;
-use Songshenzong\ResponseJson\Http\Response;
+use Songshenzong\Api\Http\Request;
+use Songshenzong\Api\Http\Response;
 
-use Songshenzong\ResponseJson\Http\Parser\Accept as AcceptParser;
+use Songshenzong\Api\Http\Parser\Accept as AcceptParser;
 
 use Illuminate\Contracts\Http\Kernel;
 
@@ -38,9 +38,9 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     public function boot()
     {
         // Response ::setFormatters($this -> config('formats'));
-        // Request ::setAcceptParser($this -> app['Songshenzong\ResponseJson\Http\Parser\Accept']);
+        // Request ::setAcceptParser($this -> app['Songshenzong\Api\Http\Parser\Accept']);
         $kernel = $this -> app -> make(Kernel::class);
-        $kernel -> prependMiddleware(ResponseJson::class);
+        $kernel -> prependMiddleware(Api::class);
     }
 
     /**
@@ -60,8 +60,8 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         // });
 
 
-        $this -> app -> singleton('ResponseJson', function ($app) {
-            return new ResponseJson(
+        $this -> app -> singleton('SongshenzongAPI', function ($app) {
+            return new Api(
                 $app,
                 $app[Handler::class],
                 $app[Router::class]
@@ -69,16 +69,16 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         });
 
 
-        $this -> app -> singleton('responseJson.exception', function ($app) {
+        $this -> app -> singleton('SongshenzongAPI.exception', function ($app) {
             return new Handler(
                 $app['Illuminate\Contracts\Debug\ExceptionHandler'],
-                env('RESPONSE_JSON_DEBUG', env('APP_DEBUG'))
+                env('SONGSHENZONG_API_DEBUG', env('APP_DEBUG'))
             );
         });
 
 
-        $this -> app -> alias('ResponseJson', 'Songshenzong\ResponseJson\Facade');
-        $this -> app -> alias('responseJson.exception', 'Songshenzong\ResponseJson\Exception\Handler');
+        $this -> app -> alias('SongshenzongAPI', 'Songshenzong\Api\Facade');
+        $this -> app -> alias('SongshenzongAPI.exception', 'Songshenzong\Api\Exception\Handler');
     }
 
 

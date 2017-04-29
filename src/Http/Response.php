@@ -1,6 +1,6 @@
 <?php
 
-namespace Songshenzong\ResponseJson\Http;
+namespace Songshenzong\Api\Http;
 
 use ArrayObject;
 use UnexpectedValueException;
@@ -240,7 +240,7 @@ class Response extends IlluminateResponse
      * @param $key
      * @param $value
      *
-     * @return \Songshenzong\ResponseJson\Http\Response
+     * @return \Songshenzong\Api\Http\Response
      */
     public function meta($key, $value)
     {

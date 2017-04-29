@@ -1,6 +1,6 @@
 {
-  "name": "songshenzong/response-json",
-  "description": "Response Http Json for Laravel",
+  "name": "songshenzong/api",
+  "description": "A RESTful API package for the Laravel and Lumen frameworks.",
   "keywords": [
     "laravel",
     "response",
@@ -9,8 +9,8 @@
   "license": "MIT",
   "homepage": "http://songshenzong.com",
   "support": {
-    "issues": "https://github.com/songshenzong/response-json/issues",
-    "source": "https://github.com/songshenzong/response-json"
+    "issues": "https://github.com/songshenzong/api/issues",
+    "source": "https://github.com/songshenzong/api"
   },
   "authors": [
     {
@@ -25,7 +25,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Songshenzong\\ResponseJson\\": "src/"
+      "Songshenzong\\Api\\": "src/"
     },
     "files": [
       "src/Helpers.php"

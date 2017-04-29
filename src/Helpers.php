@@ -1,13 +1,12 @@
 <?php
 
-if (!function_exists('responseJson')) {
+if (!function_exists('songshenzongApi')) {
     /**
      * Get the instance
      *
-     * @return \Songshenzong\ResponseJson\ResponseJson
      */
-    function responseJson()
+    function songshenzongApi()
     {
-        return app('ResponseJson');
+        return app('SongshenzongAPI');
     }
 }

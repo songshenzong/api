@@ -1,6 +1,6 @@
 <?php
 
-namespace Songshenzong\ResponseJson\Http\Response\Format;
+namespace Songshenzong\Api\Http\Response\Format;
 
 use Illuminate\Support\Str;
 use Illuminate\Contracts\Support\Arrayable;

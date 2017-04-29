@@ -1,6 +1,6 @@
 <?php
 
-namespace Songshenzong\ResponseJson\Http\Parser;
+namespace Songshenzong\Api\Http\Parser;
 
 use Illuminate\Http\Request;
 

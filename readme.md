@@ -1,13 +1,13 @@
-# ResponseJson
+# Songshenzong Api
 
-Http Json Response
+A RESTful API package for the Laravel
 
 ## Installation
 
 Require this package with composer:
 
 ```shell
-composer require songshenzong/response-json
+composer require songshenzong/api
 ```
 
 After updating composer, add the ServiceProvider to the providers array in `config/app.php`
@@ -15,13 +15,13 @@ After updating composer, add the ServiceProvider to the providers array in `conf
 ### Laravel 5.x:
 
 ```php
-Songshenzong\ResponseJson\ServiceProvider::class,
+Songshenzong\Api\ServiceProvider::class,
 ```
 
 
 ### Debug Information
-If you not defined `RESPONSE_JSON_DEBUG` in `.env`, it will use `APP_DEBUG`
+If you not defined `SONGSHENZONG_API_DEBUG` in `.env`, it will use `APP_DEBUG`
 
 ```
-RESPONSE_JSON_DEBUG=true
+SONGSHENZONG_API_DEBUG=true
 ```

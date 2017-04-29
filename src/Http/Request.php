@@ -1,8 +1,8 @@
 <?php
 
-namespace Songshenzong\ResponseJson\Http;
+namespace Songshenzong\Api\Http;
 
-use Songshenzong\ResponseJson\Http\Parser\Accept;
+use Songshenzong\Api\Http\Parser\Accept;
 use Illuminate\Http\Request as IlluminateRequest;
 
 class Request extends IlluminateRequest

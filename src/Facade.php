@@ -1,6 +1,6 @@
 <?php
 
-namespace Songshenzong\ResponseJson;
+namespace Songshenzong\Api;
 
 class Facade extends \Illuminate\Support\Facades\Facade
 {
@@ -10,6 +10,6 @@ class Facade extends \Illuminate\Support\Facades\Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'ResponseJson';
+        return 'SongshenzongAPI';
     }
 }

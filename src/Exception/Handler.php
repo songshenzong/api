@@ -1,6 +1,6 @@
 <?php
 
-namespace Songshenzong\ResponseJson\Exception;
+namespace Songshenzong\Api\Exception;
 
 use Exception;
 use ReflectionFunction;
@@ -11,7 +11,7 @@ use Illuminate\Contracts\Debug\ExceptionHandler;
 
 use Symfony\Component\HttpFoundation\Response as BaseResponse;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
-use Songshenzong\ResponseJson\Exception\HttpException;
+use Songshenzong\Api\Exception\HttpException;
 
 class Handler implements ExceptionHandler
 {
@@ -69,7 +69,7 @@ class Handler implements ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param \Songshenzong\ResponseJson\Http\Request $request
+     * @param \Songshenzong\Api\Http\Request $request
      * @param \Exception                              $exception
      *
      * @throws \Exception

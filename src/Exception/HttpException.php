@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Songshenzong\ResponseJson\Exception;
+namespace Songshenzong\Api\Exception;
 
 use Exception;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
