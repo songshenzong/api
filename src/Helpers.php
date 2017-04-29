@@ -7,6 +7,6 @@ if (!function_exists('songshenzongApi')) {
      */
     function songshenzongApi()
     {
-        return app('SongshenzongAPI');
+        return app('SongshenzongApi');
     }
 }

@@ -5,10 +5,6 @@ namespace Songshenzong\Api;
 use \Illuminate\Routing\Router;
 use Songshenzong\Api\Exception\Handler;
 
-use Songshenzong\Api\Http\Request;
-use Songshenzong\Api\Http\Response;
-
-use Songshenzong\Api\Http\Parser\Accept as AcceptParser;
 
 use Illuminate\Contracts\Http\Kernel;
 
@@ -40,7 +36,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         // Response ::setFormatters($this -> config('formats'));
         // Request ::setAcceptParser($this -> app['Songshenzong\Api\Http\Parser\Accept']);
         $kernel = $this -> app -> make(Kernel::class);
-        $kernel -> prependMiddleware(Api::class);
+        $kernel -> prependMiddleware(Middleware::class);
     }
 
     /**
@@ -60,7 +56,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         // });
 
 
-        $this -> app -> singleton('SongshenzongAPI', function ($app) {
+        $this -> app -> singleton('SongshenzongApi', function ($app) {
             return new Api(
                 $app,
                 $app[Handler::class],
@@ -69,7 +65,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         });
 
 
-        $this -> app -> singleton('SongshenzongAPI.exception', function ($app) {
+        $this -> app -> singleton('SongshenzongApi.exception', function ($app) {
             return new Handler(
                 $app['Illuminate\Contracts\Debug\ExceptionHandler'],
                 env('SONGSHENZONG_API_DEBUG', env('APP_DEBUG'))
@@ -77,8 +73,8 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         });
 
 
-        $this -> app -> alias('SongshenzongAPI', 'Songshenzong\Api\Facade');
-        $this -> app -> alias('SongshenzongAPI.exception', 'Songshenzong\Api\Exception\Handler');
+        $this -> app -> alias('SongshenzongApi', 'Songshenzong\Api\Facade');
+        $this -> app -> alias('SongshenzongApi.exception', 'Songshenzong\Api\Exception\Handler');
     }
 
 
