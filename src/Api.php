@@ -54,8 +54,6 @@ class Api
             $this -> getMessage(),
             $this -> getErrors()
         );
-
-
     }
 
 

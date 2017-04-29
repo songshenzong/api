@@ -168,7 +168,6 @@ class Handler implements ExceptionHandler
         }
 
         return isset($exception -> responseStatusCode) ? $exception -> responseStatusCode : 500;
-
     }
 
     /**

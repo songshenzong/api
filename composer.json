@@ -37,7 +37,6 @@
     "illuminate/log": "^5.1",
     "illuminate/pagination": "^5.1",
     "laravel/lumen-framework": "5.1.* || 5.2.*",
-    "lucadegasperi/oauth2-server-laravel": "5.0.*",
     "mockery/mockery": "~0.9",
     "tymon/jwt-auth": "1.0.*"
   },

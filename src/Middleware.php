@@ -42,15 +42,12 @@ class Middleware
             $response = $router -> dispatch($request);
 
             if (property_exists($response, 'exception') && $response -> exception instanceof Exception) {
-
                 if (method_exists($response, 'getStatusCode')) {
                     $response -> exception -> responseStatusCode = $response -> getStatusCode();
                 }
 
                 throw $response -> exception;
             }
-
-
         } catch (Exception $exception) {
             // For dingo/api
             // if (isset($response) && $response -> getStatusCode() === 404) {
