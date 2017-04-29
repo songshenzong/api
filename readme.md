@@ -26,7 +26,8 @@ Please refer to our extensive [Wiki documentation](https://github.com/songshenzo
 
 ## Support
 
-For answers you may not find in the Wiki, avoid posting issues.
+For answers you may not find in the Wiki, avoid posting issues. Feel free to ask for support on Songshenzong.com
+
 
 ## License
 
