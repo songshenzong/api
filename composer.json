@@ -30,14 +30,9 @@
     "squizlabs/php_codesniffer": "^2.8",
     "illuminate/cache": "^5.1",
     "illuminate/console": "^5.1",
-    "illuminate/database": "^5.1",
     "illuminate/events": "^5.1",
     "illuminate/filesystem": "^5.1",
-    "illuminate/log": "^5.1",
-    "illuminate/pagination": "^5.1",
-    "laravel/lumen-framework": "5.1.* || 5.2.*",
-    "mockery/mockery": "~0.9",
-    "tymon/jwt-auth": "1.0.*"
+    "mockery/mockery": "~0.9"
   },
   "autoload": {
     "psr-4": {
