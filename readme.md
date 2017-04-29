@@ -18,22 +18,8 @@ After updating composer, add the ServiceProvider to the providers array in `conf
 Songshenzong\Api\ServiceProvider::class,
 ```
 
-### Debug Information
-If you not defined `SONGSHENZONG_API_DEBUG` in `.env`, it will use `APP_DEBUG`
 
-```
-SONGSHENZONG_API_DEBUG=true
-```
+## Documentation
 
-## Use
+Please refer to our extensive [Wiki documentation](https://github.com/songshenzong/api/wiki) for more information.
 
-You can use `api()` , if the `api()` defined by other code you can also use `songshenzongApi()`
-
-```
-api() -> ok();
-api() -> collection();
-api() -> item();
-api() -> paginate();
-api() -> setHttpStatusCode(405) -> ok();
-api() -> badRequest();
-```

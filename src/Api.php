@@ -753,4 +753,26 @@ class Api
     {
         return $this -> errors(511, $message, $errors);
     }
+
+
+    /**
+     * Parameters Validator.
+     *
+     * @param $payload
+     * @param $rules
+     *
+     * @return mixed
+     */
+    public function validator($payload, $rules)
+    {
+        if (is_array($payload)) {
+            $validator = app('validator') -> make($payload, $rules);
+        } else {
+            $validator = app('validator') -> make($payload -> all(), $rules);
+        }
+
+        if ($validator -> fails()) {
+            return $this -> unprocessableEntity(env('SONGSHENZONG_API_VALIDATOR', 'Unprocessable Entity'), $validator -> errors());
+        }
+    }
 }
