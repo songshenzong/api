@@ -22,4 +22,3 @@ Songshenzong\Api\ServiceProvider::class,
 ## Documentation
 
 Please refer to our extensive [Wiki documentation](https://github.com/songshenzong/api/wiki) for more information.
-
