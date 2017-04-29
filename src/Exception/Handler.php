@@ -7,11 +7,7 @@ use ReflectionFunction;
 
 use Illuminate\Http\Response;
 use Illuminate\Contracts\Debug\ExceptionHandler;
-
-
 use Symfony\Component\HttpFoundation\Response as BaseResponse;
-use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
-use Songshenzong\Api\Exception\HttpException;
 
 class Handler implements ExceptionHandler
 {
@@ -70,7 +66,7 @@ class Handler implements ExceptionHandler
      * Render an exception into an HTTP response.
      *
      * @param \Songshenzong\Api\Http\Request $request
-     * @param \Exception                              $exception
+     * @param \Exception                     $exception
      *
      * @throws \Exception
      *
@@ -148,6 +144,7 @@ class Handler implements ExceptionHandler
     {
         $replacements = $this -> prepareReplacements($exception);
 
+
         return new Response($replacements, $this -> getHttpStatusCode($exception), $this -> getHeaders($exception));
     }
 
@@ -165,7 +162,12 @@ class Handler implements ExceptionHandler
             return $exception -> getStatusCode();
         }
 
-        return $exception -> responseStatusCode ?? 500;
+
+        if ($exception instanceof Exception && method_exists($exception, 'getStatusCode')) {
+            return $exception -> getStatusCode();
+        }
+
+        return isset($exception -> responseStatusCode) ? $exception -> responseStatusCode : 500;
 
     }
 
@@ -179,15 +181,16 @@ class Handler implements ExceptionHandler
     protected function getHttpStatusCode(Exception $exception)
     {
 
+
         if ($exception instanceof HttpException) {
             return $exception -> getHttpStatusCode();
         }
 
-        if (method_exists($exception, 'getStatusCode')) {
+        if ($exception instanceof Exception && method_exists($exception, 'getStatusCode')) {
             return $exception -> getStatusCode();
         }
 
-        return $exception -> responseStatusCode ?: 500;
+        return isset($exception -> responseStatusCode) ? $exception -> responseStatusCode : 500;
     }
 
 
@@ -212,8 +215,9 @@ class Handler implements ExceptionHandler
      */
     protected function prepareReplacements(Exception $exception)
     {
-        $statusCode     = $this -> getStatusCode($exception);
-        $httpStatusCode = $this -> getHttpStatusCode($exception);
+
+        $statusCode = $this -> getStatusCode($exception);
+        // $httpStatusCode = $this -> getHttpStatusCode($exception);
 
 
         if (!$message = $exception -> getMessage()) {
