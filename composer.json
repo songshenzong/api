@@ -1,6 +1,6 @@
 {
   "name": "songshenzong/api",
-  "description": "A RESTful API package for the Laravel and Lumen frameworks.",
+  "description": "A RESTful API package for the Laravel",
   "keywords": [
     "laravel",
     "response",
