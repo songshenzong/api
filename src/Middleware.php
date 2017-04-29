@@ -59,9 +59,10 @@ class Middleware
                 }
             }
 
-            // dd($exception);
             $this -> exception -> report($exception);
+
             $response = $this -> exception -> handle($exception);
+
         }
 
         return $response;

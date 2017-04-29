@@ -114,6 +114,7 @@ class Handler implements ExceptionHandler
     public function handle(Exception $exception)
     {
 
+
         foreach ($this -> handlers as $hint => $handler) {
             if (!$exception instanceof $hint) {
                 continue;
@@ -127,6 +128,7 @@ class Handler implements ExceptionHandler
                 return $response;
             }
         }
+
 
 
         return $this -> genericResponse($exception);
