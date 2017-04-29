@@ -13,7 +13,7 @@ namespace Songshenzong\Api\Exception;
 use Exception;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
-class HttpException extends \RuntimeException implements HttpExceptionInterface
+class SongshenzongException extends \RuntimeException implements HttpExceptionInterface
 {
 
     /**
@@ -25,6 +25,7 @@ class HttpException extends \RuntimeException implements HttpExceptionInterface
     private   $statusCode;
     protected $errors;
     private   $headers;
+    protected $code;
 
     public function __construct($httpStatusCode, $statusCode, $message = null, $errors = null, Exception $previous = null, $headers = [], $code = 0)
     {
@@ -34,7 +35,7 @@ class HttpException extends \RuntimeException implements HttpExceptionInterface
         $this -> statusCode     = $statusCode;
         $this -> errors         = $errors;
         $this -> headers        = $headers;
-
+        $this -> code           = $code;
 
         parent ::__construct($message, $code, $previous);
     }
@@ -49,7 +50,6 @@ class HttpException extends \RuntimeException implements HttpExceptionInterface
     {
         return $this -> statusCode;
     }
-
 
 
     public function getErrors()

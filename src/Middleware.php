@@ -44,9 +44,7 @@ class Middleware
 
 
             if (property_exists($response, 'exception') && $response -> exception instanceof Exception) {
-
                 if (method_exists($response, 'getStatusCode')) {
-
                     $response -> exception -> responseStatusCode = $response -> getStatusCode();
                 }
 

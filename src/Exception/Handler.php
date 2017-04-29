@@ -163,7 +163,7 @@ class Handler implements ExceptionHandler
     protected function getStatusCode(Exception $exception)
     {
 
-        if ($exception instanceof HttpException) {
+        if ($exception instanceof SongshenzongException) {
             return $exception -> getStatusCode();
         }
 
@@ -186,7 +186,7 @@ class Handler implements ExceptionHandler
     {
 
 
-        if ($exception instanceof HttpException) {
+        if ($exception instanceof SongshenzongException) {
             return $exception -> getHttpStatusCode();
         }
 
@@ -207,7 +207,7 @@ class Handler implements ExceptionHandler
      */
     protected function getHeaders(Exception $exception)
     {
-        return $exception instanceof HttpException ? $exception -> getHeaders() : [];
+        return $exception instanceof SongshenzongException ? $exception -> getHeaders() : [];
     }
 
     /**
@@ -234,7 +234,7 @@ class Handler implements ExceptionHandler
         ];
 
 
-        if ($exception instanceof HttpException && $exception -> hasErrors()) {
+        if ($exception instanceof SongshenzongException && $exception -> hasErrors()) {
             $replacements['errors'] = $exception -> getErrors();
         }
 
