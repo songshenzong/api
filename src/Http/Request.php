@@ -22,7 +22,7 @@ class Request extends IlluminateRequest
 
 
     /**
-     * Create a new Dingo request instance from an Illuminate request instance.
+     * Create a new request instance from an Illuminate request instance.
      *
      * @param \Illuminate\Http\Request $old
      *
