@@ -93,18 +93,24 @@ class ResponseJson
         try {
             // $req      = $this -> app -> make(HttpRequest::class) -> createFromIlluminate($request);
             $router   = clone $this -> router;
+
             $response = $router -> dispatch($request);
 
             if (property_exists($response, 'exception') && $response -> exception instanceof Exception) {
+
+
                 $response -> exception -> responseStatusCode = $response -> getStatusCode();
+
                 throw $response -> exception;
             }
+
 
         } catch (Exception $exception) {
             // For dingo/api
             // if ($response -> getStatusCode() === 404) {
             //     return $next($request);
             // }
+
 
             // Will response Json with httpStatusCode
             $this -> exception -> report($exception);

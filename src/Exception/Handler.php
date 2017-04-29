@@ -165,7 +165,7 @@ class Handler implements ExceptionHandler
             return $exception -> getStatusCode();
         }
 
-        return $exception -> responseStatusCode ?: 500;
+        return $exception -> responseStatusCode ?? 500;
 
     }
 
