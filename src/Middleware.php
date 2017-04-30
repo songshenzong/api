@@ -41,11 +41,8 @@ class Middleware
         try {
             return $this -> sendRequestThroughRouter($request);
         } catch (Exception $exception) {
-
-
             if ($this -> isCompatibleWithDingo($exception)) {
                 return $next($request);
-
             }
 
             $this -> exception -> report($exception);
