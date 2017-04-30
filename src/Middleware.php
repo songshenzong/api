@@ -37,15 +37,15 @@ class Middleware
      */
     public function handle($request, Closure $next)
     {
-        if (!$this -> atPrefix()) {
+        if (!$this -> inPrefixes()) {
             return $next($request);
         }
 
-        if ($this -> shouldExclude()) {
+        if ($this -> inExcludes()) {
             return $next($request);
         }
 
-        if (!$this -> isDomain()) {
+        if (!$this -> inDomains()) {
             return $next($request);
         }
 
@@ -88,7 +88,7 @@ class Middleware
     /**
      * @return bool
      */
-    private function atPrefix()
+    private function inPrefixes()
     {
         $env = env('SONGSHENZONG_API_PREFIX', null);
 
@@ -124,7 +124,7 @@ class Middleware
     /**
      * @return bool
      */
-    private function shouldExclude()
+    private function inExcludes()
     {
         $env = env('SONGSHENZONG_API_EXCLUDE', null);
 
@@ -153,7 +153,10 @@ class Middleware
     }
 
 
-    private function isDomain()
+    /**
+     * @return bool
+     */
+    private function inDomains()
     {
         $env = env('SONGSHENZONG_API_DOMAIN', null);
 
