@@ -44,6 +44,7 @@ class Middleware
 
 
             if (property_exists($response, 'exception') && $response -> exception instanceof Exception) {
+
                 if (method_exists($response, 'getStatusCode')) {
                     $response -> exception -> responseStatusCode = $response -> getStatusCode();
                 }
@@ -51,19 +52,20 @@ class Middleware
                 throw $response -> exception;
             }
         } catch (Exception $exception) {
-
-
             // For dingo/api
             if (method_exists($exception, 'getStatusCode') && $exception -> getStatusCode() == 404) {
+
                 if (env('SONGSHENZONG_API_DINGO', false)) {
-                    return $next($request);
+                    if ($this -> app['request'] -> segment(1) == env('API_PREFIX')) {
+                        return $next($request);
+                    }
                 }
             }
+
 
             $this -> exception -> report($exception);
 
             $response = $this -> exception -> handle($exception);
-
         }
 
         return $response;
