@@ -7,6 +7,7 @@ use Exception;
 use Illuminate\Container\Container;
 use Songshenzong\Api\Exception\Handler;
 use Illuminate\Routing\Router;
+use Illuminate\Pipeline\Pipeline;
 
 class Middleware
 {
@@ -35,13 +36,56 @@ class Middleware
      */
     public function handle($request, Closure $next)
     {
-        // return $next($request);
 
         try {
-            $router = clone $this -> router;
 
-            $response = $router -> dispatch($request);
+            return $this -> sendRequestThroughRouter($request);
 
+        } catch (Exception $exception) {
+
+            if ($this -> isCompatibleWithDingo($exception)) {
+                return $next($request);
+            }
+
+            $this -> exception -> report($exception);
+            return $this -> exception -> handle($exception);
+        }
+
+
+        return $next($request);
+    }
+
+    /**
+     * @param \Exception $exception
+     *
+     * @return bool
+     */
+    private function isCompatibleWithDingo(Exception $exception)
+    {
+        if (method_exists($exception, 'getStatusCode') && $exception -> getStatusCode() == 404) {
+
+            if (env('SONGSHENZONG_API_DINGO', false)) {
+                if ($this -> app['request'] -> segment(1) == env('API_PREFIX')) {
+                    return true;
+                }
+            }
+        }
+
+    }
+
+
+    /**
+     * Send the request through the Dingo router.
+     *
+     * @param \Dingo\Api\Http\Request $request
+     *
+     * @return \Dingo\Api\Http\Response
+     */
+    protected function sendRequestThroughRouter($request)
+    {
+        return (new Pipeline($this -> app)) -> send($request) -> then(function ($request) {
+
+            $response = $this -> router -> dispatch($request);
 
             if (property_exists($response, 'exception') && $response -> exception instanceof Exception) {
 
@@ -51,23 +95,10 @@ class Middleware
 
                 throw $response -> exception;
             }
-        } catch (Exception $exception) {
-            // For dingo/api
-            if (method_exists($exception, 'getStatusCode') && $exception -> getStatusCode() == 404) {
-
-                if (env('SONGSHENZONG_API_DINGO', false)) {
-                    if ($this -> app['request'] -> segment(1) == env('API_PREFIX')) {
-                        return $next($request);
-                    }
-                }
-            }
 
 
-            $this -> exception -> report($exception);
-
-            $response = $this -> exception -> handle($exception);
-        }
-
-        return $response;
+        });
     }
+
+
 }
