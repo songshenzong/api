@@ -37,20 +37,33 @@ class Middleware
      */
     public function handle($request, Closure $next)
     {
+        if (!$this -> atPrefix()) {
+            return $next($request);
+        }
+
+        if ($this -> shouldExclude()) {
+            return $next($request);
+        }
+
+        if (!$this -> isDomain()) {
+            return $next($request);
+        }
+
 
         try {
-            return $this -> sendRequestThroughRouter($request);
+            $response = $this -> sendRequestThroughRouter($request);
         } catch (Exception $exception) {
+
             if ($this -> isCompatibleWithDingo($exception)) {
                 return $next($request);
             }
 
             $this -> exception -> report($exception);
-            return $this -> exception -> handle($exception);
+            $response = $this -> exception -> handle($exception);
         }
 
 
-        return $next($request);
+        return $response;
     }
 
     /**
@@ -60,8 +73,10 @@ class Middleware
      */
     private function isCompatibleWithDingo(Exception $exception)
     {
-        if (method_exists($exception, 'getStatusCode') && $exception -> getStatusCode() == 404) {
-            if (env('SONGSHENZONG_API_DINGO', false)) {
+        if (env('SONGSHENZONG_API_DINGO', false)) {
+
+            if (method_exists($exception, 'getStatusCode') && $exception -> getStatusCode() == 404) {
+
                 if ($this -> app['request'] -> segment(1) == env('API_PREFIX')) {
                     return true;
                 }
@@ -69,6 +84,103 @@ class Middleware
         }
     }
 
+
+    /**
+     * @return bool
+     */
+    private function atPrefix()
+    {
+        $env = env('SONGSHENZONG_API_PREFIX', null);
+
+        if ($env === true) {
+            $env = 'true';
+        }
+
+        if ($env === false) {
+            $env = 'false';
+        }
+
+
+        if (is_null($env)) {
+            return true;
+        }
+
+        if ($env == '') {
+            return true;
+        }
+
+
+        $array = explode(',', $env);
+
+        if (in_array($this -> app['request'] -> segment(1), $array)) {
+            return true;
+        }
+        return false;
+
+
+    }
+
+
+    /**
+     * @return bool
+     */
+    private function shouldExclude()
+    {
+        $env = env('SONGSHENZONG_API_EXCLUDE', null);
+
+        if ($env === true) {
+            $env = 'true';
+        }
+
+        if ($env === false) {
+            $env = 'false';
+        }
+
+        if (is_null($env)) {
+            return false;
+        }
+
+        if ($env == '') {
+            return false;
+        }
+
+        $array = explode(',', $env);
+
+        if (in_array($this -> app['request'] -> segment(1), $array)) {
+            return true;
+        }
+        return false;
+    }
+
+
+    private function isDomain()
+    {
+        $env = env('SONGSHENZONG_API_DOMAIN', null);
+
+        if ($env === true) {
+            $env = 'true';
+        }
+
+        if ($env === false) {
+            $env = 'false';
+        }
+
+        if (is_null($env)) {
+            return true;
+        }
+
+        if ($env == '') {
+            return true;
+        }
+
+        $array = explode(',', $env);
+
+        if (in_array(request() -> getHttpHost(), $array)) {
+            return true;
+        }
+        return false;
+
+    }
 
     /**
      * Send the request through the Dingo router.
@@ -90,6 +202,8 @@ class Middleware
 
                 throw $response -> exception;
             }
+
+            return $response;
         });
     }
 }

@@ -7,7 +7,8 @@ if (!function_exists('songshenzongApi')) {
      */
     function songshenzongApi()
     {
-        return app('SongshenzongApi');
+
+        return clone app('SongshenzongApi');
     }
 }
 
@@ -19,6 +20,6 @@ if (!function_exists('api')) {
      */
     function api()
     {
-        return app('SongshenzongApi');
+        return clone app('SongshenzongApi');
     }
 }

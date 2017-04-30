@@ -7,6 +7,7 @@ use Songshenzong\Api\Exception\SongshenzongException;
 class Api
 {
 
+
     /**
      * @var string
      */
@@ -119,14 +120,18 @@ class Api
      */
     public function errors($statusCode, $message, $errors = null)
     {
-        $this -> setStatusCode($statusCode);
 
+        if (is_null($this -> getStatusCode())) {
+            $this -> setStatusCode($statusCode);
+        }
 
-        $this -> setMessage($message);
+        if (is_null($this -> getMessage())) {
+            $this -> setMessage($message);
+        }
 
-
-        $this -> setErrors($errors);
-
+        if (is_null($this -> getErrors())) {
+            $this -> setErrors($errors);
+        }
 
         throw new SongshenzongException(
             $this -> getHttpStatusCode() ?: $this -> getStatusCode(),
@@ -152,7 +157,7 @@ class Api
     /**
      * @return mixed
      */
-    public function getCode()
+    protected function getCode()
     {
         return $this -> code;
     }
@@ -171,7 +176,7 @@ class Api
     /**
      * @return string
      */
-    public function getMessage()
+    protected function getMessage()
     {
         return $this -> message;
     }
@@ -192,7 +197,7 @@ class Api
     /**
      * @return mixed
      */
-    public function getData()
+    protected function getData()
     {
         return $this -> data;
     }
@@ -212,7 +217,7 @@ class Api
     /**
      * @return mixed
      */
-    public function getErrors()
+    protected function getErrors()
     {
         return $this -> errors;
     }
@@ -236,7 +241,7 @@ class Api
     /**
      * @return int
      */
-    public function getHttpStatusCode()
+    protected function getHttpStatusCode()
     {
         return $this -> httpStatusCode;
     }
@@ -253,9 +258,11 @@ class Api
             return $this -> internalServerError('Do not use a non-existent status code in ' . __METHOD__, self ::$statusTexts);
         }
         $this -> statusCode = $statusCode;
+
         if (!$this -> getCode()) {
             $this -> setCode($statusCode);
         }
+
         return $this;
     }
 
@@ -263,7 +270,7 @@ class Api
     /**
      * @return int
      */
-    public function getStatusCode()
+    protected function getStatusCode()
     {
         return $this -> statusCode;
     }
@@ -280,27 +287,36 @@ class Api
      */
     public function success($statusCode, $message, $data = null)
     {
-        $this -> setStatusCode($statusCode);
-        $this -> setMessage($message);
-        $this -> setData($data);
 
-        $content = [
-            'message'     => $this -> message,
-            'status_code' => $this -> statusCode,
-        ];
 
+        if (is_null($this -> getStatusCode())) {
+            $this -> setStatusCode($statusCode);
+        }
+
+        if (is_null($this -> getMessage())) {
+            $this -> setMessage($message);
+        }
+
+        if (is_null($this -> getData())) {
+            $this -> setData($data);
+        }
+
+
+        $content['message'] = $this -> message;
+
+        if ($this -> getCode()) {
+            $content['code'] = $this -> getCode();
+        }
+
+
+        $content['status_code'] = $this -> statusCode;
 
         if ($this -> getErrors()) {
             $content['errors'] = $this -> getErrors();
         }
 
 
-        if ($this -> getCode()) {
-            $content['code'] = $this -> getCode();
-        }
-
         if ($this -> getData() && $this -> getData() != $this -> getErrors()) {
-            $this -> setData($data);
             $content['data'] = $this -> getData();
         }
 

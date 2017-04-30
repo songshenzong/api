@@ -21,10 +21,10 @@ class SongshenzongException extends \RuntimeException implements HttpExceptionIn
      *
      * @var \Illuminate\Support\MessageBag
      */
-    private $httpStatusCode;
-    private $statusCode;
+    private   $httpStatusCode;
+    private   $statusCode;
     protected $errors;
-    private $headers;
+    private   $headers;
     protected $code;
 
     public function __construct($httpStatusCode, $statusCode, $message = null, $errors = null, $code = 0, Exception $previous = null, $headers = [])
