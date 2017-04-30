@@ -38,11 +38,8 @@ class Middleware
     {
 
         try {
-
             return $this -> sendRequestThroughRouter($request);
-
         } catch (Exception $exception) {
-
             if ($this -> isCompatibleWithDingo($exception)) {
                 return $next($request);
             }
@@ -63,14 +60,12 @@ class Middleware
     private function isCompatibleWithDingo(Exception $exception)
     {
         if (method_exists($exception, 'getStatusCode') && $exception -> getStatusCode() == 404) {
-
             if (env('SONGSHENZONG_API_DINGO', false)) {
                 if ($this -> app['request'] -> segment(1) == env('API_PREFIX')) {
                     return true;
                 }
             }
         }
-
     }
 
 
@@ -88,17 +83,12 @@ class Middleware
             $response = $this -> router -> dispatch($request);
 
             if (property_exists($response, 'exception') && $response -> exception instanceof Exception) {
-
                 if (method_exists($response, 'getStatusCode')) {
                     $response -> exception -> responseStatusCode = $response -> getStatusCode();
                 }
 
                 throw $response -> exception;
             }
-
-
         });
     }
-
-
 }
