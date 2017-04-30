@@ -130,7 +130,6 @@ class Handler implements ExceptionHandler
         }
 
 
-
         return $this -> genericResponse($exception);
     }
 
