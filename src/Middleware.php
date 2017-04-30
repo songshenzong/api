@@ -8,6 +8,7 @@ use Illuminate\Container\Container;
 use Songshenzong\Api\Exception\Handler;
 use Illuminate\Routing\Router;
 use Illuminate\Pipeline\Pipeline;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 class Middleware
 {
@@ -40,8 +41,11 @@ class Middleware
         try {
             return $this -> sendRequestThroughRouter($request);
         } catch (Exception $exception) {
+
+
             if ($this -> isCompatibleWithDingo($exception)) {
                 return $next($request);
+
             }
 
             $this -> exception -> report($exception);

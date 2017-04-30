@@ -253,6 +253,9 @@ class Api
             return $this -> internalServerError('Do not use a non-existent status code in ' . __METHOD__, self ::$statusTexts);
         }
         $this -> statusCode = $statusCode;
+        if (!$this -> getCode()) {
+            $this -> setCode($statusCode);
+        }
         return $this;
     }
 

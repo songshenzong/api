@@ -8,6 +8,7 @@ use ReflectionFunction;
 use Illuminate\Http\Response;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Symfony\Component\HttpFoundation\Response as BaseResponse;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 class Handler implements ExceptionHandler
 {
@@ -165,7 +166,7 @@ class Handler implements ExceptionHandler
         }
 
 
-        if ($exception instanceof Exception && method_exists($exception, 'getStatusCode')) {
+        if ($exception instanceof HttpExceptionInterface && method_exists($exception, 'getStatusCode')) {
             return $exception -> getStatusCode();
         }
 
@@ -182,12 +183,11 @@ class Handler implements ExceptionHandler
     protected function getHttpStatusCode(Exception $exception)
     {
 
-
         if ($exception instanceof SongshenzongException) {
             return $exception -> getHttpStatusCode();
         }
 
-        if ($exception instanceof Exception && method_exists($exception, 'getStatusCode')) {
+        if ($exception instanceof HttpExceptionInterface && method_exists($exception, 'getStatusCode')) {
             return $exception -> getStatusCode();
         }
 
@@ -225,20 +225,19 @@ class Handler implements ExceptionHandler
             $message = sprintf('%d %s', $statusCode, Response ::$statusTexts[$statusCode]);
         }
 
-        $replacements = [
-            'message'     => $message,
-            'status_code' => $statusCode,
-        ];
-
-
-        if ($exception instanceof SongshenzongException && $exception -> hasErrors()) {
-            $replacements['errors'] = $exception -> getErrors();
-        }
+        $replacements['message'] = $message;
 
 
         if ($code = $exception -> getCode()) {
             $replacements['code'] = $code;
         }
+
+        $replacements['status_code'] = $statusCode;
+
+        if ($exception instanceof SongshenzongException && $exception -> hasErrors()) {
+            $replacements['errors'] = $exception -> getErrors();
+        }
+
 
         if ($this -> runningInDebugMode()) {
             $replacements['debug'] = [
@@ -282,7 +281,7 @@ class Handler implements ExceptionHandler
                 ? $exception -> responseStatusCode : 500;
         }
 
-        return ($exception instanceof Exception) ? $exception -> getStatusCode() : $defaultStatusCode;
+        return ($exception instanceof HttpExceptionInterface) ? $exception -> getStatusCode() : $defaultStatusCode;
     }
 
     /**
