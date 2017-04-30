@@ -144,8 +144,6 @@ class Handler implements ExceptionHandler
      */
     protected function genericResponse(Exception $exception)
     {
-
-
         $replacements = $this -> prepareReplacements($exception);
 
 
@@ -193,7 +191,7 @@ class Handler implements ExceptionHandler
             return $exception -> getStatusCode();
         }
 
-        return isset($exception -> responseStatusCode) ? $exception -> responseStatusCode : 500;
+        return isset($exception -> responseStatusCode) ? $exception -> responseStatusCode : 404;
     }
 
 
@@ -277,8 +275,13 @@ class Handler implements ExceptionHandler
      *
      * @return int
      */
-    protected function getExceptionStatusCode(Exception $exception, $defaultStatusCode = 500)
+    protected function getExceptionStatusCode(Exception $exception, $defaultStatusCode = null)
     {
+        if (is_null($defaultStatusCode)) {
+            $defaultStatusCode = isset($exception -> responseStatusCode)
+                ? $exception -> responseStatusCode : 500;
+        }
+
         return ($exception instanceof Exception) ? $exception -> getStatusCode() : $defaultStatusCode;
     }
 
