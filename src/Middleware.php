@@ -146,7 +146,6 @@ class Middleware
         }
 
         return explode(',', $env);
-
     }
 
 
