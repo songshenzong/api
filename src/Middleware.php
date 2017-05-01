@@ -8,7 +8,6 @@ use Illuminate\Container\Container;
 use Songshenzong\Api\Exception\Handler;
 use Illuminate\Routing\Router;
 use Illuminate\Pipeline\Pipeline;
-use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 class Middleware
 {
