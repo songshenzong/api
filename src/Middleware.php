@@ -86,27 +86,13 @@ class Middleware
      */
     private function inPrefixes()
     {
-        $env = env('SONGSHENZONG_API_PREFIX', null);
-
-        if ($env === true) {
-            $env = 'true';
-        }
-
-        if ($env === false) {
-            $env = 'false';
-        }
 
 
-        if (is_null($env)) {
+        $array = $this -> getEnvArray('SONGSHENZONG_API_PREFIX');
+
+        if ($array == null) {
             return true;
         }
-
-        if ($env == '') {
-            return true;
-        }
-
-
-        $array = explode(',', $env);
 
         if (in_array($this -> app['request'] -> segment(1), $array)) {
             return true;
@@ -120,7 +106,27 @@ class Middleware
      */
     private function inExcludes()
     {
-        $env = env('SONGSHENZONG_API_EXCLUDE', null);
+
+        $array = $this -> getEnvArray('SONGSHENZONG_API_EXCLUDE');
+
+        if ($array == null) {
+            return false;
+        }
+
+        if (in_array($this -> app['request'] -> segment(1), $array)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @param $name
+     *
+     * @return array|null
+     */
+    private function getEnvArray($name)
+    {
+        $env = env($name, null);
 
         if ($env === true) {
             $env = 'true';
@@ -130,20 +136,17 @@ class Middleware
             $env = 'false';
         }
 
-        if (is_null($env)) {
-            return false;
+
+        if ($env == null) {
+            return null;
         }
 
         if ($env == '') {
-            return false;
+            return null;
         }
 
-        $array = explode(',', $env);
+        return explode(',', $env);
 
-        if (in_array($this -> app['request'] -> segment(1), $array)) {
-            return true;
-        }
-        return false;
     }
 
 
@@ -152,21 +155,11 @@ class Middleware
      */
     private function inDomains()
     {
-        $env = env('SONGSHENZONG_API_DOMAIN', null);
 
-        if ($env === true) {
-            $env = 'true';
-        }
 
-        if ($env === false) {
-            $env = 'false';
-        }
+        $array = $this -> getEnvArray('SONGSHENZONG_API_DOMAIN');
 
-        if (is_null($env)) {
-            return true;
-        }
-
-        if ($env == '') {
+        if ($array == null) {
             return true;
         }
 
