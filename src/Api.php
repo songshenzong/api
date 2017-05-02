@@ -2,6 +2,7 @@
 
 namespace Songshenzong\Api;
 
+use Illuminate\Http\JsonResponse;
 use Songshenzong\Api\Exception\SongshenzongException;
 
 class Api
@@ -259,9 +260,9 @@ class Api
         }
         $this -> statusCode = $statusCode;
 
-        if (!$this -> getCode()) {
-            $this -> setCode($statusCode);
-        }
+        // if (!$this -> getCode()) {
+        //     $this -> setCode($statusCode);
+        // }
 
         return $this;
     }
@@ -321,7 +322,7 @@ class Api
         }
 
 
-        return \Response ::json($content, $this -> getHttpStatusCode() ?: $this -> getStatusCode());
+        return new JsonResponse($content, $this -> getHttpStatusCode() ?: $this -> getStatusCode());
     }
 
 
