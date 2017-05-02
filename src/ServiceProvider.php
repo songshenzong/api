@@ -31,8 +31,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     public function boot()
     {
-        // Response ::setFormatters($this -> config('formats'));
-        // Request ::setAcceptParser($this -> app['Songshenzong\Api\Http\Parser\Accept']);
         $kernel = $this -> app -> make(Kernel::class);
         $kernel -> prependMiddleware(Middleware::class);
     }
@@ -44,16 +42,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     public function register()
     {
-        // $this -> app -> singleton(AcceptParser::class, function ($app) {
-        //     return new AcceptParser(
-        //         'x',
-        //         '',
-        //         'v1',
-        //         'json'
-        //     );
-        // });
-
-
         $this -> app -> singleton('SongshenzongApi', function ($app) {
             return new Api(
                 $app,
@@ -75,25 +63,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this -> app -> alias('SongshenzongApi.exception', 'Songshenzong\Api\Exception\Handler');
     }
 
-
-    /**
-     * Retrieve and instantiate a config value if it exists and is a class.
-     *
-     * @param      $item
-     * @param bool $instantiate
-     *
-     * @return array|mixed
-     */
-    // protected function config($item, $instantiate = true)
-    // {
-    //     $value = $this -> app['config'] -> get('api.' . $item);
-    //
-    //     if (is_array($value)) {
-    //         return $instantiate ? $this -> instantiateConfigValues($item, $value) : $value;
-    //     }
-    //
-    //     return $instantiate ? $this -> instantiateConfigValue($item, $value) : $value;
-    // }
 
     /**
      * Instantiate an array of instantiable configuration values.
