@@ -895,7 +895,7 @@ class Api
         }
 
         if ($validator -> fails()) {
-            return $this -> setHttpStatusCode(env('SONGSHENZONG_API_VALIDATOR_STATUS_CODE', 422)) -> unprocessableEntity(env('SONGSHENZONG_API_VALIDATOR', 'Unprocessable Entity'), $validator -> errors());
+            return $this -> setHttpStatusCode(env('SONGSHENZONG_API_VALIDATOR_HTTP_STATUS_CODE', 422)) -> unprocessableEntity(env('SONGSHENZONG_API_VALIDATOR', 'Unprocessable Entity'), $validator -> errors());
         }
     }
 }
