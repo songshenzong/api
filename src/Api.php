@@ -891,7 +891,11 @@ class Api
         if (is_array($payload)) {
             $validator = app('validator') -> make($payload, $rules);
         } else {
-            $validator = app('validator') -> make($payload -> all(), $rules);
+            if (method_exists($payload, 'all')) {
+                $validator = app('validator') -> make($payload -> all(), $rules);
+            } else {
+                return $this -> internalServerError('The first argument must be an array.');
+            }
         }
 
         if ($validator -> fails()) {
