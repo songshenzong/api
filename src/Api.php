@@ -881,12 +881,13 @@ class Api
     /**
      * Parameters Validator.
      *
-     * @param $payload
-     * @param $rules
+     * @param      $payload
+     * @param      $rules
+     * @param null $message
      *
-     * @return mixed
+     * @return object
      */
-    public function validator($payload, $rules)
+    public function validator($payload, $rules, $message = null)
     {
         if (is_array($payload)) {
             $validator = app('validator') -> make($payload, $rules);
@@ -898,8 +899,14 @@ class Api
             }
         }
 
+        $status_code = env('SONGSHENZONG_API_VALIDATOR_HTTP_STATUS_CODE', 422);
+
+        if (is_null($message)) {
+            $message = env('SONGSHENZONG_API_VALIDATOR', 'Unprocessable Entity');
+        }
+
         if ($validator -> fails()) {
-            return $this -> setHttpStatusCode(env('SONGSHENZONG_API_VALIDATOR_HTTP_STATUS_CODE', 422)) -> unprocessableEntity(env('SONGSHENZONG_API_VALIDATOR', 'Unprocessable Entity'), $validator -> errors());
+            return $this -> setHttpStatusCode($status_code) -> unprocessableEntity($message, $validator -> errors());
         }
     }
 }
