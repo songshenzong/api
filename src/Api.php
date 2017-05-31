@@ -2,7 +2,6 @@
 
 namespace Songshenzong\Api;
 
-use Illuminate\Http\JsonResponse;
 use Songshenzong\Api\Exception\SongshenzongException;
 
 class Api
@@ -116,8 +115,13 @@ class Api
         511 => 'Network Authentication Required',                             // RFC6585
     ];
 
+
     /**
      * Public Errors Exception Method.
+     *
+     * @param      $statusCode
+     * @param      $message
+     * @param null $errors
      */
     public function errors($statusCode, $message, $errors = null)
     {
@@ -227,7 +231,7 @@ class Api
     /**
      * @param int $httpStatusCode
      *
-     * @return $this
+     * @return $this|object
      */
     public function setHttpStatusCode($httpStatusCode)
     {
@@ -321,8 +325,8 @@ class Api
             $content['data'] = $this -> getData();
         }
 
+        return response() -> json($content, $this -> getHttpStatusCode() ?: $this -> getStatusCode());
 
-        return new JsonResponse($content, $this -> getHttpStatusCode() ?: $this -> getStatusCode());
     }
 
 
