@@ -126,24 +126,24 @@ class Api
     public function errors($statusCode, $message, $errors = null)
     {
 
-        if (is_null($this -> getStatusCode())) {
-            $this -> setStatusCode($statusCode);
+        if (is_null($this->getStatusCode())) {
+            $this->setStatusCode($statusCode);
         }
 
-        if (is_null($this -> getMessage())) {
-            $this -> setMessage($message);
+        if (is_null($this->getMessage())) {
+            $this->setMessage($message);
         }
 
-        if (is_null($this -> getErrors())) {
-            $this -> setErrors($errors);
+        if (is_null($this->getErrors())) {
+            $this->setErrors($errors);
         }
 
         throw new SongshenzongException(
-            $this -> getHttpStatusCode() ?: $this -> getStatusCode(),
-            $this -> getStatusCode(),
-            $this -> getMessage(),
-            $this -> getErrors(),
-            $this -> getCode()
+            $this->getHttpStatusCode() ?: $this->getStatusCode(),
+            $this->getStatusCode(),
+            $this->getMessage(),
+            $this->getErrors(),
+            $this->getCode()
         );
     }
 
@@ -155,7 +155,7 @@ class Api
      */
     public function setCode($code)
     {
-        $this -> code = $code;
+        $this->code = $code;
         return $this;
     }
 
@@ -164,7 +164,7 @@ class Api
      */
     protected function getCode()
     {
-        return $this -> code;
+        return $this->code;
     }
 
     /**
@@ -174,7 +174,7 @@ class Api
      */
     public function setMessage($message)
     {
-        $this -> message = $message;
+        $this->message = $message;
         return $this;
     }
 
@@ -183,7 +183,7 @@ class Api
      */
     protected function getMessage()
     {
-        return $this -> message;
+        return $this->message;
     }
 
 
@@ -194,7 +194,7 @@ class Api
      */
     public function setData($data)
     {
-        $this -> data = $data;
+        $this->data = $data;
         return $this;
     }
 
@@ -204,7 +204,7 @@ class Api
      */
     protected function getData()
     {
-        return $this -> data;
+        return $this->data;
     }
 
 
@@ -215,7 +215,7 @@ class Api
      */
     public function setErrors($errors)
     {
-        $this -> errors = $errors;
+        $this->errors = $errors;
         return $this;
     }
 
@@ -224,7 +224,7 @@ class Api
      */
     protected function getErrors()
     {
-        return $this -> errors;
+        return $this->errors;
     }
 
 
@@ -235,10 +235,10 @@ class Api
      */
     public function setHttpStatusCode($httpStatusCode)
     {
-        if (!key_exists($httpStatusCode, self ::$statusTexts)) {
-            return $this -> internalServerError('Do not use a non-existent status code in ' . __METHOD__, self ::$statusTexts);
+        if (!key_exists($httpStatusCode, self::$statusTexts)) {
+            return $this->internalServerError('Do not use a non-existent status code in ' . __METHOD__, self::$statusTexts);
         }
-        $this -> httpStatusCode = $httpStatusCode;
+        $this->httpStatusCode = $httpStatusCode;
         return $this;
     }
 
@@ -248,7 +248,7 @@ class Api
      */
     protected function getHttpStatusCode()
     {
-        return $this -> httpStatusCode;
+        return $this->httpStatusCode;
     }
 
 
@@ -259,10 +259,10 @@ class Api
      */
     public function setStatusCode($statusCode)
     {
-        if (!key_exists($statusCode, self ::$statusTexts)) {
-            return $this -> internalServerError('Do not use a non-existent status code in ' . __METHOD__, self ::$statusTexts);
+        if (!key_exists($statusCode, self::$statusTexts)) {
+            return $this->internalServerError('Do not use a non-existent status code in ' . __METHOD__, self::$statusTexts);
         }
-        $this -> statusCode = $statusCode;
+        $this->statusCode = $statusCode;
 
         // if (!$this -> getCode()) {
         //     $this -> setCode($statusCode);
@@ -277,7 +277,7 @@ class Api
      */
     protected function getStatusCode()
     {
-        return $this -> statusCode;
+        return $this->statusCode;
     }
 
 
@@ -294,39 +294,38 @@ class Api
     {
 
 
-        if (is_null($this -> getStatusCode())) {
-            $this -> setStatusCode($statusCode);
+        if (is_null($this->getStatusCode())) {
+            $this->setStatusCode($statusCode);
         }
 
-        if (is_null($this -> getMessage())) {
-            $this -> setMessage($message);
+        if (is_null($this->getMessage())) {
+            $this->setMessage($message);
         }
 
-        if (is_null($this -> getData())) {
-            $this -> setData($data);
-        }
-
-
-        $content['message'] = $this -> message;
-
-        if ($this -> getCode()) {
-            $content['code'] = $this -> getCode();
+        if (is_null($this->getData())) {
+            $this->setData($data);
         }
 
 
-        $content['status_code'] = $this -> statusCode;
+        $content['message'] = $this->message;
 
-        if ($this -> getErrors()) {
-            $content['errors'] = $this -> getErrors();
+        if ($this->getCode()) {
+            $content['code'] = $this->getCode();
         }
 
 
-        if ($this -> getData() && $this -> getData() != $this -> getErrors()) {
-            $content['data'] = $this -> getData();
+        $content['status_code'] = $this->statusCode;
+
+        if ($this->getErrors()) {
+            $content['errors'] = $this->getErrors();
         }
 
-        return response() -> json($content, $this -> getHttpStatusCode() ?: $this -> getStatusCode());
 
+        if ($this->getData() && $this->getData() != $this->getErrors()) {
+            $content['data'] = $this->getData();
+        }
+
+        return response()->json($content, $this->getHttpStatusCode() ?: $this->getStatusCode());
     }
 
 
@@ -343,7 +342,7 @@ class Api
      */
     public function ok($data = null)
     {
-        return $this -> success(200, 'OK', $data);
+        return $this->success(200, 'OK', $data);
     }
 
 
@@ -354,7 +353,7 @@ class Api
      */
     public function item($data = null)
     {
-        return $this -> ok($data);
+        return $this->ok($data);
     }
 
     /**
@@ -364,7 +363,7 @@ class Api
      */
     public function collection($data = null)
     {
-        return $this -> ok($data);
+        return $this->ok($data);
     }
 
     /**
@@ -374,7 +373,7 @@ class Api
      */
     public function paginate($data = null)
     {
-        return $this -> ok($data);
+        return $this->ok($data);
     }
 
     /**
@@ -383,13 +382,13 @@ class Api
      * The request has been fulfilled, resulting in the creation of a new resource.
      *
      * @param string $message
-     * @param null   $data
+     * @param null $data
      *
      * @return object
      */
     public function created($message = 'Created', $data = null)
     {
-        return $this -> success(201, $message, $data);
+        return $this->success(201, $message, $data);
     }
 
     /**
@@ -399,13 +398,13 @@ class Api
      * might not be eventually acted upon, and may be disallowed when processing occurs.
      *
      * @param string $message
-     * @param null   $data
+     * @param null $data
      *
      * @return object
      */
     public function accepted($message = 'Accepted', $data = null)
     {
-        return $this -> success(202, $message, $data);
+        return $this->success(202, $message, $data);
     }
 
     /**
@@ -415,13 +414,13 @@ class Api
      * returning a modified version of the origin's response.
      *
      * @param string $message
-     * @param null   $data
+     * @param null $data
      *
      * @return object
      */
     public function nonAuthoritativeInformation($message = 'Non-Authoritative Information', $data = null)
     {
-        return $this -> success(203, $message, $data);
+        return $this->success(203, $message, $data);
     }
 
 
@@ -431,13 +430,13 @@ class Api
      * The server successfully processed the request and is not returning any content.
      *
      * @param string $message
-     * @param null   $data
+     * @param null $data
      *
      * @return object
      */
     public function noContent($message = 'No Content', $data = null)
     {
-        return $this -> success(204, $message, $data);
+        return $this->success(204, $message, $data);
     }
 
 
@@ -448,13 +447,13 @@ class Api
      * response requires that the requester reset the document view.
      *
      * @param string $message
-     * @param null   $data
+     * @param null $data
      *
      * @return object
      */
     public function resetContent($message = 'Reset Content', $data = null)
     {
-        return $this -> success(205, $message, $data);
+        return $this->success(205, $message, $data);
     }
 
 
@@ -465,13 +464,13 @@ class Api
      * syntax, too large size, invalid request message framing, or deceptive request routing).
      *
      * @param string $message
-     * @param null   $errors
+     * @param null $errors
      *
      * @return object
      */
     public function badRequest($message = 'Bad Request', $errors = null)
     {
-        return $this -> errors(400, $message, $errors);
+        return $this->errors(400, $message, $errors);
     }
 
 
@@ -487,13 +486,13 @@ class Api
      * that specific address is refused permission to access a website.
      *
      * @param string $message
-     * @param null   $errors
+     * @param null $errors
      *
      * @return object
      */
     public function unauthorized($message = 'Unauthorized', $errors = null)
     {
-        return $this -> errors(401, $message, $errors);
+        return $this->errors(401, $message, $errors);
     }
 
 
@@ -504,13 +503,13 @@ class Api
      * a resource.
      *
      * @param string $message
-     * @param null   $errors
+     * @param null $errors
      *
      * @return object
      */
     public function forbidden($message = 'Forbidden', $errors = null)
     {
-        return $this -> errors(403, $message, $errors);
+        return $this->errors(403, $message, $errors);
     }
 
 
@@ -521,13 +520,13 @@ class Api
      * are permissible.
      *
      * @param string $message
-     * @param null   $errors
+     * @param null $errors
      *
      * @return object
      */
     public function notFound($message = 'Not Found', $errors = null)
     {
-        return $this -> errors(404, $message, $errors);
+        return $this->errors(404, $message, $errors);
     }
 
 
@@ -538,13 +537,13 @@ class Api
      * data to be presented via POST, or a PUT request on a read-only resource.
      *
      * @param string $message
-     * @param null   $errors
+     * @param null $errors
      *
      * @return object
      */
     public function methodNotAllowed($message = 'Method Not Allowed', $errors = null)
     {
-        return $this -> errors(405, $message, $errors);
+        return $this->errors(405, $message, $errors);
     }
 
 
@@ -555,13 +554,13 @@ class Api
      * in the request.[36] See Content negotiation.
      *
      * @param string $message
-     * @param null   $errors
+     * @param null $errors
      *
      * @return object
      */
     public function notAcceptable($message = 'Not Acceptable', $errors = null)
     {
-        return $this -> errors(406, $message, $errors);
+        return $this->errors(406, $message, $errors);
     }
 
 
@@ -572,13 +571,13 @@ class Api
      * between multiple simultaneous updates.
      *
      * @param string $message
-     * @param null   $errors
+     * @param null $errors
      *
      * @return object
      */
     public function conflict($message = 'Conflict', $errors = null)
     {
-        return $this -> errors(409, $message, $errors);
+        return $this->errors(409, $message, $errors);
     }
 
 
@@ -592,13 +591,13 @@ class Api
      * the resource, and a "404 Not Found" may be used instead.
      *
      * @param string $message
-     * @param null   $errors
+     * @param null $errors
      *
      * @return object
      */
     public function gone($message = 'Gone', $errors = null)
     {
-        return $this -> errors(410, $message, $errors);
+        return $this->errors(410, $message, $errors);
     }
 
 
@@ -608,13 +607,13 @@ class Api
      * The request did not specify the length of its content, which is required by the requested resource.
      *
      * @param string $message
-     * @param null   $errors
+     * @param null $errors
      *
      * @return object
      */
     public function lengthRequired($message = 'Length Required', $errors = null)
     {
-        return $this -> errors(411, $message, $errors);
+        return $this->errors(411, $message, $errors);
     }
 
 
@@ -624,13 +623,13 @@ class Api
      * The server does not meet one of the preconditions that the requester put on the request.
      *
      * @param string $message
-     * @param null   $errors
+     * @param null $errors
      *
      * @return object
      */
     public function preconditionFailed($message = 'Precondition Failed', $errors = null)
     {
-        return $this -> errors(412, $message, $errors);
+        return $this->errors(412, $message, $errors);
     }
 
 
@@ -641,13 +640,13 @@ class Api
      * uploads an image as image/svg+xml, but the server requires that images use a different format.
      *
      * @param string $message
-     * @param null   $errors
+     * @param null $errors
      *
      * @return object
      */
     public function unsupportedMediaType($message = 'Unsupported Media Type', $errors = null)
     {
-        return $this -> errors(413, $message, $errors);
+        return $this->errors(413, $message, $errors);
     }
 
 
@@ -657,13 +656,13 @@ class Api
      * The request was well-formed but was unable to be followed due to semantic errors.[15].
      *
      * @param string $message
-     * @param null   $errors
+     * @param null $errors
      *
      * @return object
      */
     public function unprocessableEntity($message = 'Unprocessable Entity', $errors = null)
     {
-        return $this -> errors(422, $message, $errors);
+        return $this->errors(422, $message, $errors);
     }
 
 
@@ -675,13 +674,13 @@ class Api
      * modified the state on the server, leading to a conflict.
      *
      * @param string $message
-     * @param null   $errors
+     * @param null $errors
      *
      * @return object
      */
     public function preconditionRequired($message = 'Precondition Required', $errors = null)
     {
-        return $this -> errors(428, $message, $errors);
+        return $this->errors(428, $message, $errors);
     }
 
 
@@ -691,13 +690,13 @@ class Api
      * The user has sent too many requests in a given amount of time. Intended for use with rate-limiting schemes.
      *
      * @param string $message
-     * @param null   $errors
+     * @param null $errors
      *
      * @return object
      */
     public function tooManyRequests($message = 'Too Many Requests', $errors = null)
     {
-        return $this -> errors(429, $message, $errors);
+        return $this->errors(429, $message, $errors);
     }
 
 
@@ -708,13 +707,13 @@ class Api
      * suitable.
      *
      * @param string $message
-     * @param null   $errors
+     * @param null $errors
      *
      * @return object
      */
     public function internalServerError($message = 'Internal Server Error', $errors = null)
     {
-        return $this -> errors(500, $message, $errors);
+        return $this->errors(500, $message, $errors);
     }
 
 
@@ -725,13 +724,13 @@ class Api
      * this implies future availability (e.g., a new feature of a web-service API).
      *
      * @param string $message
-     * @param null   $errors
+     * @param null $errors
      *
      * @return object
      */
     public function notImplemented($message = 'Not Implemented', $errors = null)
     {
-        return $this -> errors(501, $message, $errors);
+        return $this->errors(501, $message, $errors);
     }
 
 
@@ -741,13 +740,13 @@ class Api
      * The server was acting as a gateway or proxy and received an invalid response from the upstream server.
      *
      * @param string $message
-     * @param null   $errors
+     * @param null $errors
      *
      * @return object
      */
     public function badGateway($message = 'Bad Gateway', $errors = null)
     {
-        return $this -> errors(502, $message, $errors);
+        return $this->errors(502, $message, $errors);
     }
 
 
@@ -758,13 +757,13 @@ class Api
      * temporary state.
      *
      * @param string $message
-     * @param null   $errors
+     * @param null $errors
      *
      * @return object
      */
     public function serviceUnavailable($message = 'Service Unavailable', $errors = null)
     {
-        return $this -> errors(503, $message, $errors);
+        return $this->errors(503, $message, $errors);
     }
 
 
@@ -774,13 +773,13 @@ class Api
      * The server was acting as a gateway or proxy and did not receive a timely response from the upstream server.
      *
      * @param string $message
-     * @param null   $errors
+     * @param null $errors
      *
      * @return object
      */
     public function gatewayTimeOut($message = 'Gateway Time-out', $errors = null)
     {
-        return $this -> errors(504, $message, $errors);
+        return $this->errors(504, $message, $errors);
     }
 
 
@@ -790,13 +789,13 @@ class Api
      * The server does not support the HTTP protocol version used in the request.
      *
      * @param string $message
-     * @param null   $errors
+     * @param null $errors
      *
      * @return object
      */
     public function httpVersionNotSupported($message = 'HTTP Version Not Supported', $errors = null)
     {
-        return $this -> errors(505, $message, $errors);
+        return $this->errors(505, $message, $errors);
     }
 
 
@@ -806,13 +805,13 @@ class Api
      * Transparent content negotiation for the request results in a circular reference.
      *
      * @param string $message
-     * @param null   $errors
+     * @param null $errors
      *
      * @return object
      */
     public function variantAlsoNegotiates($message = 'Variant Also Negotiates', $errors = null)
     {
-        return $this -> errors(506, $message, $errors);
+        return $this->errors(506, $message, $errors);
     }
 
 
@@ -822,13 +821,13 @@ class Api
      * The server is unable to store the representation needed to complete the request.
      *
      * @param string $message
-     * @param null   $errors
+     * @param null $errors
      *
      * @return object
      */
     public function insufficientStorage($message = 'Insufficient Storage', $errors = null)
     {
-        return $this -> errors(507, $message, $errors);
+        return $this->errors(507, $message, $errors);
     }
 
 
@@ -838,13 +837,13 @@ class Api
      * The server detected an infinite loop while processing the request (sent in lieu of 208 Already Reported).
      *
      * @param string $message
-     * @param null   $errors
+     * @param null $errors
      *
      * @return object
      */
     public function loopDetected($message = 'Loop Detected', $errors = null)
     {
-        return $this -> errors(508, $message, $errors);
+        return $this->errors(508, $message, $errors);
     }
 
 
@@ -854,13 +853,13 @@ class Api
      * Further extensions to the request are required for the server to fulfill it.
      *
      * @param string $message
-     * @param null   $errors
+     * @param null $errors
      *
      * @return object
      */
     public function notExtended($message = 'Not Extended', $errors = null)
     {
-        return $this -> errors(510, $message, $errors);
+        return $this->errors(510, $message, $errors);
     }
 
 
@@ -872,13 +871,13 @@ class Api
      * granting full Internet access via a Wi-Fi hotspot).
      *
      * @param string $message
-     * @param null   $errors
+     * @param null $errors
      *
      * @return object
      */
     public function networkAuthenticationRequired($message = 'Network Authentication Required', $errors = null)
     {
-        return $this -> errors(511, $message, $errors);
+        return $this->errors(511, $message, $errors);
     }
 
 
@@ -894,12 +893,12 @@ class Api
     public function validator($payload, $rules, $message = null)
     {
         if (is_array($payload)) {
-            $validator = app('validator') -> make($payload, $rules);
+            $validator = app('validator')->make($payload, $rules);
         } else {
             if (method_exists($payload, 'all')) {
-                $validator = app('validator') -> make($payload -> all(), $rules);
+                $validator = app('validator')->make($payload->all(), $rules);
             } else {
-                return $this -> internalServerError('The first argument must be an array.');
+                return $this->internalServerError('The first argument must be an array.');
             }
         }
 
@@ -909,8 +908,8 @@ class Api
             $message = env('SONGSHENZONG_API_VALIDATOR', 'Unprocessable Entity');
         }
 
-        if ($validator -> fails()) {
-            return $this -> setHttpStatusCode($status_code) -> unprocessableEntity($message, $validator -> errors());
+        if ($validator->fails()) {
+            return $this->setHttpStatusCode($status_code)->unprocessableEntity($message, $validator->errors());
         }
     }
 }
