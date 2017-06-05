@@ -253,20 +253,17 @@ class Api
 
 
     /**
-     * @param int $statusCode
+     * @param $statusCode
      *
-     * @return $this
+     * @return $this|object
      */
     public function setStatusCode($statusCode)
     {
         if (!key_exists($statusCode, self::$statusTexts)) {
             return $this->internalServerError('Do not use a non-existent status code in ' . __METHOD__, self::$statusTexts);
         }
-        $this->statusCode = $statusCode;
 
-        // if (!$this -> getCode()) {
-        //     $this -> setCode($statusCode);
-        // }
+        $this->statusCode = $statusCode;
 
         return $this;
     }
@@ -307,25 +304,25 @@ class Api
         }
 
 
-        $content['message'] = $this->message;
+        $content['message'] = $this->getMessage();
 
-        if ($this->getCode()) {
+        if (is_null($this->getCode())) {
             $content['code'] = $this->getCode();
         }
 
-
-        $content['status_code'] = $this->statusCode;
-
-        if ($this->getErrors()) {
-            $content['errors'] = $this->getErrors();
-        }
+        $content['status_code'] = $this->getStatusCode();
 
 
-        if ($this->getData() && $this->getData() != $this->getErrors()) {
+        if ($this->getData() !== null && $this->getData() !== $this->getErrors()) {
             $content['data'] = $this->getData();
         }
 
-        return response()->json($content, $this->getHttpStatusCode() ?: $this->getStatusCode());
+
+        if (is_null($this->getErrors())) {
+            $content['errors'] = $this->getErrors();
+        }
+
+        return new JsonResponse($content, $this->getHttpStatusCode() ?: $this->getStatusCode());
     }
 
 
@@ -344,7 +341,6 @@ class Api
     {
         return $this->success(200, 'OK', $data);
     }
-
 
     /**
      * @param null $data
@@ -382,7 +378,7 @@ class Api
      * The request has been fulfilled, resulting in the creation of a new resource.
      *
      * @param string $message
-     * @param null $data
+     * @param null   $data
      *
      * @return object
      */
@@ -398,7 +394,7 @@ class Api
      * might not be eventually acted upon, and may be disallowed when processing occurs.
      *
      * @param string $message
-     * @param null $data
+     * @param null   $data
      *
      * @return object
      */
@@ -414,7 +410,7 @@ class Api
      * returning a modified version of the origin's response.
      *
      * @param string $message
-     * @param null $data
+     * @param null   $data
      *
      * @return object
      */
@@ -430,7 +426,7 @@ class Api
      * The server successfully processed the request and is not returning any content.
      *
      * @param string $message
-     * @param null $data
+     * @param null   $data
      *
      * @return object
      */
@@ -447,7 +443,7 @@ class Api
      * response requires that the requester reset the document view.
      *
      * @param string $message
-     * @param null $data
+     * @param null   $data
      *
      * @return object
      */
@@ -464,7 +460,7 @@ class Api
      * syntax, too large size, invalid request message framing, or deceptive request routing).
      *
      * @param string $message
-     * @param null $errors
+     * @param null   $errors
      *
      * @return object
      */
@@ -486,7 +482,7 @@ class Api
      * that specific address is refused permission to access a website.
      *
      * @param string $message
-     * @param null $errors
+     * @param null   $errors
      *
      * @return object
      */
@@ -503,7 +499,7 @@ class Api
      * a resource.
      *
      * @param string $message
-     * @param null $errors
+     * @param null   $errors
      *
      * @return object
      */
@@ -520,7 +516,7 @@ class Api
      * are permissible.
      *
      * @param string $message
-     * @param null $errors
+     * @param null   $errors
      *
      * @return object
      */
@@ -537,7 +533,7 @@ class Api
      * data to be presented via POST, or a PUT request on a read-only resource.
      *
      * @param string $message
-     * @param null $errors
+     * @param null   $errors
      *
      * @return object
      */
@@ -554,7 +550,7 @@ class Api
      * in the request.[36] See Content negotiation.
      *
      * @param string $message
-     * @param null $errors
+     * @param null   $errors
      *
      * @return object
      */
@@ -571,7 +567,7 @@ class Api
      * between multiple simultaneous updates.
      *
      * @param string $message
-     * @param null $errors
+     * @param null   $errors
      *
      * @return object
      */
@@ -591,7 +587,7 @@ class Api
      * the resource, and a "404 Not Found" may be used instead.
      *
      * @param string $message
-     * @param null $errors
+     * @param null   $errors
      *
      * @return object
      */
@@ -607,7 +603,7 @@ class Api
      * The request did not specify the length of its content, which is required by the requested resource.
      *
      * @param string $message
-     * @param null $errors
+     * @param null   $errors
      *
      * @return object
      */
@@ -623,7 +619,7 @@ class Api
      * The server does not meet one of the preconditions that the requester put on the request.
      *
      * @param string $message
-     * @param null $errors
+     * @param null   $errors
      *
      * @return object
      */
@@ -640,7 +636,7 @@ class Api
      * uploads an image as image/svg+xml, but the server requires that images use a different format.
      *
      * @param string $message
-     * @param null $errors
+     * @param null   $errors
      *
      * @return object
      */
@@ -656,7 +652,7 @@ class Api
      * The request was well-formed but was unable to be followed due to semantic errors.[15].
      *
      * @param string $message
-     * @param null $errors
+     * @param null   $errors
      *
      * @return object
      */
@@ -674,7 +670,7 @@ class Api
      * modified the state on the server, leading to a conflict.
      *
      * @param string $message
-     * @param null $errors
+     * @param null   $errors
      *
      * @return object
      */
@@ -690,7 +686,7 @@ class Api
      * The user has sent too many requests in a given amount of time. Intended for use with rate-limiting schemes.
      *
      * @param string $message
-     * @param null $errors
+     * @param null   $errors
      *
      * @return object
      */
@@ -707,7 +703,7 @@ class Api
      * suitable.
      *
      * @param string $message
-     * @param null $errors
+     * @param null   $errors
      *
      * @return object
      */
@@ -724,7 +720,7 @@ class Api
      * this implies future availability (e.g., a new feature of a web-service API).
      *
      * @param string $message
-     * @param null $errors
+     * @param null   $errors
      *
      * @return object
      */
@@ -740,7 +736,7 @@ class Api
      * The server was acting as a gateway or proxy and received an invalid response from the upstream server.
      *
      * @param string $message
-     * @param null $errors
+     * @param null   $errors
      *
      * @return object
      */
@@ -757,7 +753,7 @@ class Api
      * temporary state.
      *
      * @param string $message
-     * @param null $errors
+     * @param null   $errors
      *
      * @return object
      */
@@ -773,7 +769,7 @@ class Api
      * The server was acting as a gateway or proxy and did not receive a timely response from the upstream server.
      *
      * @param string $message
-     * @param null $errors
+     * @param null   $errors
      *
      * @return object
      */
@@ -789,7 +785,7 @@ class Api
      * The server does not support the HTTP protocol version used in the request.
      *
      * @param string $message
-     * @param null $errors
+     * @param null   $errors
      *
      * @return object
      */
@@ -805,7 +801,7 @@ class Api
      * Transparent content negotiation for the request results in a circular reference.
      *
      * @param string $message
-     * @param null $errors
+     * @param null   $errors
      *
      * @return object
      */
@@ -821,7 +817,7 @@ class Api
      * The server is unable to store the representation needed to complete the request.
      *
      * @param string $message
-     * @param null $errors
+     * @param null   $errors
      *
      * @return object
      */
@@ -837,7 +833,7 @@ class Api
      * The server detected an infinite loop while processing the request (sent in lieu of 208 Already Reported).
      *
      * @param string $message
-     * @param null $errors
+     * @param null   $errors
      *
      * @return object
      */
@@ -853,7 +849,7 @@ class Api
      * Further extensions to the request are required for the server to fulfill it.
      *
      * @param string $message
-     * @param null $errors
+     * @param null   $errors
      *
      * @return object
      */
@@ -871,7 +867,7 @@ class Api
      * granting full Internet access via a Wi-Fi hotspot).
      *
      * @param string $message
-     * @param null $errors
+     * @param null   $errors
      *
      * @return object
      */
