@@ -2,6 +2,7 @@
 
 namespace Songshenzong\Api;
 
+use Illuminate\Http\JsonResponse;
 use Songshenzong\Api\Exception\SongshenzongException;
 
 class Api
@@ -306,14 +307,14 @@ class Api
 
         $content['message'] = $this->getMessage();
 
-        if (is_null($this->getCode())) {
+        if (!is_null($this->getCode())) {
             $content['code'] = $this->getCode();
         }
 
         $content['status_code'] = $this->getStatusCode();
 
 
-        if ($this->getData() !== null && $this->getData() !== $this->getErrors()) {
+        if (!is_null($this->getData()) && $this->getData() !== $this->getErrors()) {
             $content['data'] = $this->getData();
         }
 
