@@ -318,7 +318,7 @@ class Api
         }
 
 
-        if (is_null($this->getErrors())) {
+        if (!is_null($this->getErrors())) {
             $content['errors'] = $this->getErrors();
         }
 
