@@ -2,6 +2,11 @@
 
 namespace Songshenzong\Api;
 
+/**
+ * Class Facade
+ *
+ * @package Songshenzong\Api
+ */
 class Facade extends \Illuminate\Support\Facades\Facade
 {
 

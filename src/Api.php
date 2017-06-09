@@ -4,7 +4,13 @@ namespace Songshenzong\Api;
 
 use Illuminate\Http\JsonResponse;
 use Songshenzong\Api\Exception\SongshenzongException;
+use const true;
 
+/**
+ * Class Api
+ *
+ * @package Songshenzong\Api
+ */
 class Api
 {
 
@@ -123,19 +129,21 @@ class Api
      * @param      $statusCode
      * @param      $message
      * @param null $errors
+     *
+     * @throws SongshenzongException
      */
     public function errors($statusCode, $message, $errors = null)
     {
 
-        if (is_null($this->getStatusCode())) {
+        if (null === $this->getStatusCode()) {
             $this->setStatusCode($statusCode);
         }
 
-        if (is_null($this->getMessage())) {
+        if (null === $this->getMessage()) {
             $this->setMessage($message);
         }
 
-        if (is_null($this->getErrors())) {
+        if (null === $this->getErrors()) {
             $this->setErrors($errors);
         }
 
@@ -232,11 +240,12 @@ class Api
     /**
      * @param int $httpStatusCode
      *
-     * @return $this|object
+     * @return mixed|Api
+     * @throws SongshenzongException
      */
     public function setHttpStatusCode($httpStatusCode)
     {
-        if (!key_exists($httpStatusCode, self::$statusTexts)) {
+        if (!array_key_exists($httpStatusCode, self::$statusTexts)) {
             return $this->internalServerError('Do not use a non-existent status code in ' . __METHOD__, self::$statusTexts);
         }
         $this->httpStatusCode = $httpStatusCode;
@@ -256,11 +265,12 @@ class Api
     /**
      * @param $statusCode
      *
-     * @return $this|object
+     * @return mixed|Api
+     * @throws SongshenzongException
      */
     public function setStatusCode($statusCode)
     {
-        if (!key_exists($statusCode, self::$statusTexts)) {
+        if (!array_key_exists($statusCode, self::$statusTexts)) {
             return $this->internalServerError('Do not use a non-existent status code in ' . __METHOD__, self::$statusTexts);
         }
 
@@ -286,40 +296,40 @@ class Api
      * @param      $message
      * @param null $data
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws SongshenzongException
      */
     public function success($statusCode, $message, $data = null)
     {
 
 
-        if (is_null($this->getStatusCode())) {
+        if (null === $this->getStatusCode()) {
             $this->setStatusCode($statusCode);
         }
 
-        if (is_null($this->getMessage())) {
+        if (null === $this->getMessage()) {
             $this->setMessage($message);
         }
 
-        if (is_null($this->getData())) {
+        if (null === $this->getData()) {
             $this->setData($data);
         }
 
 
         $content['message'] = $this->getMessage();
 
-        if (!is_null($this->getCode())) {
+        if (null !== $this->getCode()) {
             $content['code'] = $this->getCode();
         }
 
         $content['status_code'] = $this->getStatusCode();
 
 
-        if (!is_null($this->getData()) && $this->getData() !== $this->getErrors()) {
+        if (null !== $this->getData() && $this->getData() !== $this->getErrors()) {
             $content['data'] = $this->getData();
         }
 
-
-        if (!is_null($this->getErrors())) {
+        if (null !== $this->getErrors()) {
             $content['errors'] = $this->getErrors();
         }
 
@@ -336,7 +346,8 @@ class Api
      *
      * @param null $data
      *
-     * @return object
+     * @return mixed
+     * @throws SongshenzongException
      */
     public function ok($data = null)
     {
@@ -347,6 +358,7 @@ class Api
      * @param null $data
      *
      * @return mixed
+     * @throws SongshenzongException
      */
     public function item($data = null)
     {
@@ -357,6 +369,7 @@ class Api
      * @param null $data
      *
      * @return mixed
+     * @throws SongshenzongException
      */
     public function collection($data = null)
     {
@@ -367,6 +380,7 @@ class Api
      * @param null $data
      *
      * @return mixed
+     * @throws SongshenzongException
      */
     public function paginate($data = null)
     {
@@ -381,7 +395,8 @@ class Api
      * @param string $message
      * @param null   $data
      *
-     * @return object
+     * @return mixed
+     * @throws SongshenzongException
      */
     public function created($message = 'Created', $data = null)
     {
@@ -397,7 +412,8 @@ class Api
      * @param string $message
      * @param null   $data
      *
-     * @return object
+     * @return mixed
+     * @throws SongshenzongException
      */
     public function accepted($message = 'Accepted', $data = null)
     {
@@ -413,7 +429,8 @@ class Api
      * @param string $message
      * @param null   $data
      *
-     * @return object
+     * @return mixed
+     * @throws SongshenzongException
      */
     public function nonAuthoritativeInformation($message = 'Non-Authoritative Information', $data = null)
     {
@@ -429,7 +446,8 @@ class Api
      * @param string $message
      * @param null   $data
      *
-     * @return object
+     * @return mixed
+     * @throws SongshenzongException
      */
     public function noContent($message = 'No Content', $data = null)
     {
@@ -446,7 +464,8 @@ class Api
      * @param string $message
      * @param null   $data
      *
-     * @return object
+     * @return mixed
+     * @throws SongshenzongException
      */
     public function resetContent($message = 'Reset Content', $data = null)
     {
@@ -463,7 +482,8 @@ class Api
      * @param string $message
      * @param null   $errors
      *
-     * @return object
+     * @return mixed
+     * @throws SongshenzongException
      */
     public function badRequest($message = 'Bad Request', $errors = null)
     {
@@ -485,7 +505,8 @@ class Api
      * @param string $message
      * @param null   $errors
      *
-     * @return object
+     * @return mixed
+     * @throws SongshenzongException
      */
     public function unauthorized($message = 'Unauthorized', $errors = null)
     {
@@ -502,7 +523,8 @@ class Api
      * @param string $message
      * @param null   $errors
      *
-     * @return object
+     * @return mixed
+     * @throws SongshenzongException
      */
     public function forbidden($message = 'Forbidden', $errors = null)
     {
@@ -519,7 +541,8 @@ class Api
      * @param string $message
      * @param null   $errors
      *
-     * @return object
+     * @return mixed
+     * @throws SongshenzongException
      */
     public function notFound($message = 'Not Found', $errors = null)
     {
@@ -536,7 +559,8 @@ class Api
      * @param string $message
      * @param null   $errors
      *
-     * @return object
+     * @return mixed
+     * @throws SongshenzongException
      */
     public function methodNotAllowed($message = 'Method Not Allowed', $errors = null)
     {
@@ -553,7 +577,8 @@ class Api
      * @param string $message
      * @param null   $errors
      *
-     * @return object
+     * @return mixed
+     * @throws SongshenzongException
      */
     public function notAcceptable($message = 'Not Acceptable', $errors = null)
     {
@@ -570,7 +595,8 @@ class Api
      * @param string $message
      * @param null   $errors
      *
-     * @return object
+     * @return mixed
+     * @throws SongshenzongException
      */
     public function conflict($message = 'Conflict', $errors = null)
     {
@@ -590,7 +616,8 @@ class Api
      * @param string $message
      * @param null   $errors
      *
-     * @return object
+     * @return mixed
+     * @throws SongshenzongException
      */
     public function gone($message = 'Gone', $errors = null)
     {
@@ -606,7 +633,8 @@ class Api
      * @param string $message
      * @param null   $errors
      *
-     * @return object
+     * @return mixed
+     * @throws SongshenzongException
      */
     public function lengthRequired($message = 'Length Required', $errors = null)
     {
@@ -622,7 +650,8 @@ class Api
      * @param string $message
      * @param null   $errors
      *
-     * @return object
+     * @return mixed
+     * @throws SongshenzongException
      */
     public function preconditionFailed($message = 'Precondition Failed', $errors = null)
     {
@@ -639,7 +668,8 @@ class Api
      * @param string $message
      * @param null   $errors
      *
-     * @return object
+     * @return mixed
+     * @throws SongshenzongException
      */
     public function unsupportedMediaType($message = 'Unsupported Media Type', $errors = null)
     {
@@ -655,7 +685,8 @@ class Api
      * @param string $message
      * @param null   $errors
      *
-     * @return object
+     * @return mixed
+     * @throws SongshenzongException
      */
     public function unprocessableEntity($message = 'Unprocessable Entity', $errors = null)
     {
@@ -673,7 +704,8 @@ class Api
      * @param string $message
      * @param null   $errors
      *
-     * @return object
+     * @return mixed
+     * @throws SongshenzongException
      */
     public function preconditionRequired($message = 'Precondition Required', $errors = null)
     {
@@ -689,7 +721,8 @@ class Api
      * @param string $message
      * @param null   $errors
      *
-     * @return object
+     * @return mixed
+     * @throws SongshenzongException
      */
     public function tooManyRequests($message = 'Too Many Requests', $errors = null)
     {
@@ -706,7 +739,8 @@ class Api
      * @param string $message
      * @param null   $errors
      *
-     * @return object
+     * @return mixed
+     * @throws SongshenzongException
      */
     public function internalServerError($message = 'Internal Server Error', $errors = null)
     {
@@ -723,7 +757,8 @@ class Api
      * @param string $message
      * @param null   $errors
      *
-     * @return object
+     * @return mixed
+     * @throws SongshenzongException
      */
     public function notImplemented($message = 'Not Implemented', $errors = null)
     {
@@ -739,7 +774,8 @@ class Api
      * @param string $message
      * @param null   $errors
      *
-     * @return object
+     * @return mixed
+     * @throws SongshenzongException
      */
     public function badGateway($message = 'Bad Gateway', $errors = null)
     {
@@ -756,7 +792,8 @@ class Api
      * @param string $message
      * @param null   $errors
      *
-     * @return object
+     * @return mixed
+     * @throws SongshenzongException
      */
     public function serviceUnavailable($message = 'Service Unavailable', $errors = null)
     {
@@ -772,7 +809,8 @@ class Api
      * @param string $message
      * @param null   $errors
      *
-     * @return object
+     * @return mixed
+     * @throws SongshenzongException
      */
     public function gatewayTimeOut($message = 'Gateway Time-out', $errors = null)
     {
@@ -788,7 +826,8 @@ class Api
      * @param string $message
      * @param null   $errors
      *
-     * @return object
+     * @return mixed
+     * @throws SongshenzongException
      */
     public function httpVersionNotSupported($message = 'HTTP Version Not Supported', $errors = null)
     {
@@ -804,7 +843,8 @@ class Api
      * @param string $message
      * @param null   $errors
      *
-     * @return object
+     * @return mixed
+     * @throws SongshenzongException
      */
     public function variantAlsoNegotiates($message = 'Variant Also Negotiates', $errors = null)
     {
@@ -820,7 +860,8 @@ class Api
      * @param string $message
      * @param null   $errors
      *
-     * @return object
+     * @return mixed
+     * @throws SongshenzongException
      */
     public function insufficientStorage($message = 'Insufficient Storage', $errors = null)
     {
@@ -836,7 +877,8 @@ class Api
      * @param string $message
      * @param null   $errors
      *
-     * @return object
+     * @return mixed
+     * @throws SongshenzongException
      */
     public function loopDetected($message = 'Loop Detected', $errors = null)
     {
@@ -852,7 +894,8 @@ class Api
      * @param string $message
      * @param null   $errors
      *
-     * @return object
+     * @return mixed
+     * @throws SongshenzongException
      */
     public function notExtended($message = 'Not Extended', $errors = null)
     {
@@ -870,7 +913,8 @@ class Api
      * @param string $message
      * @param null   $errors
      *
-     * @return object
+     * @return mixed
+     * @throws SongshenzongException
      */
     public function networkAuthenticationRequired($message = 'Network Authentication Required', $errors = null)
     {
@@ -885,7 +929,8 @@ class Api
      * @param      $rules
      * @param null $message
      *
-     * @return object
+     * @return mixed
+     * @throws SongshenzongException
      */
     public function validator($payload, $rules, $message = null)
     {
@@ -901,12 +946,15 @@ class Api
 
         $status_code = env('SONGSHENZONG_API_VALIDATOR_HTTP_STATUS_CODE', 422);
 
-        if (is_null($message)) {
+        if (null === $message) {
             $message = env('SONGSHENZONG_API_VALIDATOR', 'Unprocessable Entity');
         }
 
         if ($validator->fails()) {
-            return $this->setHttpStatusCode($status_code)->unprocessableEntity($message, $validator->errors());
+            return $this->setHttpStatusCode($status_code)
+                        ->unprocessableEntity($message, $validator->errors());
         }
+
+        return true;
     }
 }

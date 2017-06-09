@@ -2,10 +2,15 @@
 
 namespace Songshenzong\Api;
 
+use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Routing\Router;
 use Songshenzong\Api\Exception\Handler;
-use Illuminate\Contracts\Http\Kernel;
 
+/**
+ * Class ServiceProvider
+ *
+ * @package Songshenzong\Api
+ */
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
     /**
@@ -31,8 +36,8 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     public function boot()
     {
-        $kernel = $this -> app -> make(Kernel::class);
-        $kernel -> prependMiddleware(Middleware::class);
+        $kernel = $this->app->make(Kernel::class);
+        $kernel->prependMiddleware(Middleware::class);
     }
 
     /**
@@ -42,7 +47,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     public function register()
     {
-        $this -> app -> singleton('SongshenzongApi', function ($app) {
+        $this->app->singleton('SongshenzongApi', function ($app) {
             return new Api(
                 $app,
                 $app[Handler::class],
@@ -51,7 +56,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         });
 
 
-        $this -> app -> singleton('SongshenzongApi.exception', function ($app) {
+        $this->app->singleton('SongshenzongApi.exception', function ($app) {
             return new Handler(
                 $app['Illuminate\Contracts\Debug\ExceptionHandler'],
                 env('SONGSHENZONG_API_DEBUG', env('APP_DEBUG'))
@@ -59,8 +64,8 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         });
 
 
-        $this -> app -> alias('SongshenzongApi', 'Songshenzong\Api\Facade');
-        $this -> app -> alias('SongshenzongApi.exception', 'Songshenzong\Api\Exception\Handler');
+        $this->app->alias('SongshenzongApi', Facade::class);
+        $this->app->alias('SongshenzongApi.exception', Handler::class);
     }
 
 
@@ -75,7 +80,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     protected function instantiateConfigValues($item, array $values)
     {
         foreach ($values as $key => $value) {
-            $values[$key] = $this -> instantiateConfigValue($item, $value);
+            $values[$key] = $this->instantiateConfigValue($item, $value);
         }
 
         return $values;
@@ -91,8 +96,8 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     protected function instantiateConfigValue($item, $value)
     {
-        if (is_string($value) && in_array($item, $this -> instantiable)) {
-            return $this -> app -> make($value);
+        if (is_string($value) && in_array($item, $this->instantiable, true)) {
+            return $this->app->make($value);
         }
 
         return $value;
