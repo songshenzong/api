@@ -3,6 +3,7 @@
 namespace Songshenzong\Api;
 
 use Closure;
+use function dd;
 use Exception;
 use Illuminate\Container\Container;
 use Illuminate\Pipeline\Pipeline;
@@ -95,6 +96,14 @@ class Middleware
         if (!env('SONGSHENZONG_API_DINGO', false)) {
             return false;
         }
+
+
+        if (method_exists($exception, 'getHttpStatusCode')) {
+            if ($exception->getHttpStatusCode() !== 404) {
+                return false;
+            }
+        }
+
 
         if (!method_exists($exception, 'getStatusCode')) {
             return false;
@@ -193,7 +202,7 @@ class Middleware
             return true;
         }
 
-        $array = explode(',', $env);
+        $array = explode(',', $array);
 
         if (in_array(request()->getHttpHost(), $array, true)) {
             return true;
