@@ -3,13 +3,11 @@
 namespace Songshenzong\Api;
 
 use Closure;
-use function dd;
 use Exception;
 use Illuminate\Container\Container;
 use Illuminate\Pipeline\Pipeline;
 use Illuminate\Routing\Router;
 use Songshenzong\Api\Exception\Handler;
-use const false;
 
 /**
  * Class Middleware
@@ -58,6 +56,7 @@ class Middleware
      */
     public function handle($request, Closure $next)
     {
+
         if (!$this->inPrefixes()) {
             return $next($request);
         }
@@ -113,7 +112,7 @@ class Middleware
             return false;
         }
 
-        if ($this->app['request']->segment(1) === env('API_PREFIX')) {
+        if (app('request')->segment(1) === env('API_PREFIX')) {
             return true;
         }
         return false;
@@ -128,11 +127,12 @@ class Middleware
 
         $array = $this->getEnvArray('SONGSHENZONG_API_PREFIX');
 
+
         if ($array === []) {
             return true;
         }
 
-        if (in_array($this->app['request']->segment(1), $array, true)) {
+        if (in_array(app('request')->segment(1), $array, true)) {
             return true;
         }
 
@@ -152,7 +152,7 @@ class Middleware
             return false;
         }
 
-        if (in_array($this->app['request']->segment(1), $array, true)) {
+        if (in_array(app('request')->segment(1), $array, true)) {
             return true;
         }
         return false;
@@ -194,17 +194,13 @@ class Middleware
      */
     private function inDomains()
     {
-
-
         $array = $this->getEnvArray('SONGSHENZONG_API_DOMAIN');
 
         if ($array === []) {
             return true;
         }
 
-        $array = explode(',', $array);
-
-        if (in_array(request()->getHttpHost(), $array, true)) {
+        if (in_array(app('request')->getHttpHost(), $array, true)) {
             return true;
         }
         return false;
