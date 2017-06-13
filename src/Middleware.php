@@ -132,11 +132,8 @@ class Middleware
             return true;
         }
 
-        if (in_array(app('request')->segment(1), $array, true)) {
-            return true;
-        }
 
-        return false;
+        return in_array(app('request')->segment(1), $array, true);
     }
 
 
@@ -152,10 +149,8 @@ class Middleware
             return false;
         }
 
-        if (in_array(app('request')->segment(1), $array, true)) {
-            return true;
-        }
-        return false;
+
+        return in_array(app('request')->segment(1), $array, true);
     }
 
 
@@ -200,10 +195,8 @@ class Middleware
             return true;
         }
 
-        if (in_array(app('request')->getHttpHost(), $array, true)) {
-            return true;
-        }
-        return false;
+
+        return in_array(app('request')->getHttpHost(), $array, true);
     }
 
     /**
