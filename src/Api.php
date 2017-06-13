@@ -246,7 +246,7 @@ class Api
     public function setHttpStatusCode($httpStatusCode)
     {
         if (!array_key_exists($httpStatusCode, self::$statusTexts)) {
-            return $this->internalServerError('Do not use a non-existent status code in ' . __METHOD__, self::$statusTexts);
+            return $this->internalServerError('Invalid status code in ' . __METHOD__, self::$statusTexts);
         }
         $this->httpStatusCode = $httpStatusCode;
         return $this;
@@ -271,7 +271,7 @@ class Api
     public function setStatusCode($statusCode)
     {
         if (!array_key_exists($statusCode, self::$statusTexts)) {
-            return $this->internalServerError('Do not use a non-existent status code in ' . __METHOD__, self::$statusTexts);
+            return $this->internalServerError('Invalid status code in ' . __METHOD__, self::$statusTexts);
         }
 
         $this->statusCode = $statusCode;
