@@ -255,6 +255,7 @@ class Handler implements ExceptionHandler
             ];
         }
 
+
         return array_merge($replacements, $this->replacements);
     }
 
