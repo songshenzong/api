@@ -2,8 +2,10 @@
   "name": "songshenzong/api",
   "description": "A RESTful API package for the Laravel",
   "keywords": [
+    "RESTful",
     "laravel",
     "response",
+    "api",
     "web"
   ],
   "license": "MIT",
@@ -19,7 +21,7 @@
     }
   ],
   "require": {
-    "php": ">=5.5.9"
+    "php": ">=5.6"
   },
   "autoload": {
     "psr-4": {
