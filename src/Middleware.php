@@ -8,6 +8,7 @@ use Illuminate\Container\Container;
 use Illuminate\Pipeline\Pipeline;
 use Illuminate\Routing\Router;
 use Songshenzong\Api\Exception\Handler;
+use function env;
 
 /**
  * Class Middleware
@@ -57,6 +58,7 @@ class Middleware
     public function handle($request, Closure $next)
     {
 
+
         if (!$this->inPrefixes()) {
             return $next($request);
         }
@@ -67,6 +69,19 @@ class Middleware
 
         if (!$this->inDomains()) {
             return $next($request);
+        }
+
+        // CORS
+        if (isset($_SERVER['HTTP_ORIGIN'])) {
+            if (env('SONGSHENZONG_API_CORS', true)) {
+                header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+                if (env('SONGSHENZONG_API_CORS_CREDENTIALS', true)) {
+                    header('Access-Control-Allow-Credentials: true');
+                }
+                $age = env('SONGSHENZONG_API_CORS_MAX_AGE', 86400);
+                header("Access-Control-Max-Age: $age");
+            }
+
         }
 
 
