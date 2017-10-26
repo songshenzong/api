@@ -10,9 +10,11 @@ Require this package with composer:
 composer require songshenzong/api
 ```
 
-After updating composer, add the ServiceProvider to the providers array in `config/app.php`
 
-### Laravel 5.x:
+
+## Laravel 5.x
+
+After updating composer, add the ServiceProvider to the providers array in `config/app.php`
 
 ```php
 Songshenzong\Api\ServiceProvider::class,
