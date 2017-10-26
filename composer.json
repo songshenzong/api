@@ -3,9 +3,9 @@
   "description": "A RESTful API package for the Laravel",
   "keywords": [
     "RESTful",
+    "api",
     "laravel",
     "response",
-    "api",
     "web"
   ],
   "license": "MIT",
@@ -16,7 +16,7 @@
   },
   "authors": [
     {
-      "name": "Connor Niu",
+      "name": "Connor",
       "email": "connor.niu@gmail.com"
     }
   ],
