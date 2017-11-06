@@ -26,7 +26,9 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      * @var array
      */
     protected $instantiable = [
-        'middleware', 'transformer', 'formats',
+        'middleware',
+        'transformer',
+        'formats',
     ];
 
     /**

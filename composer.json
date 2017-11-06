@@ -2,7 +2,7 @@
   "name": "songshenzong/api",
   "description": "A RESTful API package for the Laravel",
   "keywords": [
-    "RESTful",
+    "restful",
     "api",
     "laravel",
     "response",
@@ -16,8 +16,8 @@
   },
   "authors": [
     {
-      "name": "Connor",
-      "email": "connor.niu@gmail.com"
+      "name": "Songshenzong",
+      "email": "i@songshenzong.com"
     }
   ],
   "require": {
