@@ -2,6 +2,10 @@
 
 ---
 
+## Version 1.2.0 (2017-11-23)
+
+- Package Auto Discovery
+
 ## Version 1.1.0 (2017-10-17)
 
 - allow CORS

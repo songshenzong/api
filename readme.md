@@ -12,11 +12,7 @@ composer require songshenzong/api
 
 ## Laravel 5.x
 
-After updating composer, add the ServiceProvider to the providers array in `config/app.php`
-
-```php
-Songshenzong\Api\ServiceProvider::class,
-```
+Package Auto Discovery
 
 
 ## Documentation

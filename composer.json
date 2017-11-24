@@ -30,5 +30,15 @@
     "files": [
       "src/Helpers.php"
     ]
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Songshenzong\\Api\\ServiceProvider"
+      ],
+      "aliases": {
+        "SongshenzongApi": "Songshenzong\\Api\\Facade"
+      }
+    }
   }
 }
