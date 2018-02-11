@@ -1,10 +1,9 @@
-<p align="center"><a href="https://songshenzong.com" target="_blank"><img src="https://songshenzong.com/images/logo.png"></a></p>
+[![Songshenzong](https://songshenzong.com/images/logo.png)](https://songshenzong.com)
 
-<p align="center">
-<a href="https://packagist.org/packages/songshenzong/api"><img src="https://poser.pugx.org/songshenzong/api/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/songshenzong/api"><img src="https://poser.pugx.org/songshenzong/api/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/songshenzong/api"><img src="https://poser.pugx.org/songshenzong/api/license.svg" alt="License"></a>
-</p>
+[![Total Downloads](https://poser.pugx.org/songshenzong/api/d/total.svg)](https://packagist.org/packages/songshenzong/api)
+[![Latest Stable Version](https://poser.pugx.org/songshenzong/api/v/stable.svg)](https://packagist.org/packages/songshenzong/api)
+[![License](https://poser.pugx.org/songshenzong/api/license.svg)](https://packagist.org/packages/songshenzong/api)
+[![PHP Version](https://img.shields.io/packagist/php-v/songshenzong/api.svg)](https://packagist.org/packages/songshenzong/api)
 
 
 ## About Api
@@ -28,7 +27,7 @@ Package Auto Discovery
 After updating composer, add the ServiceProvider to the providers array in `config/app.php`
 
 ```php
-Songshenzong\Api\ServiceProvider::class, 
+Songshenzong\Api\ServiceProvider::class,
 ```
 
 ## Documentation
