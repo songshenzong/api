@@ -29,7 +29,7 @@ After updating composer, add the ServiceProvider to the providers array in `conf
 
 ```php
 
-      Aliyun\ServiceProvider::class,
+      Songshenzong\Api\ServiceProvider::class,
       
 ```
 
