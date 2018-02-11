@@ -4,7 +4,6 @@
 [![Latest Stable Version](https://poser.pugx.org/songshenzong/api/v/stable.svg)](https://packagist.org/packages/songshenzong/api)
 [![License](https://poser.pugx.org/songshenzong/api/license.svg)](https://packagist.org/packages/songshenzong/api)
 [![PHP Version](https://img.shields.io/packagist/php-v/songshenzong/api.svg)](https://packagist.org/packages/songshenzong/api)
-[![Downloads](https://img.shields.io/packagist/dt/songshenzong/api.svg)](https://packagist.org/packages/songshenzong/api)
 
 
 ## About
