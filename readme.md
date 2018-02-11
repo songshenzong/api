@@ -7,7 +7,7 @@
 [![Downloads](https://img.shields.io/packagist/dt/songshenzong/api.svg)](https://packagist.org/packages/songshenzong/api)
 
 
-## About Api
+## About
 
 A RESTful API package for the Laravel
 
