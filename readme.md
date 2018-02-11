@@ -1,4 +1,13 @@
-# Songshenzong Api
+<p align="center"><a href="https://songshenzong.com" target="_blank"><img src="https://songshenzong.com/images/logo.png"></a></p>
+
+<p align="center">
+<a href="https://packagist.org/packages/songshenzong/api"><img src="https://poser.pugx.org/songshenzong/api/d/total.svg" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/songshenzong/api"><img src="https://poser.pugx.org/songshenzong/api/v/stable.svg" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/songshenzong/api"><img src="https://poser.pugx.org/songshenzong/api/license.svg" alt="License"></a>
+</p>
+
+
+## About Api
 
 A RESTful API package for the Laravel
 
