@@ -28,9 +28,7 @@ Package Auto Discovery
 After updating composer, add the ServiceProvider to the providers array in `config/app.php`
 
 ```php
-
-      Songshenzong\Api\ServiceProvider::class,
-      
+Songshenzong\Api\ServiceProvider::class, 
 ```
 
 ## Documentation
