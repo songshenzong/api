@@ -21,7 +21,7 @@ composer require songshenzong/api
 ## Laravel
 
 ```shell
-php artisan vendor:publish
+php artisan vendor:publish --provider="Songshenzong\Api\ServiceProvider"
 ```
 
 ## Documentation
