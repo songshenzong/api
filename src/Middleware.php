@@ -8,7 +8,7 @@ use Illuminate\Container\Container;
 use Illuminate\Pipeline\Pipeline;
 use Illuminate\Routing\Router;
 use Songshenzong\Api\Exception\Handler;
-use function env;
+use function config;
 
 /**
  * Class Middleware
@@ -73,12 +73,13 @@ class Middleware
 
         // CORS
         if (isset($_SERVER['HTTP_ORIGIN'])) {
-            if (env('SONGSHENZONG_API_CORS', true)) {
+
+            if (config('api.cors.cors', true)) {
                 header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
-                if (env('SONGSHENZONG_API_CORS_CREDENTIALS', true)) {
+                if (config('api.cors.credentials', true)) {
                     header('Access-Control-Allow-Credentials: true');
                 }
-                $age = env('SONGSHENZONG_API_CORS_MAX_AGE', 86400);
+                $age = config('api.cors.max_age', 86400);
                 header("Access-Control-Max-Age: $age");
             }
 
@@ -107,7 +108,7 @@ class Middleware
      */
     private function isCompatibleWithDingo(Exception $exception)
     {
-        if (!env('SONGSHENZONG_API_DINGO', false)) {
+        if (!config('api.dingo')) {
             return false;
         }
 
@@ -127,7 +128,7 @@ class Middleware
             return false;
         }
 
-        if (app('request')->segment(1) === env('API_PREFIX')) {
+        if (app('request')->segment(1) === config('api.prefix')) {
             return true;
         }
         return false;
@@ -140,7 +141,7 @@ class Middleware
     private function inPrefixes()
     {
 
-        $array = $this->getEnvArray('SONGSHENZONG_API_PREFIX');
+        $array = $this->getEnvArray('prefix');
 
 
         if ($array === []) {
@@ -158,7 +159,7 @@ class Middleware
     private function inExcludes()
     {
 
-        $array = $this->getEnvArray('SONGSHENZONG_API_EXCLUDE');
+        $array = $this->getEnvArray('exclude');
 
         if ($array === []) {
             return false;
@@ -176,7 +177,7 @@ class Middleware
      */
     private function getEnvArray($name)
     {
-        $env = env($name, null);
+        $env = config("api.$name", null);
 
         if ($env === true) {
             $env = 'true';
@@ -204,7 +205,7 @@ class Middleware
      */
     private function inDomains()
     {
-        $array = $this->getEnvArray('SONGSHENZONG_API_DOMAIN');
+        $array = $this->getEnvArray('domain');
 
         if ($array === []) {
             return true;

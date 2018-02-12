@@ -2,6 +2,7 @@
 
 namespace Songshenzong\Api;
 
+use function config;
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Routing\Router;
 use Songshenzong\Api\Exception\Handler;
@@ -40,6 +41,9 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     {
         $kernel = $this->app->make(Kernel::class);
         $kernel->prependMiddleware(Middleware::class);
+        $this->publishes([
+                             __DIR__ . '/../config/api.php' => config_path('api.php'),
+                         ]);
     }
 
     /**
@@ -61,7 +65,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->app->singleton('SongshenzongApi.exception', function ($app) {
             return new Handler(
                 $app['Illuminate\Contracts\Debug\ExceptionHandler'],
-                env('SONGSHENZONG_API_DEBUG', env('APP_DEBUG'))
+               config('api.debug')
             );
         });
 

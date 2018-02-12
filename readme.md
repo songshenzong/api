@@ -20,14 +20,8 @@ composer require songshenzong/api
 
 ## Laravel
 
-Package Auto Discovery
-
-
-## Before Laravel 5.5
-After updating composer, add the ServiceProvider to the providers array in `config/app.php`
-
-```php
-Songshenzong\Api\ServiceProvider::class,
+```shell
+php artisan vendor:publish
 ```
 
 ## Documentation

@@ -944,10 +944,10 @@ class Api
             }
         }
 
-        $status_code = env('SONGSHENZONG_API_VALIDATOR_HTTP_STATUS_CODE', 422);
+        $status_code = config('api.validator.status_code', 422);
 
         if (null === $message) {
-            $message = env('SONGSHENZONG_API_VALIDATOR', 'Unprocessable Entity');
+            $message = config('api.validator.message', 'Unprocessable Entity');
         }
 
         if ($validator->fails()) {
