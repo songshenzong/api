@@ -44,7 +44,5 @@
         "SongshenzongApi": "Songshenzong\\Api\\Facade"
       }
     }
-  },
-  "minimum-stability": "dev",
-  "prefer-stable": true
+  }
 }
