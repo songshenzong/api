@@ -21,6 +21,8 @@ composer require songshenzong/api
 
 ## Laravel
 
+Publish configuration files. If not, They can not be serialized correctly when you execute the `config:cache` Artisan command.
+
 ```shell
 php artisan vendor:publish --provider="Songshenzong\Api\ServiceProvider"
 ```
