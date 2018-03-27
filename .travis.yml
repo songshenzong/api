@@ -4,9 +4,7 @@ php:
   - 7.2
 before_script:
   - curl --version
-  - composer self-update
   - composer install --no-interaction --prefer-source --dev
-  - curl -sSfL -o ~/.phpenv/versions/hhvm/bin/phpunit https://phar.phpunit.de/phpunit-5.7.phar
 #script: phpunit
 deploy:
   provider: releases
