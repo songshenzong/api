@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="All" tests="1" assertions="1" errors="0" failures="0" skipped="0" time="0.006335">
+    <testsuite name="Songshenzong\Api\Test\ApiTest" file="/Users/zwp/IdeaProjects/Composer/api/tests/ApiTest.php" tests="1" assertions="1" errors="0" failures="0" skipped="0" time="0.006335">
+      <testcase name="testError" class="Songshenzong\Api\Test\ApiTest" classname="Songshenzong.Api.Test.ApiTest" file="/Users/zwp/IdeaProjects/Composer/api/tests/ApiTest.php" line="15" assertions="1" time="0.006335"/>
+    </testsuite>
+  </testsuite>
+</testsuites>

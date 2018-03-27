@@ -3,9 +3,8 @@ install: true
 php:
   - 7.2
 before_script:
-  - curl --version
   - composer install --no-interaction --prefer-source --dev
-#script: phpunit
+script: phpunit
 deploy:
   provider: releases
   api_key:
