@@ -2,6 +2,10 @@
 
 ---
 
+## Version 2.1.0 (2018-03-27)
+
+- Support Helper Function set Http Status Code by Parameter just like `return api(200)->badRequest();`
+
 ## Version 2.0.0 (2018-02-12)
 
 - Need `php artisan vendor:publish` for `php artisan config:cache`
