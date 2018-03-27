@@ -1,5 +1,6 @@
-[![Songshenzong](https://cdn.songshenzong.com/images/logo.png)](https://songshenzong.com)
+[![Songshenzong](https://songshenzong.com/images/logo.png)](https://songshenzong.com)
 
+[![Build Status](https://travis-ci.org/songshenzong/api.svg?branch=master)](https://travis-ci.org/songshenzong/api)
 [![Total Downloads](https://poser.pugx.org/songshenzong/api/d/total.svg)](https://packagist.org/packages/songshenzong/api)
 [![Latest Stable Version](https://poser.pugx.org/songshenzong/api/v/stable.svg)](https://packagist.org/packages/songshenzong/api)
 [![License](https://poser.pugx.org/songshenzong/api/license.svg)](https://packagist.org/packages/songshenzong/api)
