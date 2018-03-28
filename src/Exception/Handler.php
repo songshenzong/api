@@ -168,7 +168,7 @@ class Handler implements ExceptionHandler
     protected function getStatusCode(Exception $exception)
     {
 
-        if ($exception instanceof SongshenzongException) {
+        if ($exception instanceof ApiException) {
             return $exception->getStatusCode();
         }
 
@@ -190,7 +190,7 @@ class Handler implements ExceptionHandler
     protected function getHttpStatusCode(Exception $exception)
     {
 
-        if ($exception instanceof SongshenzongException) {
+        if ($exception instanceof ApiException) {
             return $exception->getHttpStatusCode();
         }
 
@@ -211,7 +211,7 @@ class Handler implements ExceptionHandler
      */
     protected function getHeaders(Exception $exception)
     {
-        return $exception instanceof SongshenzongException ? $exception->getHeaders() : [];
+        return $exception instanceof ApiException ? $exception->getHeaders() : [];
     }
 
     /**
@@ -241,10 +241,14 @@ class Handler implements ExceptionHandler
 
         $replacements['status_code'] = $statusCode;
 
-        if ($exception instanceof SongshenzongException && $exception->hasErrors()) {
+        if ($exception instanceof ApiException && $exception->hasErrors()) {
             $replacements['errors'] = $exception->getErrors();
         }
 
+
+        if (isset($exception->Hypermedia)) {
+            $replacements = $replacements + $exception->Hypermedia;
+        }
 
         if ($this->runningInDebugMode()) {
             $replacements['debug'] = [
@@ -254,7 +258,6 @@ class Handler implements ExceptionHandler
                 'trace' => explode("\n", $exception->getTraceAsString()),
             ];
         }
-
 
         return array_merge($replacements, $this->replacements);
     }

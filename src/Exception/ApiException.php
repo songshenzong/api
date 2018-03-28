@@ -1,9 +1,6 @@
 <?php
 
 /*
- * This file is part of the Symfony package.
- *
- *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
@@ -11,18 +8,16 @@
 namespace Songshenzong\Api\Exception;
 
 use Exception;
+use Songshenzong\Api\Api;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
-/**
- * {@inheritDoc}
- */
 
 /**
- * Class SongshenzongException
+ * Class ApiException
  *
  * @package Songshenzong\Api\Exception
  */
-class SongshenzongException extends \RuntimeException implements HttpExceptionInterface
+class ApiException extends \RuntimeException implements HttpExceptionInterface
 {
 
     /**
@@ -49,30 +44,29 @@ class SongshenzongException extends \RuntimeException implements HttpExceptionIn
     protected $code;
 
     /**
-     * {@inheritDoc}
+     * @var array
      */
+    public $Hypermedia;
+
     /**
-     * SongshenzongException constructor.
+     * ApiException constructor.
      *
-     * @param string         $httpStatusCode
-     * @param int            $statusCode
-     * @param null           $message
-     * @param null           $errors
-     * @param int            $code
+     * @param Api            $api
      * @param Exception|null $previous
      * @param array          $headers
      */
-    public function __construct($httpStatusCode, $statusCode, $message = null, $errors = null, $code = 0, Exception $previous = null, $headers = [])
+    public function __construct(Api $api, Exception $previous = null, $headers = [])
     {
 
 
-        $this->httpStatusCode = $httpStatusCode;
-        $this->statusCode     = $statusCode;
-        $this->errors         = $errors;
+        $this->httpStatusCode = $api->getHttpStatusCode() ?: $api->getStatusCode();
+        $this->statusCode     = $api->getStatusCode();
+        $this->errors         = $api->getErrors();
+        $this->code           = $api->getCode();
+        $this->Hypermedia     = $api->getHypermedia();
         $this->headers        = $headers;
-        $this->code           = $code;
 
-        parent::__construct($message, $code, $previous);
+        parent::__construct($api->getMessage(), $this->code, $previous);
     }
 
 

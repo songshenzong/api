@@ -3,6 +3,7 @@
 if (!function_exists('songshenzongApi')) {
     /**
      * @param null $httpStatusCode
+     *
      * @return \Illuminate\Foundation\Application|mixed
      */
     function songshenzongApi($httpStatusCode = null)
@@ -18,6 +19,7 @@ if (!function_exists('songshenzongApi')) {
 if (!function_exists('api')) {
     /**
      * @param null $httpStatusCode
+     *
      * @return \Illuminate\Foundation\Application|mixed
      */
     function api($httpStatusCode = null)

@@ -21,6 +21,7 @@ class Middleware
      * @var Container
      */
     protected $app;
+
     /**
      * @var Handler
      */
