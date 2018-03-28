@@ -2,6 +2,10 @@
 
 ---
 
+## Version 2.2.0 (2018-03-28)
+
+- Support Hypermedia API
+
 ## Version 2.1.0 (2018-03-27)
 
 - Support Helper Function set Http Status Code by Parameter just like `return api(200)->badRequest();`

@@ -29,7 +29,8 @@
   },
   "autoload": {
     "psr-4": {
-      "Songshenzong\\Api\\": "src/"
+      "Songshenzong\\Api\\": "src/",
+      "Songshenzong\\Api\\Test\\": "tests"
     },
     "files": [
       "src/Helpers.php"
