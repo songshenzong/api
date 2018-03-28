@@ -4,7 +4,7 @@ if (!function_exists('songshenzongApi')) {
     /**
      * @param null $httpStatusCode
      *
-     * @return \Illuminate\Foundation\Application|mixed
+     * @return Songshenzong\Api\Api
      */
     function songshenzongApi($httpStatusCode = null)
     {
@@ -20,7 +20,7 @@ if (!function_exists('api')) {
     /**
      * @param null $httpStatusCode
      *
-     * @return \Illuminate\Foundation\Application|mixed
+     * @return Songshenzong\Api\Api
      */
     function api($httpStatusCode = null)
     {
