@@ -74,11 +74,15 @@ class Middleware
 
         // CORS
         if (config('api.cors.cors', true)) {
-            header('Access-Control-Allow-Origin: *');
+            if (isset($_SERVER['HTTP_ORIGIN'])) {
+                header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+            } else {
+                header('Access-Control-Allow-Origin: *');
+            }
             if (config('api.cors.credentials', true)) {
                 header('Access-Control-Allow-Credentials: true');
             }
-            header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
+            header("Access-Control-Allow-Headers: Origin, X-Requested-With, Authorization, Content-Type, Accept");
             header("Access-Control-Allow-Methods: *");
             $age = config('api.cors.max_age', 86400);
             header("Access-Control-Max-Age: $age");
