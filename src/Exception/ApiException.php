@@ -57,8 +57,6 @@ class ApiException extends \RuntimeException implements HttpExceptionInterface
      */
     public function __construct(Api $api, Exception $previous = null, $headers = [])
     {
-
-
         $this->httpStatusCode = $api->getHttpStatusCode() ?: $api->getStatusCode();
         $this->statusCode     = $api->getStatusCode();
         $this->errors         = $api->getErrors();
