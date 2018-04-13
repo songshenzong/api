@@ -2,37 +2,34 @@
 
 namespace Songshenzong\Api\Traits;
 
+use function dd;
 use Songshenzong\Api\Exception\ApiException;
 
+/**
+ * Trait Errors
+ *
+ * @package Songshenzong\Api\Traits
+ */
 trait Errors
 {
+
     /**
-     * @var
+     * @var mixed
      */
     protected $errors;
 
     /**
-     * Public Errors Exception Method.
-     *
-     * @param      $statusCode
-     * @param      $message
-     * @param null $errors
+     * @param   int    $statusCode
+     * @param   string $message
+     * @param null     $errors
      *
      * @throws ApiException
      */
-    public function errors($statusCode, $message, $errors = null)
+    public function errors(int $statusCode, string $message, $errors = null): void
     {
-        if (null === $this->getStatusCode()) {
-            $this->setStatusCode($statusCode);
-        }
-
-        if (null === $this->getMessage()) {
-            $this->setMessage($message);
-        }
-
-        if (null === $this->getErrors()) {
-            $this->setErrors($errors);
-        }
+        $this->setStatusCode($statusCode);
+        $this->setMessage($message);
+        $this->setErrors($errors);
 
         throw new ApiException($this);
     }
@@ -43,7 +40,7 @@ trait Errors
      *
      * @return $this
      */
-    public function setErrors($errors)
+    public function setErrors($errors): self
     {
         $this->errors = $errors;
         return $this;
@@ -67,12 +64,11 @@ trait Errors
      * @param string $message
      * @param null   $errors
      *
-     * @return mixed
      * @throws ApiException
      */
-    public function badRequest($message = 'Bad Request', $errors = null)
+    public function badRequest($message = 'Bad Request', $errors = null): void
     {
-        return $this->errors(400, $message, $errors);
+        $this->errors(400, $message, $errors);
     }
 
 
@@ -90,12 +86,11 @@ trait Errors
      * @param string $message
      * @param null   $errors
      *
-     * @return mixed
      * @throws ApiException
      */
-    public function unauthorized($message = 'Unauthorized', $errors = null)
+    public function unauthorized($message = 'Unauthorized', $errors = null): void
     {
-        return $this->errors(401, $message, $errors);
+        $this->errors(401, $message, $errors);
     }
 
 
@@ -108,12 +103,11 @@ trait Errors
      * @param string $message
      * @param null   $errors
      *
-     * @return mixed
      * @throws ApiException
      */
-    public function forbidden($message = 'Forbidden', $errors = null)
+    public function forbidden($message = 'Forbidden', $errors = null): void
     {
-        return $this->errors(403, $message, $errors);
+        $this->errors(403, $message, $errors);
     }
 
 
@@ -126,12 +120,11 @@ trait Errors
      * @param string $message
      * @param null   $errors
      *
-     * @return mixed
      * @throws ApiException
      */
-    public function notFound($message = 'Not Found', $errors = null)
+    public function notFound($message = 'Not Found', $errors = null): void
     {
-        return $this->errors(404, $message, $errors);
+        $this->errors(404, $message, $errors);
     }
 
 
@@ -144,12 +137,11 @@ trait Errors
      * @param string $message
      * @param null   $errors
      *
-     * @return mixed
      * @throws ApiException
      */
-    public function methodNotAllowed($message = 'Method Not Allowed', $errors = null)
+    public function methodNotAllowed($message = 'Method Not Allowed', $errors = null): void
     {
-        return $this->errors(405, $message, $errors);
+        $this->errors(405, $message, $errors);
     }
 
 
@@ -162,12 +154,11 @@ trait Errors
      * @param string $message
      * @param null   $errors
      *
-     * @return mixed
      * @throws ApiException
      */
-    public function notAcceptable($message = 'Not Acceptable', $errors = null)
+    public function notAcceptable($message = 'Not Acceptable', $errors = null): void
     {
-        return $this->errors(406, $message, $errors);
+        $this->errors(406, $message, $errors);
     }
 
     /**
@@ -179,12 +170,11 @@ trait Errors
      * @param string $message
      * @param null   $errors
      *
-     * @return mixed
      * @throws ApiException
      */
-    public function conflict($message = 'Conflict', $errors = null)
+    public function conflict($message = 'Conflict', $errors = null): void
     {
-        return $this->errors(409, $message, $errors);
+        $this->errors(409, $message, $errors);
     }
 
 
@@ -200,12 +190,11 @@ trait Errors
      * @param string $message
      * @param null   $errors
      *
-     * @return mixed
      * @throws ApiException
      */
-    public function gone($message = 'Gone', $errors = null)
+    public function gone($message = 'Gone', $errors = null): void
     {
-        return $this->errors(410, $message, $errors);
+        $this->errors(410, $message, $errors);
     }
 
 
@@ -217,12 +206,11 @@ trait Errors
      * @param string $message
      * @param null   $errors
      *
-     * @return mixed
      * @throws ApiException
      */
-    public function lengthRequired($message = 'Length Required', $errors = null)
+    public function lengthRequired($message = 'Length Required', $errors = null): void
     {
-        return $this->errors(411, $message, $errors);
+        $this->errors(411, $message, $errors);
     }
 
 
@@ -234,12 +222,11 @@ trait Errors
      * @param string $message
      * @param null   $errors
      *
-     * @return mixed
      * @throws ApiException
      */
-    public function preconditionFailed($message = 'Precondition Failed', $errors = null)
+    public function preconditionFailed($message = 'Precondition Failed', $errors = null): void
     {
-        return $this->errors(412, $message, $errors);
+        $this->errors(412, $message, $errors);
     }
 
 
@@ -252,12 +239,11 @@ trait Errors
      * @param string $message
      * @param null   $errors
      *
-     * @return mixed
      * @throws ApiException
      */
-    public function unsupportedMediaType($message = 'Unsupported Media Type', $errors = null)
+    public function unsupportedMediaType($message = 'Unsupported Media Type', $errors = null): void
     {
-        return $this->errors(413, $message, $errors);
+        $this->errors(413, $message, $errors);
     }
 
 
@@ -269,12 +255,11 @@ trait Errors
      * @param string $message
      * @param null   $errors
      *
-     * @return mixed
      * @throws ApiException
      */
-    public function unprocessableEntity($message = 'Unprocessable Entity', $errors = null)
+    public function unprocessableEntity($message = 'Unprocessable Entity', $errors = null): void
     {
-        return $this->errors(422, $message, $errors);
+        $this->errors(422, $message, $errors);
     }
 
     /**
@@ -287,12 +272,11 @@ trait Errors
      * @param string $message
      * @param null   $errors
      *
-     * @return mixed
      * @throws ApiException
      */
-    public function preconditionRequired($message = 'Precondition Required', $errors = null)
+    public function preconditionRequired($message = 'Precondition Required', $errors = null): void
     {
-        return $this->errors(428, $message, $errors);
+        $this->errors(428, $message, $errors);
     }
 
 
@@ -304,12 +288,11 @@ trait Errors
      * @param string $message
      * @param null   $errors
      *
-     * @return mixed
      * @throws ApiException
      */
-    public function tooManyRequests($message = 'Too Many Requests', $errors = null)
+    public function tooManyRequests($message = 'Too Many Requests', $errors = null): void
     {
-        return $this->errors(429, $message, $errors);
+        $this->errors(429, $message, $errors);
     }
 
 
@@ -322,12 +305,11 @@ trait Errors
      * @param string $message
      * @param null   $errors
      *
-     * @return mixed
      * @throws ApiException
      */
-    public function internalServerError($message = 'Internal Server Error', $errors = null)
+    public function internalServerError($message = 'Internal Server Error', $errors = null): void
     {
-        return $this->errors(500, $message, $errors);
+        $this->errors(500, $message, $errors);
     }
 
 
@@ -340,12 +322,11 @@ trait Errors
      * @param string $message
      * @param null   $errors
      *
-     * @return mixed
      * @throws ApiException
      */
-    public function notImplemented($message = 'Not Implemented', $errors = null)
+    public function notImplemented($message = 'Not Implemented', $errors = null): void
     {
-        return $this->errors(501, $message, $errors);
+        $this->errors(501, $message, $errors);
     }
 
 
@@ -357,12 +338,11 @@ trait Errors
      * @param string $message
      * @param null   $errors
      *
-     * @return mixed
      * @throws ApiException
      */
-    public function badGateway($message = 'Bad Gateway', $errors = null)
+    public function badGateway($message = 'Bad Gateway', $errors = null): void
     {
-        return $this->errors(502, $message, $errors);
+        $this->errors(502, $message, $errors);
     }
 
 
@@ -375,12 +355,11 @@ trait Errors
      * @param string $message
      * @param null   $errors
      *
-     * @return mixed
      * @throws ApiException
      */
-    public function serviceUnavailable($message = 'Service Unavailable', $errors = null)
+    public function serviceUnavailable($message = 'Service Unavailable', $errors = null): void
     {
-        return $this->errors(503, $message, $errors);
+        $this->errors(503, $message, $errors);
     }
 
     /**
@@ -391,12 +370,11 @@ trait Errors
      * @param string $message
      * @param null   $errors
      *
-     * @return mixed
      * @throws ApiException
      */
-    public function gatewayTimeOut($message = 'Gateway Time-out', $errors = null)
+    public function gatewayTimeOut($message = 'Gateway Time-out', $errors = null): void
     {
-        return $this->errors(504, $message, $errors);
+        $this->errors(504, $message, $errors);
     }
 
 
@@ -408,12 +386,11 @@ trait Errors
      * @param string $message
      * @param null   $errors
      *
-     * @return mixed
      * @throws ApiException
      */
-    public function httpVersionNotSupported($message = 'HTTP Version Not Supported', $errors = null)
+    public function httpVersionNotSupported($message = 'HTTP Version Not Supported', $errors = null): void
     {
-        return $this->errors(505, $message, $errors);
+        $this->errors(505, $message, $errors);
     }
 
     /**
@@ -424,12 +401,11 @@ trait Errors
      * @param string $message
      * @param null   $errors
      *
-     * @return mixed
      * @throws ApiException
      */
-    public function variantAlsoNegotiates($message = 'Variant Also Negotiates', $errors = null)
+    public function variantAlsoNegotiates($message = 'Variant Also Negotiates', $errors = null): void
     {
-        return $this->errors(506, $message, $errors);
+        $this->errors(506, $message, $errors);
     }
 
 
@@ -441,12 +417,11 @@ trait Errors
      * @param string $message
      * @param null   $errors
      *
-     * @return mixed
      * @throws ApiException
      */
-    public function insufficientStorage($message = 'Insufficient Storage', $errors = null)
+    public function insufficientStorage($message = 'Insufficient Storage', $errors = null): void
     {
-        return $this->errors(507, $message, $errors);
+        $this->errors(507, $message, $errors);
     }
 
     /**
@@ -457,12 +432,11 @@ trait Errors
      * @param string $message
      * @param null   $errors
      *
-     * @return mixed
      * @throws ApiException
      */
-    public function loopDetected($message = 'Loop Detected', $errors = null)
+    public function loopDetected($message = 'Loop Detected', $errors = null): void
     {
-        return $this->errors(508, $message, $errors);
+        $this->errors(508, $message, $errors);
     }
 
 
@@ -474,12 +448,11 @@ trait Errors
      * @param string $message
      * @param null   $errors
      *
-     * @return mixed
      * @throws ApiException
      */
-    public function notExtended($message = 'Not Extended', $errors = null)
+    public function notExtended($message = 'Not Extended', $errors = null): void
     {
-        return $this->errors(510, $message, $errors);
+        $this->errors(510, $message, $errors);
     }
 
     /**
@@ -492,11 +465,10 @@ trait Errors
      * @param string $message
      * @param null   $errors
      *
-     * @return mixed
      * @throws ApiException
      */
-    public function networkAuthenticationRequired($message = 'Network Authentication Required', $errors = null)
+    public function networkAuthenticationRequired($message = 'Network Authentication Required', $errors = null): void
     {
-        return $this->errors(511, $message, $errors);
+        $this->errors(511, $message, $errors);
     }
 }

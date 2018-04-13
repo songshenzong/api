@@ -12,7 +12,7 @@ class ApiTest extends TestCase
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testError()
+    public function testError(): void
     {
         $this->assertInstanceOf(Api::class, new Api());
     }

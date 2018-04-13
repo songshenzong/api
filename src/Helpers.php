@@ -2,11 +2,11 @@
 
 if (!function_exists('songshenzongApi')) {
     /**
-     * @param null $httpStatusCode
+     * @param int $httpStatusCode
      *
      * @return Songshenzong\Api\Api
      */
-    function songshenzongApi($httpStatusCode = null)
+    function songshenzongApi(int $httpStatusCode = null)
     {
         if ($httpStatusCode === null) {
             return clone app('SongshenzongApi');
@@ -18,11 +18,11 @@ if (!function_exists('songshenzongApi')) {
 
 if (!function_exists('api')) {
     /**
-     * @param null $httpStatusCode
+     * @param int $httpStatusCode
      *
      * @return Songshenzong\Api\Api
      */
-    function api($httpStatusCode = null)
+    function api(int $httpStatusCode = null)
     {
         return songshenzongApi($httpStatusCode);
     }

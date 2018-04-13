@@ -5,6 +5,8 @@ namespace Songshenzong\Api;
 use Closure;
 use Exception;
 use Illuminate\Container\Container;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Pipeline\Pipeline;
 use Illuminate\Routing\Router;
 use Songshenzong\Api\Exception\Handler;
@@ -49,16 +51,15 @@ class Middleware
     /**
      * Handle an incoming request.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      *
-     * @param Closure                  $next
+     * @param Closure $next
      *
      * @return mixed
      * @throws Exception
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
-
 
         if (!$this->inPrefixes()) {
             return $next($request);
@@ -82,8 +83,8 @@ class Middleware
             if (config('api.cors.credentials', true)) {
                 header('Access-Control-Allow-Credentials: true');
             }
-            header("Access-Control-Allow-Headers: Origin, X-Requested-With, No-Cache, Authorization, X-Auth-Token, Content-Type, Accept");
-            header("Access-Control-Allow-Methods: GET, POST, HEAD, PUT, DELETE, PATCH, OPTIONS, TRACE");
+            header('Access-Control-Allow-Headers: Origin, X-Requested-With, No-Cache, Authorization, X-Auth-Token, Content-Type, Accept');
+            header('Access-Control-Allow-Methods: GET, POST, HEAD, PUT, DELETE, PATCH, OPTIONS, TRACE');
             $age = config('api.cors.max_age', 86400);
             header("Access-Control-Max-Age: $age");
         }
@@ -92,12 +93,15 @@ class Middleware
         try {
             $response = $this->sendRequestThroughRouter($request);
         } catch (Exception $exception) {
+
             if ($this->isCompatibleWithDingo($exception)) {
                 return $next($request);
             }
 
+
             $this->exception->report($exception);
             $response = $this->exception->handle($exception);
+
         }
 
 
@@ -109,17 +113,15 @@ class Middleware
      *
      * @return bool
      */
-    private function isCompatibleWithDingo(Exception $exception)
+    private function isCompatibleWithDingo(Exception $exception): bool
     {
         if (!config('api.dingo')) {
             return false;
         }
 
 
-        if (method_exists($exception, 'getHttpStatusCode')) {
-            if ($exception->getHttpStatusCode() !== 404) {
-                return false;
-            }
+        if (method_exists($exception, 'getHttpStatusCode') && $exception->getHttpStatusCode() !== 404) {
+            return false;
         }
 
 
@@ -134,6 +136,7 @@ class Middleware
         if (app('request')->segment(1) === config('api.prefix')) {
             return true;
         }
+
         return false;
     }
 
@@ -141,7 +144,7 @@ class Middleware
     /**
      * @return bool
      */
-    private function inPrefixes()
+    private function inPrefixes(): bool
     {
 
         $array = $this->getEnvArray('prefix');
@@ -152,14 +155,14 @@ class Middleware
         }
 
 
-        return in_array(app('request')->segment(1), $array, true);
+        return \in_array(app('request')->segment(1), $array, true);
     }
 
 
     /**
      * @return bool
      */
-    private function inExcludes()
+    private function inExcludes(): bool
     {
 
         $array = $this->getEnvArray('exclude');
@@ -169,7 +172,7 @@ class Middleware
         }
 
 
-        return in_array(app('request')->segment(1), $array, true);
+        return \in_array(app('request')->segment(1), $array, true);
     }
 
 
@@ -178,7 +181,7 @@ class Middleware
      *
      * @return array
      */
-    private function getEnvArray($name)
+    private function getEnvArray($name): array
     {
         $env = config("api.$name", null);
 
@@ -206,7 +209,7 @@ class Middleware
     /**
      * @return bool
      */
-    private function inDomains()
+    private function inDomains(): bool
     {
         $array = $this->getEnvArray('domain');
 
@@ -215,27 +218,26 @@ class Middleware
         }
 
 
-        return in_array(app('request')->getHttpHost(), $array, true);
+        return \in_array(app('request')->getHttpHost(), $array, true);
     }
 
     /**
-     * Send the request through the Dingo router.
+     * Send the request through the Songshenzong router.
      *
-     * @param \Dingo\Api\Http\Request $request
+     * @param Request $request
      *
-     * @return \Dingo\Api\Http\Response
+     * @return Response
      */
-    protected function sendRequestThroughRouter($request)
+    protected function sendRequestThroughRouter(Request $request): Response
     {
         return (new Pipeline($this->app))->send($request)->then(function ($request) {
 
+            /**
+             * @var Response $response
+             */
             $response = $this->router->dispatch($request);
 
             if (property_exists($response, 'exception') && $response->exception instanceof Exception) {
-                if (method_exists($response, 'getStatusCode')) {
-                    $response->exception->responseStatusCode = $response->getStatusCode();
-                }
-
                 throw $response->exception;
             }
 

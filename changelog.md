@@ -1,6 +1,11 @@
 # Songzhenzong API ChangeLog
 
 ---
+
+## Version 3.0.0 (2018-04-05)
+
+- Redesign
+
 ## Version 2.2.2 (2018-04-05)
 
 - Fixed Bug for CORS

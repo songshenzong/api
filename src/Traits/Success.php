@@ -3,48 +3,74 @@
 namespace Songshenzong\Api\Traits;
 
 use Illuminate\Http\JsonResponse;
-use Songshenzong\Api\Exception\ApiException;
 
+/**
+ * Trait Success
+ *
+ * @package Songshenzong\Api\Traits
+ */
 trait Success
 {
 
     /**
+     * @var mixed
+     */
+    protected $data;
+
+
+    /**
+     * @param mixed $data
+     *
+     * @return $this
+     */
+    public function setData($data): self
+    {
+        $this->data = $data;
+        return $this;
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
+
+
+    /**
      * Public Success Method.
      *
-     * @param      $statusCode
-     * @param      $message
-     * @param null $data
+     * @param  int    $statusCode
+     * @param  string $message
+     * @param null    $data
      *
      * @return JsonResponse
-     * @throws ApiException
+     * @throws \Songshenzong\Api\Exception\ApiException
      */
-    public function success($statusCode, $message, $data = null)
+    public function success(int $statusCode, string $message, $data = null): JsonResponse
     {
 
+        $this->setStatusCode($statusCode);
 
-        if (null === $this->getStatusCode()) {
-            $this->setStatusCode($statusCode);
-        }
+        $this->setMessage($message);
 
-        if (null === $this->getMessage()) {
-            $this->setMessage($message);
-        }
-
-        if (null === $this->getData()) {
-            $this->setData($data);
-        }
+        $this->setData($data);
 
 
         $content['message'] = $this->getMessage();
+
 
         if (null !== $this->getCode()) {
             $content['code'] = $this->getCode();
         }
 
+
         $content['status_code'] = $this->getStatusCode();
 
 
-        if (null !== $this->getData() && $this->getData() !== $this->getErrors()) {
+        if (null !== $this->getData() && $this->getErrors() !== $this->getData()) {
             $content['data'] = $this->getData();
         }
 
@@ -52,7 +78,7 @@ trait Success
             $content['errors'] = $this->getErrors();
         }
 
-        $content = $content + $this->Hypermedia;
+        $content += $this->Hypermedia;
 
         return new JsonResponse($content, $this->getHttpStatusCode() ?: $this->getStatusCode());
     }
@@ -66,36 +92,21 @@ trait Success
      *
      * @param null $data
      *
-     * @return mixed
-     * @throws ApiException
+     * @return JsonResponse
+     * @throws \Songshenzong\Api\Exception\ApiException
      */
-    public function ok($data = null)
+    public function ok($data = null): JsonResponse
     {
         return $this->success(200, 'OK', $data);
     }
 
     /**
-     * Success - item
-     *
      * @param null $data
      *
-     * @return mixed
-     * @throws ApiException
+     * @return JsonResponse
+     * @throws \Songshenzong\Api\Exception\ApiException
      */
-    public function item($data = null)
-    {
-        return $this->ok($data);
-    }
-
-    /**
-     * Success - collection
-     *
-     * @param null $data
-     *
-     * @return mixed
-     * @throws ApiException
-     */
-    public function collection($data = null)
+    public function item($data = null): JsonResponse
     {
         return $this->ok($data);
     }
@@ -103,10 +114,21 @@ trait Success
     /**
      * @param null $data
      *
-     * @return mixed
-     * @throws ApiException
+     * @return JsonResponse
+     * @throws \Songshenzong\Api\Exception\ApiException
      */
-    public function paginate($data = null)
+    public function collection($data = null): JsonResponse
+    {
+        return $this->ok($data);
+    }
+
+    /**
+     * @param null $data
+     *
+     * @return JsonResponse
+     * @throws \Songshenzong\Api\Exception\ApiException
+     */
+    public function paginate($data = null): JsonResponse
     {
         return $this->ok($data);
     }
@@ -119,10 +141,10 @@ trait Success
      * @param string $message
      * @param null   $data
      *
-     * @return mixed
-     * @throws ApiException
+     * @return JsonResponse
+     * @throws \Songshenzong\Api\Exception\ApiException
      */
-    public function created($message = 'Created', $data = null)
+    public function created($message = 'Created', $data = null): JsonResponse
     {
         return $this->success(201, $message, $data);
     }
@@ -136,10 +158,10 @@ trait Success
      * @param string $message
      * @param null   $data
      *
-     * @return mixed
-     * @throws ApiException
+     * @return JsonResponse
+     * @throws \Songshenzong\Api\Exception\ApiException
      */
-    public function accepted($message = 'Accepted', $data = null)
+    public function accepted($message = 'Accepted', $data = null): JsonResponse
     {
         return $this->success(202, $message, $data);
     }
@@ -153,10 +175,10 @@ trait Success
      * @param string $message
      * @param null   $data
      *
-     * @return mixed
-     * @throws ApiException
+     * @return JsonResponse
+     * @throws \Songshenzong\Api\Exception\ApiException
      */
-    public function nonAuthoritativeInformation($message = 'Non-Authoritative Information', $data = null)
+    public function nonAuthoritativeInformation($message = 'Non-Authoritative Information', $data = null): JsonResponse
     {
         return $this->success(203, $message, $data);
     }
@@ -169,10 +191,10 @@ trait Success
      * @param string $message
      * @param null   $data
      *
-     * @return mixed
-     * @throws ApiException
+     * @return JsonResponse
+     * @throws \Songshenzong\Api\Exception\ApiException
      */
-    public function noContent($message = 'No Content', $data = null)
+    public function noContent($message = 'No Content', $data = null): JsonResponse
     {
         return $this->success(204, $message, $data);
     }
@@ -187,10 +209,10 @@ trait Success
      * @param string $message
      * @param null   $data
      *
-     * @return mixed
-     * @throws ApiException
+     * @return JsonResponse
+     * @throws \Songshenzong\Api\Exception\ApiException
      */
-    public function resetContent($message = 'Reset Content', $data = null)
+    public function resetContent($message = 'Reset Content', $data = null): JsonResponse
     {
         return $this->success(205, $message, $data);
     }

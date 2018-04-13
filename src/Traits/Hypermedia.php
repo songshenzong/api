@@ -2,6 +2,11 @@
 
 namespace Songshenzong\Api\Traits;
 
+/**
+ * Trait Hypermedia
+ *
+ * @package Songshenzong\Api\Traits
+ */
 trait Hypermedia
 {
 
@@ -13,29 +18,29 @@ trait Hypermedia
     /**
      * @return array
      */
-    public function getHypermedia()
+    public function getHypermedia(): array
     {
         return $this->Hypermedia;
     }
 
     /**
-     * @param $key
-     * @param $value
+     * @param string $key
+     * @param        $value
      *
-     * @return $this
+     * @return self
      */
-    public function setHypermedia($key, $value)
+    public function setHypermedia(string $key, $value): self
     {
         $this->Hypermedia[$key] = $value;
         return $this;
     }
 
     /**
-     * @param $value
+     * @param string $value
      *
-     * @return $this
+     * @return self
      */
-    public function setDocumentationUrl($value)
+    public function setDocumentationUrl(string $value): self
     {
         $this->Hypermedia['documentation_url'] = $value;
         return $this;
@@ -43,22 +48,22 @@ trait Hypermedia
 
 
     /**
-     * @param $value
+     * @param string $value
      *
-     * @return $this
+     * @return self
      */
-    public function setAuthorizationsUrl($value)
+    public function setAuthorizationsUrl(string $value): self
     {
         $this->Hypermedia['authorizations_url'] = $value;
         return $this;
     }
 
     /**
-     * @param $value
+     * @param string $value
      *
-     * @return $this
+     * @return self
      */
-    public function setCurrentUserUrl($value)
+    public function setCurrentUserUrl(string $value): self
     {
         $this->Hypermedia['current_user_url'] = $value;
         return $this;

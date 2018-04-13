@@ -1,52 +1,45 @@
 <?php
 
-/*
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Songshenzong\Api\Exception;
 
+use function dd;
 use Exception;
 use Songshenzong\Api\Api;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
-
+use RuntimeException;
 
 /**
  * Class ApiException
  *
  * @package Songshenzong\Api\Exception
  */
-class ApiException extends \RuntimeException implements HttpExceptionInterface
+class ApiException extends RuntimeException implements HttpExceptionInterface
 {
 
     /**
-     * MessageBag errors.
-     *
-     * @var \Illuminate\Support\MessageBag
+     * @var int
      */
     private $httpStatusCode;
+
     /**
      * @var int
      */
     private $statusCode;
-    /**
-     * @var null
-     */
-    protected $errors;
-    /**
-     * @var array
-     */
-    private $headers;
-    /**
-     * @var int
-     */
-    protected $code;
 
     /**
      * @var array
      */
-    public $Hypermedia;
+    private $errors;
+
+    /**
+     * @var array
+     */
+    private $headers;
+
+    /**
+     * @var array
+     */
+    private $Hypermedia;
 
     /**
      * ApiException constructor.
@@ -60,18 +53,25 @@ class ApiException extends \RuntimeException implements HttpExceptionInterface
         $this->httpStatusCode = $api->getHttpStatusCode() ?: $api->getStatusCode();
         $this->statusCode     = $api->getStatusCode();
         $this->errors         = $api->getErrors();
-        $this->code           = $api->getStatusCode();
         $this->Hypermedia     = $api->getHypermedia();
         $this->headers        = $headers;
 
-        parent::__construct($api->getMessage(), $this->code, $previous);
+        parent::__construct($api->getMessage(), $api->getCode(), $previous);
     }
 
 
     /**
-     * @return \Illuminate\Support\MessageBag|string
+     * @return array
      */
-    public function getHttpStatusCode()
+    public function getHypermedia(): array
+    {
+        return $this->Hypermedia;
+    }
+
+    /**
+     * @return int
+     */
+    public function getHttpStatusCode(): int
     {
         return $this->httpStatusCode;
     }
@@ -79,29 +79,14 @@ class ApiException extends \RuntimeException implements HttpExceptionInterface
     /**
      * @return int
      */
-    public function getStatusCode()
+    public function getStatusCode(): int
     {
-        // if (!$this -> httpStatusCode) {
-        //     return $this -> statusCode;
-        // }
-        // if ($this -> httpStatusCode != $this -> statusCode) {
-        //     return $this -> httpStatusCode;
-        // }
-
         return $this->statusCode;
     }
 
 
     /**
-     * @return int
-     */
-    public function getOriginalStatusCode()
-    {
-        return $this->statusCode;
-    }
-
-    /**
-     * @return null
+     * @return array|null|object
      */
     public function getErrors()
     {
@@ -112,17 +97,8 @@ class ApiException extends \RuntimeException implements HttpExceptionInterface
     /**
      * @return array
      */
-    public function getHeaders()
+    public function getHeaders(): array
     {
         return $this->headers;
-    }
-
-
-    /**
-     * @return bool
-     */
-    public function hasErrors()
-    {
-        return !empty($this->errors);
     }
 }
