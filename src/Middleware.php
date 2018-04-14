@@ -227,8 +227,9 @@ class Middleware
      * @param Request $request
      *
      * @return Response
+     * @throws \Exception
      */
-    protected function sendRequestThroughRouter(Request $request): Response
+    protected function sendRequestThroughRouter(Request $request)
     {
         return (new Pipeline($this->app))->send($request)->then(function ($request) {
 
