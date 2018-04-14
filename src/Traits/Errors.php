@@ -2,7 +2,6 @@
 
 namespace Songshenzong\Api\Traits;
 
-use function dd;
 use Songshenzong\Api\Exception\ApiException;
 
 /**
@@ -68,7 +67,11 @@ trait Errors
      */
     public function badRequest($message = 'Bad Request', $errors = null): void
     {
-        $this->errors(400, $message, $errors);
+        $this->setStatusCode(400);
+        $this->setMessage($message);
+        $this->setErrors($errors);
+
+        throw new ApiException($this);
     }
 
 
@@ -90,7 +93,11 @@ trait Errors
      */
     public function unauthorized($message = 'Unauthorized', $errors = null): void
     {
-        $this->errors(401, $message, $errors);
+        $this->setStatusCode(401);
+        $this->setMessage($message);
+        $this->setErrors($errors);
+
+        throw new ApiException($this);
     }
 
 
@@ -107,7 +114,11 @@ trait Errors
      */
     public function forbidden($message = 'Forbidden', $errors = null): void
     {
-        $this->errors(403, $message, $errors);
+        $this->setStatusCode(403);
+        $this->setMessage($message);
+        $this->setErrors($errors);
+
+        throw new ApiException($this);
     }
 
 
@@ -124,7 +135,11 @@ trait Errors
      */
     public function notFound($message = 'Not Found', $errors = null): void
     {
-        $this->errors(404, $message, $errors);
+        $this->setStatusCode(404);
+        $this->setMessage($message);
+        $this->setErrors($errors);
+
+        throw new ApiException($this);
     }
 
 
@@ -141,7 +156,11 @@ trait Errors
      */
     public function methodNotAllowed($message = 'Method Not Allowed', $errors = null): void
     {
-        $this->errors(405, $message, $errors);
+        $this->setStatusCode(405);
+        $this->setMessage($message);
+        $this->setErrors($errors);
+
+        throw new ApiException($this);
     }
 
 
@@ -158,7 +177,11 @@ trait Errors
      */
     public function notAcceptable($message = 'Not Acceptable', $errors = null): void
     {
-        $this->errors(406, $message, $errors);
+        $this->setStatusCode(406);
+        $this->setMessage($message);
+        $this->setErrors($errors);
+
+        throw new ApiException($this);
     }
 
     /**
@@ -174,7 +197,11 @@ trait Errors
      */
     public function conflict($message = 'Conflict', $errors = null): void
     {
-        $this->errors(409, $message, $errors);
+        $this->setStatusCode(409);
+        $this->setMessage($message);
+        $this->setErrors($errors);
+
+        throw new ApiException($this);
     }
 
 
@@ -194,7 +221,11 @@ trait Errors
      */
     public function gone($message = 'Gone', $errors = null): void
     {
-        $this->errors(410, $message, $errors);
+        $this->setStatusCode(410);
+        $this->setMessage($message);
+        $this->setErrors($errors);
+
+        throw new ApiException($this);
     }
 
 
@@ -210,7 +241,11 @@ trait Errors
      */
     public function lengthRequired($message = 'Length Required', $errors = null): void
     {
-        $this->errors(411, $message, $errors);
+        $this->setStatusCode(411);
+        $this->setMessage($message);
+        $this->setErrors($errors);
+
+        throw new ApiException($this);
     }
 
 
@@ -226,7 +261,11 @@ trait Errors
      */
     public function preconditionFailed($message = 'Precondition Failed', $errors = null): void
     {
-        $this->errors(412, $message, $errors);
+        $this->setStatusCode(412);
+        $this->setMessage($message);
+        $this->setErrors($errors);
+
+        throw new ApiException($this);
     }
 
 
@@ -243,7 +282,11 @@ trait Errors
      */
     public function unsupportedMediaType($message = 'Unsupported Media Type', $errors = null): void
     {
-        $this->errors(413, $message, $errors);
+        $this->setStatusCode(413);
+        $this->setMessage($message);
+        $this->setErrors($errors);
+
+        throw new ApiException($this);
     }
 
 
@@ -259,7 +302,11 @@ trait Errors
      */
     public function unprocessableEntity($message = 'Unprocessable Entity', $errors = null): void
     {
-        $this->errors(422, $message, $errors);
+        $this->setStatusCode(422);
+        $this->setMessage($message);
+        $this->setErrors($errors);
+
+        throw new ApiException($this);
     }
 
     /**
@@ -276,7 +323,11 @@ trait Errors
      */
     public function preconditionRequired($message = 'Precondition Required', $errors = null): void
     {
-        $this->errors(428, $message, $errors);
+        $this->setStatusCode(428);
+        $this->setMessage($message);
+        $this->setErrors($errors);
+
+        throw new ApiException($this);
     }
 
 
@@ -292,7 +343,11 @@ trait Errors
      */
     public function tooManyRequests($message = 'Too Many Requests', $errors = null): void
     {
-        $this->errors(429, $message, $errors);
+        $this->setStatusCode(429);
+        $this->setMessage($message);
+        $this->setErrors($errors);
+
+        throw new ApiException($this);
     }
 
 
@@ -309,7 +364,11 @@ trait Errors
      */
     public function internalServerError($message = 'Internal Server Error', $errors = null): void
     {
-        $this->errors(500, $message, $errors);
+        $this->setStatusCode(500);
+        $this->setMessage($message);
+        $this->setErrors($errors);
+
+        throw new ApiException($this);
     }
 
 
@@ -326,7 +385,11 @@ trait Errors
      */
     public function notImplemented($message = 'Not Implemented', $errors = null): void
     {
-        $this->errors(501, $message, $errors);
+        $this->setStatusCode(501);
+        $this->setMessage($message);
+        $this->setErrors($errors);
+
+        throw new ApiException($this);
     }
 
 
@@ -342,7 +405,11 @@ trait Errors
      */
     public function badGateway($message = 'Bad Gateway', $errors = null): void
     {
-        $this->errors(502, $message, $errors);
+        $this->setStatusCode(502);
+        $this->setMessage($message);
+        $this->setErrors($errors);
+
+        throw new ApiException($this);
     }
 
 
@@ -359,7 +426,11 @@ trait Errors
      */
     public function serviceUnavailable($message = 'Service Unavailable', $errors = null): void
     {
-        $this->errors(503, $message, $errors);
+        $this->setStatusCode(503);
+        $this->setMessage($message);
+        $this->setErrors($errors);
+
+        throw new ApiException($this);
     }
 
     /**
@@ -374,7 +445,11 @@ trait Errors
      */
     public function gatewayTimeOut($message = 'Gateway Time-out', $errors = null): void
     {
-        $this->errors(504, $message, $errors);
+        $this->setStatusCode(504);
+        $this->setMessage($message);
+        $this->setErrors($errors);
+
+        throw new ApiException($this);
     }
 
 
@@ -390,7 +465,11 @@ trait Errors
      */
     public function httpVersionNotSupported($message = 'HTTP Version Not Supported', $errors = null): void
     {
-        $this->errors(505, $message, $errors);
+        $this->setStatusCode(505);
+        $this->setMessage($message);
+        $this->setErrors($errors);
+
+        throw new ApiException($this);
     }
 
     /**
@@ -405,7 +484,11 @@ trait Errors
      */
     public function variantAlsoNegotiates($message = 'Variant Also Negotiates', $errors = null): void
     {
-        $this->errors(506, $message, $errors);
+        $this->setStatusCode(506);
+        $this->setMessage($message);
+        $this->setErrors($errors);
+
+        throw new ApiException($this);
     }
 
 
@@ -421,7 +504,11 @@ trait Errors
      */
     public function insufficientStorage($message = 'Insufficient Storage', $errors = null): void
     {
-        $this->errors(507, $message, $errors);
+        $this->setStatusCode(507);
+        $this->setMessage($message);
+        $this->setErrors($errors);
+
+        throw new ApiException($this);
     }
 
     /**
@@ -436,7 +523,11 @@ trait Errors
      */
     public function loopDetected($message = 'Loop Detected', $errors = null): void
     {
-        $this->errors(508, $message, $errors);
+        $this->setStatusCode(508);
+        $this->setMessage($message);
+        $this->setErrors($errors);
+
+        throw new ApiException($this);
     }
 
 
@@ -452,7 +543,11 @@ trait Errors
      */
     public function notExtended($message = 'Not Extended', $errors = null): void
     {
-        $this->errors(510, $message, $errors);
+        $this->setStatusCode(510);
+        $this->setMessage($message);
+        $this->setErrors($errors);
+
+        throw new ApiException($this);
     }
 
     /**
@@ -469,6 +564,10 @@ trait Errors
      */
     public function networkAuthenticationRequired($message = 'Network Authentication Required', $errors = null): void
     {
-        $this->errors(511, $message, $errors);
+        $this->setStatusCode(511);
+        $this->setMessage($message);
+        $this->setErrors($errors);
+
+        throw new ApiException($this);
     }
 }

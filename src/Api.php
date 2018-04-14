@@ -41,6 +41,10 @@ class Api
      */
     protected $api_code;
 
+    /**
+     * @var array
+     */
+    protected $headers = [];
 
     /**
      * @param int $code
@@ -53,11 +57,30 @@ class Api
         return $this;
     }
 
+    /**
+     * @return array
+     */
+    public function getHeaders(): array
+    {
+        return $this->headers;
+    }
+
+
+    /**
+     * @param array $headers
+     *
+     * @return $this
+     */
+    public function setHeaders(array $headers): self
+    {
+        $this->headers = $headers;
+        return $this;
+    }
 
     /**
      * @return int|null
      */
-    public function getCode()
+    public function getCode(): ?int
     {
         return $this->api_code;
     }
@@ -85,13 +108,13 @@ class Api
     /**
      * @param int $httpStatusCode
      *
-     * @return $this|void
+     * @return $this
      * @throws ApiException
      */
-    public function setHttpStatusCode(int $httpStatusCode)
+    public function setHttpStatusCode(int $httpStatusCode): self
     {
         if (!array_key_exists($httpStatusCode, Response::$statusTexts)) {
-            return $this->internalServerError('Invalid status code in ' . __METHOD__, Response::$statusTexts);
+            $this->internalServerError('Invalid status code in ' . __METHOD__, Response::$statusTexts);
         }
         $this->httpStatusCode = $httpStatusCode;
         return $this;
@@ -101,22 +124,22 @@ class Api
     /**
      * @return int|null
      */
-    public function getHttpStatusCode()
+    public function getHttpStatusCode(): ?int
     {
-        return $this->httpStatusCode;
+        return $this->httpStatusCode ?? $this->getStatusCode();
     }
 
 
     /**
      * @param int $statusCode
      *
-     * @return $this|void
+     * @return $this
      * @throws ApiException
      */
-    public function setStatusCode(int $statusCode)
+    public function setStatusCode(int $statusCode): self
     {
         if (!array_key_exists($statusCode, Response::$statusTexts)) {
-            return $this->internalServerError('Invalid status code in ' . __METHOD__, Response::$statusTexts);
+            $this->internalServerError('Invalid status code in ' . __METHOD__, Response::$statusTexts);
         }
 
         $this->statusCode = $statusCode;

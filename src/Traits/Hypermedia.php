@@ -2,6 +2,7 @@
 
 namespace Songshenzong\Api\Traits;
 
+
 /**
  * Trait Hypermedia
  *

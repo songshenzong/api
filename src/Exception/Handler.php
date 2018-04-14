@@ -63,7 +63,7 @@ class Handler implements ExceptionHandler
      *
      * @return void
      */
-    public function report(Exception $exception)
+    public function report(Exception $exception): void
     {
         $this->parentHandler->report($exception);
     }
@@ -83,17 +83,14 @@ class Handler implements ExceptionHandler
         return $this->handle($exception);
     }
 
+
     /**
-     * Render an exception to the console.
-     *
      * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param \Exception                                        $exception
-     *
-     * @return mixed
+     * @param Exception                                         $exception
      */
-    public function renderForConsole($output, Exception $exception)
+    public function renderForConsole($output, Exception $exception): void
     {
-        return $this->parentHandler->renderForConsole($output, $exception);
+        $this->parentHandler->renderForConsole($output, $exception);
     }
 
     /**
@@ -104,7 +101,7 @@ class Handler implements ExceptionHandler
      * @return void
      * @throws \ReflectionException
      */
-    public function register(callable $callback)
+    public function register(callable $callback): void
     {
         $hint = $this->handlerHint($callback);
 
@@ -184,7 +181,7 @@ class Handler implements ExceptionHandler
     protected function getHttpStatusCode(Exception $exception): int
     {
         if ($exception instanceof ApiException) {
-            return $exception->getHttpStatusCode();
+            return $exception->apiMessage->getHttpStatusCode();
         }
 
         if ($exception instanceof HttpExceptionInterface && method_exists($exception, 'getStatusCode')) {
@@ -231,13 +228,13 @@ class Handler implements ExceptionHandler
         $replacements['status_code'] = $statusCode;
 
 
-        if ($exception instanceof ApiException && $exception->getErrors()) {
-            $replacements['errors'] = $exception->getErrors();
+        if ($exception instanceof ApiException && $exception->apiMessage->getErrors()) {
+            $replacements['errors'] = $exception->apiMessage->getErrors();
         }
 
 
-        if (null !== $exception->getHypermedia()) {
-            $replacements += $exception->getHypermedia();
+        if (null !== $exception->apiMessage->getHypermedia()) {
+            $replacements += $exception->apiMessage->getHypermedia();
         }
 
         if ($this->runningInDebugMode()) {

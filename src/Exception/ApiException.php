@@ -2,11 +2,10 @@
 
 namespace Songshenzong\Api\Exception;
 
-use function dd;
 use Exception;
+use RuntimeException;
 use Songshenzong\Api\Api;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
-use RuntimeException;
 
 /**
  * Class ApiException
@@ -17,63 +16,29 @@ class ApiException extends RuntimeException implements HttpExceptionInterface
 {
 
     /**
-     * @var int
+     * @var Api
      */
-    private $httpStatusCode;
+    public $apiMessage;
 
-    /**
-     * @var int
-     */
-    private $statusCode;
-
-    /**
-     * @var array
-     */
-    private $errors;
-
-    /**
-     * @var array
-     */
-    private $headers;
-
-    /**
-     * @var array
-     */
-    private $Hypermedia;
 
     /**
      * ApiException constructor.
      *
      * @param Api            $api
      * @param Exception|null $previous
-     * @param array          $headers
      */
-    public function __construct(Api $api, Exception $previous = null, $headers = [])
+    public function __construct(Api $api, Exception $previous = null)
     {
-        $this->httpStatusCode = $api->getHttpStatusCode() ?: $api->getStatusCode();
-        $this->statusCode     = $api->getStatusCode();
-        $this->errors         = $api->getErrors();
-        $this->Hypermedia     = $api->getHypermedia();
-        $this->headers        = $headers;
-
+        $this->apiMessage = $api;
         parent::__construct($api->getMessage(), $api->getCode(), $previous);
     }
-
 
     /**
      * @return array
      */
-    public function getHypermedia(): array
+    public function getHeaders(): array
     {
-        return $this->Hypermedia;
-    }
-
-    /**
-     * @return int
-     */
-    public function getHttpStatusCode(): int
-    {
-        return $this->httpStatusCode;
+        return $this->apiMessage->getHeaders();
     }
 
     /**
@@ -81,24 +46,6 @@ class ApiException extends RuntimeException implements HttpExceptionInterface
      */
     public function getStatusCode(): int
     {
-        return $this->statusCode;
-    }
-
-
-    /**
-     * @return array|null|object
-     */
-    public function getErrors()
-    {
-        return $this->errors;
-    }
-
-
-    /**
-     * @return array
-     */
-    public function getHeaders(): array
-    {
-        return $this->headers;
+        return $this->apiMessage->getStatusCode();
     }
 }
