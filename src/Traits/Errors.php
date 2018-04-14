@@ -2,6 +2,8 @@
 
 namespace Songshenzong\Api\Traits;
 
+use function dd;
+use Exception;
 use Songshenzong\Api\Exception\ApiException;
 
 /**

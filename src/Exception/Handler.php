@@ -2,9 +2,13 @@
 
 namespace Songshenzong\Api\Exception;
 
+use function dd;
+use function debug_backtrace;
+use function debug_print_backtrace;
 use Exception;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Http\Response;
+use function pg_trace;
 use ReflectionFunction;
 use Symfony\Component\HttpFoundation\Response as BaseResponse;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
@@ -233,9 +237,11 @@ class Handler implements ExceptionHandler
         }
 
 
-        if (null !== $exception->apiMessage->getHypermedia()) {
+        if ($exception instanceof ApiException && null !== $exception->apiMessage->getHypermedia()) {
             $replacements += $exception->apiMessage->getHypermedia();
         }
+
+
 
         if ($this->runningInDebugMode()) {
             $replacements['debug'] = [
