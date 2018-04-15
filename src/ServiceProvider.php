@@ -2,9 +2,11 @@
 
 namespace Songshenzong\Api;
 
+use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Routing\Router;
 use Songshenzong\Api\Exception\Handler;
+use function config;
 
 /**
  * Class ServiceProvider
@@ -36,10 +38,13 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         $kernel = $this->app->make(Kernel::class);
         $kernel->prependMiddleware(Middleware::class);
+        $this->publishes([
+                             __DIR__ . '/../config/api.php' => config_path('api.php'),
+                         ]);
     }
 
     /**
@@ -47,7 +52,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->app->singleton('SongshenzongApi', function ($app) {
             return new Api(
@@ -60,8 +65,8 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
         $this->app->singleton('SongshenzongApi.exception', function ($app) {
             return new Handler(
-                $app['Illuminate\Contracts\Debug\ExceptionHandler'],
-                env('SONGSHENZONG_API_DEBUG', env('APP_DEBUG'))
+                $app[ExceptionHandler::class],
+                config('api.debug')
             );
         });
 
@@ -70,38 +75,4 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->app->alias('SongshenzongApi.exception', Handler::class);
     }
 
-
-    /**
-     * Instantiate an array of instantiable configuration values.
-     *
-     * @param string $item
-     * @param array  $values
-     *
-     * @return array
-     */
-    protected function instantiateConfigValues($item, array $values)
-    {
-        foreach ($values as $key => $value) {
-            $values[$key] = $this->instantiateConfigValue($item, $value);
-        }
-
-        return $values;
-    }
-
-    /**
-     * Instantiate an instantiable configuration value.
-     *
-     * @param string $item
-     * @param mixed  $value
-     *
-     * @return mixed
-     */
-    protected function instantiateConfigValue($item, $value)
-    {
-        if (is_string($value) && in_array($item, $this->instantiable, true)) {
-            return $this->app->make($value);
-        }
-
-        return $value;
-    }
 }

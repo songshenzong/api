@@ -1,0 +1,16 @@
+language: php
+install: true
+php:
+  - 7.2
+before_script:
+  - composer install --no-interaction --prefer-source --dev
+script: phpunit
+deploy:
+  provider: releases
+  api_key:
+    secure: i/FptSuLSslzRE1w88HvteBpI9MYT0O5eCEso58o+R20jke4Tqds5Z1oFgua78GfN3lEYEkdfGkONuXHUxrNva+qSkHN4UqA2sBVKfprqL6G1ZjMUvTOt5MZtYc1T9deN5/Dna5RG5Y4sfGZUdpRdIvuMeLwM5yQri2a5QGyEXnSFwFvvzbQy+q0PECh4ZEaojWj3GKl0ju91gAoVbxRHosdKUJle5CSnjHKUHYV3uhfwmnIMuQRF+rczlIIOQepDCYQCKwdrgvty6OiPbjWfxxTszYtTSrZ6LMp0moHWnblzKEykAHbhsZwGkoX1/08XRM/w//09Zrgfh9KQxdOIn2HfQBcuZ6Xq5E77VNSMfffdanvY32DAQJUp5XZsQ5OxmIwzcz6bXF6BdDW2C3SzvXJb2csraACxYz1I8G9iZnGwNuH2tf/xI2/JCtY814mB5agb2UAP4K2oRHMnw+y3nxyyfC8q5pLbD3j0AovKYV1qqOyeFuA2bHbBClE8QguvsTBcHpqN8c3LVy1juRFmu8E+eKg5K8mN4D04clbIYGGGKLdhiBOMNFY5yEu4NBkVn/+T8Q4Dmh/QtRdvpvJvU9x1VwyCr4mJCMXBUo52fuVfH8qNzPL7CMhoQUqEiHgzHnWkgmDsd3sH4AeDvNFZf4FiOKjrc4ndo4Yzl51eaw=
+  file:
+    - "README.md"
+  on:
+    repo: songshenzong/api
+    tags: true

@@ -2,9 +2,13 @@
 
 namespace Songshenzong\Api\Exception;
 
+use function dd;
+use function debug_backtrace;
+use function debug_print_backtrace;
 use Exception;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Http\Response;
+use function pg_trace;
 use ReflectionFunction;
 use Symfony\Component\HttpFoundation\Response as BaseResponse;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
@@ -63,7 +67,7 @@ class Handler implements ExceptionHandler
      *
      * @return void
      */
-    public function report(Exception $exception)
+    public function report(Exception $exception): void
     {
         $this->parentHandler->report($exception);
     }
@@ -71,8 +75,8 @@ class Handler implements ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param \Songshenzong\Api\Http\Request $request
-     * @param \Exception                     $exception
+     * @param            $request
+     * @param \Exception $exception
      *
      * @throws \Exception
      *
@@ -83,17 +87,14 @@ class Handler implements ExceptionHandler
         return $this->handle($exception);
     }
 
+
     /**
-     * Render an exception to the console.
-     *
      * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param \Exception                                        $exception
-     *
-     * @return mixed
+     * @param Exception                                         $exception
      */
-    public function renderForConsole($output, Exception $exception)
+    public function renderForConsole($output, Exception $exception): void
     {
-        return $this->parentHandler->renderForConsole($output, $exception);
+        $this->parentHandler->renderForConsole($output, $exception);
     }
 
     /**
@@ -104,7 +105,7 @@ class Handler implements ExceptionHandler
      * @return void
      * @throws \ReflectionException
      */
-    public function register(callable $callback)
+    public function register(callable $callback): void
     {
         $hint = $this->handlerHint($callback);
 
@@ -119,10 +120,8 @@ class Handler implements ExceptionHandler
      * @return Response
      * @throws Exception
      */
-    public function handle(Exception $exception)
+    public function handle(Exception $exception): Response
     {
-
-
         foreach ($this->handlers as $hint => $handler) {
             if (!$exception instanceof $hint) {
                 continue;
@@ -137,7 +136,6 @@ class Handler implements ExceptionHandler
             }
         }
 
-
         return $this->genericResponse($exception);
     }
 
@@ -150,10 +148,9 @@ class Handler implements ExceptionHandler
      *
      * @return \Illuminate\Http\Response
      */
-    protected function genericResponse(Exception $exception)
+    protected function genericResponse(Exception $exception): Response
     {
         $replacements = $this->prepareReplacements($exception);
-
 
         return new Response($replacements, $this->getHttpStatusCode($exception), $this->getHeaders($exception));
     }
@@ -165,19 +162,17 @@ class Handler implements ExceptionHandler
      *
      * @return int
      */
-    protected function getStatusCode(Exception $exception)
+    protected function getStatusCode(Exception $exception): int
     {
-
-        if ($exception instanceof SongshenzongException) {
+        if ($exception instanceof ApiException) {
             return $exception->getStatusCode();
         }
-
 
         if ($exception instanceof HttpExceptionInterface && method_exists($exception, 'getStatusCode')) {
             return $exception->getStatusCode();
         }
 
-        return isset($exception->responseStatusCode) ? $exception->responseStatusCode : 500;
+        return 500;
     }
 
     /**
@@ -187,18 +182,17 @@ class Handler implements ExceptionHandler
      *
      * @return int
      */
-    protected function getHttpStatusCode(Exception $exception)
+    protected function getHttpStatusCode(Exception $exception): int
     {
-
-        if ($exception instanceof SongshenzongException) {
-            return $exception->getHttpStatusCode();
+        if ($exception instanceof ApiException) {
+            return $exception->apiMessage->getHttpStatusCode();
         }
 
         if ($exception instanceof HttpExceptionInterface && method_exists($exception, 'getStatusCode')) {
             return $exception->getStatusCode();
         }
 
-        return isset($exception->responseStatusCode) ? $exception->responseStatusCode : 404;
+        return 500;
     }
 
 
@@ -209,9 +203,9 @@ class Handler implements ExceptionHandler
      *
      * @return array
      */
-    protected function getHeaders(Exception $exception)
+    protected function getHeaders(Exception $exception): array
     {
-        return $exception instanceof SongshenzongException ? $exception->getHeaders() : [];
+        return $exception instanceof ApiException ? $exception->getHeaders() : [];
     }
 
     /**
@@ -221,12 +215,9 @@ class Handler implements ExceptionHandler
      *
      * @return array
      */
-    protected function prepareReplacements(Exception $exception)
+    protected function prepareReplacements(Exception $exception): array
     {
-
         $statusCode = $this->getStatusCode($exception);
-        // $httpStatusCode = $this -> getHttpStatusCode($exception);
-
 
         if (!$message = $exception->getMessage()) {
             $message = sprintf('%d %s', $statusCode, Response::$statusTexts[$statusCode]);
@@ -234,27 +225,33 @@ class Handler implements ExceptionHandler
 
         $replacements['message'] = $message;
 
-
         if ($code = $exception->getCode()) {
             $replacements['code'] = $code;
         }
 
         $replacements['status_code'] = $statusCode;
 
-        if ($exception instanceof SongshenzongException && $exception->hasErrors()) {
-            $replacements['errors'] = $exception->getErrors();
+
+        if ($exception instanceof ApiException && $exception->apiMessage->getErrors()) {
+            $replacements['errors'] = $exception->apiMessage->getErrors();
         }
+
+
+        if ($exception instanceof ApiException && null !== $exception->apiMessage->getHypermedia()) {
+            $replacements += $exception->apiMessage->getHypermedia();
+        }
+
 
 
         if ($this->runningInDebugMode()) {
             $replacements['debug'] = [
                 'line'  => $exception->getLine(),
                 'file'  => $exception->getFile(),
-                'class' => get_class($exception),
+                'code'  => $exception->getCode(),
+                'class' => \get_class($exception),
                 'trace' => explode("\n", $exception->getTraceAsString()),
             ];
         }
-
 
         return array_merge($replacements, $this->replacements);
     }
@@ -266,7 +263,7 @@ class Handler implements ExceptionHandler
      *
      * @return void
      */
-    public function setReplacements(array $replacements)
+    public function setReplacements(array $replacements): void
     {
         $this->replacements = $replacements;
     }
@@ -280,11 +277,10 @@ class Handler implements ExceptionHandler
      *
      * @return int
      */
-    protected function getExceptionStatusCode(Exception $exception, $defaultStatusCode = null)
+    protected function getExceptionStatusCode(Exception $exception, $defaultStatusCode = null): int
     {
         if (null === $defaultStatusCode) {
-            $defaultStatusCode = isset($exception->responseStatusCode)
-                ? $exception->responseStatusCode : 500;
+            $defaultStatusCode = 500;
         }
 
         return ($exception instanceof HttpExceptionInterface) ? $exception->getStatusCode() : $defaultStatusCode;
@@ -295,7 +291,7 @@ class Handler implements ExceptionHandler
      *
      * @return bool
      */
-    protected function runningInDebugMode()
+    protected function runningInDebugMode(): bool
     {
         return $this->debug;
     }
@@ -308,7 +304,7 @@ class Handler implements ExceptionHandler
      * @return string
      * @throws \ReflectionException
      */
-    protected function handlerHint(callable $callback)
+    protected function handlerHint(callable $callback): string
     {
         $reflection = new ReflectionFunction($callback);
 
@@ -322,7 +318,7 @@ class Handler implements ExceptionHandler
      *
      * @return array
      */
-    public function getHandlers()
+    public function getHandlers(): array
     {
         return $this->handlers;
     }
@@ -335,7 +331,7 @@ class Handler implements ExceptionHandler
      *
      * @return void
      */
-    public function setDebug($debug)
+    public function setDebug($debug): void
     {
         $this->debug = $debug;
     }
