@@ -3,4 +3,3 @@
 /composer.lock
 /vendor/
 /.php_cs.cache
-/build

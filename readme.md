@@ -1,13 +1,4 @@
-[![Songshenzong](https://songshenzong.com/images/logo.png)](https://songshenzong.com)
-
-[![Build Status](https://travis-ci.org/songshenzong/api.svg?branch=master)](https://travis-ci.org/songshenzong/api)
-[![Total Downloads](https://poser.pugx.org/songshenzong/api/d/total.svg)](https://packagist.org/packages/songshenzong/api)
-[![Latest Stable Version](https://poser.pugx.org/songshenzong/api/v/stable.svg)](https://packagist.org/packages/songshenzong/api)
-[![License](https://poser.pugx.org/songshenzong/api/license.svg)](https://packagist.org/packages/songshenzong/api)
-[![PHP Version](https://img.shields.io/packagist/php-v/songshenzong/api.svg)](https://packagist.org/packages/songshenzong/api)
-
-
-## About
+# Songshenzong Api
 
 A RESTful API package for the Laravel
 
@@ -19,14 +10,14 @@ Require this package with composer:
 composer require songshenzong/api
 ```
 
+## Laravel 5.x
 
-## Laravel
+After updating composer, add the ServiceProvider to the providers array in `config/app.php`
 
-Publish configuration files. If not, They can not be serialized correctly when you execute the `config:cache` Artisan command.
-
-```shell
-php artisan vendor:publish --provider="Songshenzong\Api\ServiceProvider"
+```php
+Songshenzong\Api\ServiceProvider::class,
 ```
+
 
 ## Documentation
 

@@ -5,12 +5,10 @@ namespace Songshenzong\Api;
 use Closure;
 use Exception;
 use Illuminate\Container\Container;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Pipeline\Pipeline;
 use Illuminate\Routing\Router;
 use Songshenzong\Api\Exception\Handler;
-use function config;
+use function env;
 
 /**
  * Class Middleware
@@ -23,7 +21,6 @@ class Middleware
      * @var Container
      */
     protected $app;
-
     /**
      * @var Handler
      */
@@ -51,15 +48,16 @@ class Middleware
     /**
      * Handle an incoming request.
      *
-     * @param Request $request
+     * @param \Illuminate\Http\Request $request
      *
-     * @param Closure $next
+     * @param Closure                  $next
      *
      * @return mixed
      * @throws Exception
      */
-    public function handle(Request $request, Closure $next)
+    public function handle($request, Closure $next)
     {
+
 
         if (!$this->inPrefixes()) {
             return $next($request);
@@ -74,34 +72,28 @@ class Middleware
         }
 
         // CORS
-        if (config('api.cors.cors', true)) {
-            if (isset($_SERVER['HTTP_ORIGIN'])) {
+        if (isset($_SERVER['HTTP_ORIGIN'])) {
+            if (env('SONGSHENZONG_API_CORS', true)) {
                 header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
-            } else {
-                header('Access-Control-Allow-Origin: *');
+                if (env('SONGSHENZONG_API_CORS_CREDENTIALS', true)) {
+                    header('Access-Control-Allow-Credentials: true');
+                }
+                $age = env('SONGSHENZONG_API_CORS_MAX_AGE', 86400);
+                header("Access-Control-Max-Age: $age");
             }
-            if (config('api.cors.credentials', true)) {
-                header('Access-Control-Allow-Credentials: true');
-            }
-            header('Access-Control-Allow-Headers: Origin, X-Requested-With, No-Cache, Authorization, X-Auth-Token, Content-Type, Accept');
-            header('Access-Control-Allow-Methods: GET, POST, HEAD, PUT, DELETE, PATCH, OPTIONS, TRACE');
-            $age = config('api.cors.max_age', 86400);
-            header("Access-Control-Max-Age: $age");
+
         }
 
 
         try {
             $response = $this->sendRequestThroughRouter($request);
         } catch (Exception $exception) {
-
             if ($this->isCompatibleWithDingo($exception)) {
                 return $next($request);
             }
 
-
             $this->exception->report($exception);
             $response = $this->exception->handle($exception);
-
         }
 
 
@@ -113,15 +105,17 @@ class Middleware
      *
      * @return bool
      */
-    private function isCompatibleWithDingo(Exception $exception): bool
+    private function isCompatibleWithDingo(Exception $exception)
     {
-        if (!config('api.dingo')) {
+        if (!env('SONGSHENZONG_API_DINGO', false)) {
             return false;
         }
 
 
-        if (method_exists($exception, 'getHttpStatusCode') && $exception->getHttpStatusCode() !== 404) {
-            return false;
+        if (method_exists($exception, 'getHttpStatusCode')) {
+            if ($exception->getHttpStatusCode() !== 404) {
+                return false;
+            }
         }
 
 
@@ -133,10 +127,9 @@ class Middleware
             return false;
         }
 
-        if (app('request')->segment(1) === config('api.prefix')) {
+        if (app('request')->segment(1) === env('API_PREFIX')) {
             return true;
         }
-
         return false;
     }
 
@@ -144,10 +137,10 @@ class Middleware
     /**
      * @return bool
      */
-    private function inPrefixes(): bool
+    private function inPrefixes()
     {
 
-        $array = $this->getEnvArray('prefix');
+        $array = $this->getEnvArray('SONGSHENZONG_API_PREFIX');
 
 
         if ($array === []) {
@@ -155,24 +148,24 @@ class Middleware
         }
 
 
-        return \in_array(app('request')->segment(1), $array, true);
+        return in_array(app('request')->segment(1), $array, true);
     }
 
 
     /**
      * @return bool
      */
-    private function inExcludes(): bool
+    private function inExcludes()
     {
 
-        $array = $this->getEnvArray('exclude');
+        $array = $this->getEnvArray('SONGSHENZONG_API_EXCLUDE');
 
         if ($array === []) {
             return false;
         }
 
 
-        return \in_array(app('request')->segment(1), $array, true);
+        return in_array(app('request')->segment(1), $array, true);
     }
 
 
@@ -181,9 +174,9 @@ class Middleware
      *
      * @return array
      */
-    private function getEnvArray($name): array
+    private function getEnvArray($name)
     {
-        $env = config("api.$name", null);
+        $env = env($name, null);
 
         if ($env === true) {
             $env = 'true';
@@ -209,36 +202,36 @@ class Middleware
     /**
      * @return bool
      */
-    private function inDomains(): bool
+    private function inDomains()
     {
-        $array = $this->getEnvArray('domain');
+        $array = $this->getEnvArray('SONGSHENZONG_API_DOMAIN');
 
         if ($array === []) {
             return true;
         }
 
 
-        return \in_array(app('request')->getHttpHost(), $array, true);
+        return in_array(app('request')->getHttpHost(), $array, true);
     }
 
     /**
-     * Send the request through the Songshenzong router.
+     * Send the request through the Dingo router.
      *
-     * @param Request $request
+     * @param \Dingo\Api\Http\Request $request
      *
-     * @return Response
-     * @throws \Exception
+     * @return \Dingo\Api\Http\Response
      */
-    protected function sendRequestThroughRouter(Request $request)
+    protected function sendRequestThroughRouter($request)
     {
         return (new Pipeline($this->app))->send($request)->then(function ($request) {
 
-            /**
-             * @var Response $response
-             */
             $response = $this->router->dispatch($request);
 
             if (property_exists($response, 'exception') && $response->exception instanceof Exception) {
+                if (method_exists($response, 'getStatusCode')) {
+                    $response->exception->responseStatusCode = $response->getStatusCode();
+                }
+
                 throw $response->exception;
             }
 

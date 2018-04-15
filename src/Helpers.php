@@ -2,28 +2,24 @@
 
 if (!function_exists('songshenzongApi')) {
     /**
-     * @param int $httpStatusCode
+     * Get the instance
      *
-     * @return Songshenzong\Api\Api
      */
-    function songshenzongApi(int $httpStatusCode = null)
+    function songshenzongApi()
     {
-        if ($httpStatusCode === null) {
-            return clone app('SongshenzongApi');
-        }
-        return clone app('SongshenzongApi')->setHttpStatusCode($httpStatusCode);
+
+        return clone app('SongshenzongApi');
     }
 }
 
 
 if (!function_exists('api')) {
     /**
-     * @param int $httpStatusCode
+     * Get the instance
      *
-     * @return Songshenzong\Api\Api
      */
-    function api(int $httpStatusCode = null)
+    function api()
     {
-        return songshenzongApi($httpStatusCode);
+        return clone app('SongshenzongApi');
     }
 }
