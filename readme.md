@@ -1,4 +1,12 @@
-# Songshenzong Api
+[![Songshenzong](https://songshenzong.com/images/logo.png)](https://songshenzong.com)
+
+[![Total Downloads](https://poser.pugx.org/songshenzong/api/d/total.svg)](https://packagist.org/packages/songshenzong/api)
+[![Latest Stable Version](https://poser.pugx.org/songshenzong/api/v/stable.svg)](https://packagist.org/packages/songshenzong/api)
+[![License](https://poser.pugx.org/songshenzong/api/license.svg)](https://packagist.org/packages/songshenzong/api)
+[![PHP Version](https://img.shields.io/packagist/php-v/songshenzong/api.svg)](https://packagist.org/packages/songshenzong/api)
+
+
+## About
 
 A RESTful API package for the Laravel
 
@@ -10,14 +18,17 @@ Require this package with composer:
 composer require songshenzong/api
 ```
 
-## Laravel 5.x
+## Laravel
 
+Package Auto Discovery
+
+
+## Before Laravel 5.5
 After updating composer, add the ServiceProvider to the providers array in `config/app.php`
 
 ```php
 Songshenzong\Api\ServiceProvider::class,
 ```
-
 
 ## Documentation
 
