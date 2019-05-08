@@ -1,10 +1,8 @@
-[![Songshenzong](https://songshenzong.com/images/logo.png)](https://songshenzong.com)
-
-[![Build Status](https://travis-ci.org/songshenzong/api.svg?branch=master)](https://travis-ci.org/songshenzong/api)
-[![Total Downloads](https://poser.pugx.org/songshenzong/api/d/total.svg)](https://packagist.org/packages/songshenzong/api)
-[![Latest Stable Version](https://poser.pugx.org/songshenzong/api/v/stable.svg)](https://packagist.org/packages/songshenzong/api)
-[![License](https://poser.pugx.org/songshenzong/api/license.svg)](https://packagist.org/packages/songshenzong/api)
-[![PHP Version](https://img.shields.io/packagist/php-v/songshenzong/api.svg)](https://packagist.org/packages/songshenzong/api)
+[![Build Status](https://travis-ci.org/songshenzong/api.svg?branch=master)][travis]
+[![Total Downloads](https://poser.pugx.org/songshenzong/api/d/total.svg)][packagist]
+[![Latest Stable Version](https://poser.pugx.org/songshenzong/api/v/stable.svg)][packagist]
+[![License](https://poser.pugx.org/songshenzong/api/license.svg)][packagist]
+[![PHP Version](https://img.shields.io/packagist/php-v/songshenzong/api.svg)][packagist]
 
 
 ## About
@@ -41,3 +39,6 @@ For answers you may not find in the Wiki, avoid posting issues. Feel free to ask
 ## License
 
 This package is licensed under the [BSD 3-Clause license](http://opensource.org/licenses/BSD-3-Clause).
+
+[packagist]: https://packagist.org/packages/songshenzong/api
+[travis]: https://travis-ci.org/songshenzong/api

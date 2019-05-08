@@ -1,5 +1,6 @@
 {
     "name": "songshenzong/api",
+    "version": "3.0.1",
     "description": "A RESTful API package for the Laravel",
     "keywords": [
         "restful",
