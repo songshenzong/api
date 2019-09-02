@@ -281,7 +281,7 @@ class Handler implements ExceptionHandler
      */
     protected function runningInDebugMode() : bool
     {
-        return $this->debug;
+        return (bool)$this->debug;
     }
 
     /**
