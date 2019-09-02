@@ -20,7 +20,6 @@ class ApiException extends RuntimeException implements HttpExceptionInterface
      */
     public $apiMessage;
 
-
     /**
      * ApiException constructor.
      *
@@ -36,7 +35,7 @@ class ApiException extends RuntimeException implements HttpExceptionInterface
     /**
      * @return array
      */
-    public function getHeaders(): array
+    public function getHeaders() : array
     {
         return $this->apiMessage->getHeaders();
     }
@@ -44,7 +43,7 @@ class ApiException extends RuntimeException implements HttpExceptionInterface
     /**
      * @return int
      */
-    public function getStatusCode(): int
+    public function getStatusCode() : int
     {
         return $this->apiMessage->getStatusCode();
     }

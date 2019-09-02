@@ -2,6 +2,10 @@
 
 ---
 
+## Version 3.0.1 (2019-09-02)
+
+- Improved Handler
+
 ## Version 2.0.0 (2018-04-05)
 
 - Support Hypermedia API

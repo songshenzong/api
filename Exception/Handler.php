@@ -2,14 +2,10 @@
 
 namespace Songshenzong\Api\Exception;
 
-use function dd;
-use function debug_backtrace;
-use function debug_print_backtrace;
 use Exception;
-use Illuminate\Contracts\Debug\ExceptionHandler;
-use Illuminate\Http\Response;
-use function pg_trace;
 use ReflectionFunction;
+use Illuminate\Http\Response;
+use Illuminate\Contracts\Debug\ExceptionHandler;
 use Symfony\Component\HttpFoundation\Response as BaseResponse;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
@@ -26,7 +22,6 @@ class Handler implements ExceptionHandler
      * @var array
      */
     protected $handlers = [];
-
 
     /**
      * Indicates if we are in debug mode.
@@ -63,11 +58,11 @@ class Handler implements ExceptionHandler
     /**
      * Report or log an exception.
      *
-     * @param \Exception $exception
+     * @param Exception $exception
      *
      * @return void
      */
-    public function report(Exception $exception): void
+    public function report(Exception $exception) : void
     {
         $this->parentHandler->report($exception);
     }
@@ -76,23 +71,22 @@ class Handler implements ExceptionHandler
      * Render an exception into an HTTP response.
      *
      * @param            $request
-     * @param \Exception $exception
-     *
-     * @throws \Exception
+     * @param Exception  $exception
      *
      * @return mixed
+     * @throws Exception
+     *
      */
     public function render($request, Exception $exception)
     {
         return $this->handle($exception);
     }
 
-
     /**
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @param Exception                                         $exception
      */
-    public function renderForConsole($output, Exception $exception): void
+    public function renderForConsole($output, Exception $exception) : void
     {
         $this->parentHandler->renderForConsole($output, $exception);
     }
@@ -105,7 +99,7 @@ class Handler implements ExceptionHandler
      * @return void
      * @throws \ReflectionException
      */
-    public function register(callable $callback): void
+    public function register(callable $callback) : void
     {
         $hint = $this->handlerHint($callback);
 
@@ -115,12 +109,12 @@ class Handler implements ExceptionHandler
     /**
      * Handle an exception if it has an existing handler.
      *
-     * @param \Exception $exception
+     * @param Exception $exception
      *
      * @return Response
      * @throws Exception
      */
-    public function handle(Exception $exception): Response
+    public function handle(Exception $exception) : Response
     {
         foreach ($this->handlers as $hint => $handler) {
             if (!$exception instanceof $hint) {
@@ -142,13 +136,13 @@ class Handler implements ExceptionHandler
     /**
      * Handle a generic error response if there is no handler available.
      *
-     * @param \Exception $exception
-     *
-     * @throws \Exception
+     * @param Exception $exception
      *
      * @return \Illuminate\Http\Response
+     * @throws Exception
+     *
      */
-    protected function genericResponse(Exception $exception): Response
+    protected function genericResponse(Exception $exception) : Response
     {
         $replacements = $this->prepareReplacements($exception);
 
@@ -158,11 +152,11 @@ class Handler implements ExceptionHandler
     /**
      * Get the status code from the exception.
      *
-     * @param \Exception $exception
+     * @param Exception $exception
      *
      * @return int
      */
-    protected function getStatusCode(Exception $exception): int
+    protected function getStatusCode(Exception $exception) : int
     {
         if ($exception instanceof ApiException) {
             return $exception->getStatusCode();
@@ -178,11 +172,11 @@ class Handler implements ExceptionHandler
     /**
      * Get the Http status code from the exception.
      *
-     * @param \Exception $exception
+     * @param Exception $exception
      *
      * @return int
      */
-    protected function getHttpStatusCode(Exception $exception): int
+    protected function getHttpStatusCode(Exception $exception) : int
     {
         if ($exception instanceof ApiException) {
             return $exception->apiMessage->getHttpStatusCode();
@@ -195,15 +189,14 @@ class Handler implements ExceptionHandler
         return 500;
     }
 
-
     /**
      * Get the headers from the exception.
      *
-     * @param \Exception $exception
+     * @param Exception $exception
      *
      * @return array
      */
-    protected function getHeaders(Exception $exception): array
+    protected function getHeaders(Exception $exception) : array
     {
         return $exception instanceof ApiException ? $exception->getHeaders() : [];
     }
@@ -211,11 +204,11 @@ class Handler implements ExceptionHandler
     /**
      * Prepare the replacements array by gathering the keys and values.
      *
-     * @param \Exception $exception
+     * @param Exception $exception
      *
      * @return array
      */
-    protected function prepareReplacements(Exception $exception): array
+    protected function prepareReplacements(Exception $exception) : array
     {
         $statusCode = $this->getStatusCode($exception);
 
@@ -231,17 +224,13 @@ class Handler implements ExceptionHandler
 
         $replacements['status_code'] = $statusCode;
 
-
         if ($exception instanceof ApiException && $exception->apiMessage->getErrors()) {
             $replacements['errors'] = $exception->apiMessage->getErrors();
         }
 
-
         if ($exception instanceof ApiException && null !== $exception->apiMessage->getHypermedia()) {
             $replacements += $exception->apiMessage->getHypermedia();
         }
-
-
 
         if ($this->runningInDebugMode()) {
             $replacements['debug'] = [
@@ -263,21 +252,20 @@ class Handler implements ExceptionHandler
      *
      * @return void
      */
-    public function setReplacements(array $replacements): void
+    public function setReplacements(array $replacements) : void
     {
         $this->replacements = $replacements;
     }
 
-
     /**
      * Get the exception status code.
      *
-     * @param \Exception $exception
-     * @param int        $defaultStatusCode
+     * @param Exception $exception
+     * @param int       $defaultStatusCode
      *
      * @return int
      */
-    protected function getExceptionStatusCode(Exception $exception, $defaultStatusCode = null): int
+    protected function getExceptionStatusCode(Exception $exception, $defaultStatusCode = null) : int
     {
         if (null === $defaultStatusCode) {
             $defaultStatusCode = 500;
@@ -291,7 +279,7 @@ class Handler implements ExceptionHandler
      *
      * @return bool
      */
-    protected function runningInDebugMode(): bool
+    protected function runningInDebugMode() : bool
     {
         return $this->debug;
     }
@@ -304,7 +292,7 @@ class Handler implements ExceptionHandler
      * @return string
      * @throws \ReflectionException
      */
-    protected function handlerHint(callable $callback): string
+    protected function handlerHint(callable $callback) : string
     {
         $reflection = new ReflectionFunction($callback);
 
@@ -318,11 +306,10 @@ class Handler implements ExceptionHandler
      *
      * @return array
      */
-    public function getHandlers(): array
+    public function getHandlers() : array
     {
         return $this->handlers;
     }
-
 
     /**
      * Set the debug mode.
@@ -331,8 +318,20 @@ class Handler implements ExceptionHandler
      *
      * @return void
      */
-    public function setDebug($debug): void
+    public function setDebug($debug) : void
     {
         $this->debug = $debug;
+    }
+
+    /**
+     * Determine if the exception should be reported.
+     *
+     * @param Exception $e
+     *
+     * @return bool
+     */
+    public function shouldReport(Exception $e) : bool
+    {
+        return true;
     }
 }
