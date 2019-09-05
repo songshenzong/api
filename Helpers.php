@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Http\JsonResponse;
+
 if (!function_exists('songshenzongApi')) {
     /**
      * @param int $httpStatusCode
@@ -11,10 +13,10 @@ if (!function_exists('songshenzongApi')) {
         if ($httpStatusCode === null) {
             return clone app('SongshenzongApi');
         }
+
         return clone app('SongshenzongApi')->setHttpStatusCode($httpStatusCode);
     }
 }
-
 
 if (!function_exists('api')) {
     /**
@@ -25,5 +27,17 @@ if (!function_exists('api')) {
     function api(int $httpStatusCode = null)
     {
         return songshenzongApi($httpStatusCode);
+    }
+}
+
+if (!function_exists('ok')) {
+    /**
+     * @param null $data
+     *
+     * @return JsonResponse
+     */
+    function ok($data = null)
+    {
+        return api()->ok($data);
     }
 }
