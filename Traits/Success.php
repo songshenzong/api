@@ -3,6 +3,7 @@
 namespace Songshenzong\Api\Traits;
 
 use Illuminate\Http\JsonResponse;
+use Songshenzong\Api\Exception\ApiException;
 
 /**
  * Trait Success
@@ -17,39 +18,45 @@ trait Success
      */
     protected $data;
 
-
     /**
-     * @param mixed $data
+     * @param null $data
      *
-     * @return $this
+     * @return JsonResponse
+     * @throws ApiException
      */
-    public function setData($data): self
+    public function item($data = null) : JsonResponse
     {
-        $this->data = $data;
-        return $this;
+        return $this->ok($data);
     }
-
 
     /**
-     * @return mixed
+     * Success - OK
+     *
+     * Standard response for successful HTTP requests. The actual response will depend on the request method used. In a
+     * GET request, the response will contain an entity corresponding to the requested resource. In a POST request, the
+     * response will contain an entity describing or containing the result of the action.
+     *
+     * @param null $data
+     *
+     * @return JsonResponse
+     * @throws ApiException
      */
-    public function getData()
+    public function ok($data = null) : JsonResponse
     {
-        return $this->data;
+        return $this->success(200, 'OK', $data);
     }
-
 
     /**
      * Public Success Method.
      *
-     * @param  int    $statusCode
-     * @param  string $message
-     * @param null    $data
+     * @param int    $statusCode
+     * @param string $message
+     * @param null   $data
      *
      * @return JsonResponse
-     * @throws \Songshenzong\Api\Exception\ApiException
+     * @throws ApiException
      */
-    public function success(int $statusCode, string $message, $data = null): JsonResponse
+    public function success(int $statusCode, string $message, $data = null) : JsonResponse
     {
 
         $this->setStatusCode($statusCode);
@@ -58,17 +65,13 @@ trait Success
 
         $this->setData($data);
 
-
         $content['message'] = $this->getMessage();
-
 
         if (null !== $this->getCode()) {
             $content['code'] = $this->getCode();
         }
 
-
         $content['status_code'] = $this->getStatusCode();
-
 
         if (null !== $this->getData() && $this->getErrors() !== $this->getData()) {
             $content['data'] = $this->getData();
@@ -84,40 +87,32 @@ trait Success
     }
 
     /**
-     * Success - OK
+     * @param mixed $data
      *
-     * Standard response for successful HTTP requests. The actual response will depend on the request method used. In a
-     * GET request, the response will contain an entity corresponding to the requested resource. In a POST request, the
-     * response will contain an entity describing or containing the result of the action.
-     *
-     * @param null $data
-     *
-     * @return JsonResponse
-     * @throws \Songshenzong\Api\Exception\ApiException
+     * @return $this
      */
-    public function ok($data = null): JsonResponse
+    public function setData($data) : self
     {
-        return $this->success(200, 'OK', $data);
+        $this->data = $data;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getData()
+    {
+        return $this->data;
     }
 
     /**
      * @param null $data
      *
      * @return JsonResponse
-     * @throws \Songshenzong\Api\Exception\ApiException
+     * @throws ApiException
      */
-    public function item($data = null): JsonResponse
-    {
-        return $this->ok($data);
-    }
-
-    /**
-     * @param null $data
-     *
-     * @return JsonResponse
-     * @throws \Songshenzong\Api\Exception\ApiException
-     */
-    public function collection($data = null): JsonResponse
+    public function collection($data = null) : JsonResponse
     {
         return $this->ok($data);
     }
@@ -126,9 +121,9 @@ trait Success
      * @param null $data
      *
      * @return JsonResponse
-     * @throws \Songshenzong\Api\Exception\ApiException
+     * @throws ApiException
      */
-    public function paginate($data = null): JsonResponse
+    public function paginate($data = null) : JsonResponse
     {
         return $this->ok($data);
     }
@@ -142,9 +137,9 @@ trait Success
      * @param null   $data
      *
      * @return JsonResponse
-     * @throws \Songshenzong\Api\Exception\ApiException
+     * @throws ApiException
      */
-    public function created($message = 'Created', $data = null): JsonResponse
+    public function created($message = 'Created', $data = null) : JsonResponse
     {
         return $this->success(201, $message, $data);
     }
@@ -159,9 +154,9 @@ trait Success
      * @param null   $data
      *
      * @return JsonResponse
-     * @throws \Songshenzong\Api\Exception\ApiException
+     * @throws ApiException
      */
-    public function accepted($message = 'Accepted', $data = null): JsonResponse
+    public function accepted($message = 'Accepted', $data = null) : JsonResponse
     {
         return $this->success(202, $message, $data);
     }
@@ -176,9 +171,9 @@ trait Success
      * @param null   $data
      *
      * @return JsonResponse
-     * @throws \Songshenzong\Api\Exception\ApiException
+     * @throws ApiException
      */
-    public function nonAuthoritativeInformation($message = 'Non-Authoritative Information', $data = null): JsonResponse
+    public function nonAuthoritativeInformation($message = 'Non-Authoritative Information', $data = null) : JsonResponse
     {
         return $this->success(203, $message, $data);
     }
@@ -192,13 +187,12 @@ trait Success
      * @param null   $data
      *
      * @return JsonResponse
-     * @throws \Songshenzong\Api\Exception\ApiException
+     * @throws ApiException
      */
-    public function noContent($message = 'No Content', $data = null): JsonResponse
+    public function noContent($message = 'No Content', $data = null) : JsonResponse
     {
         return $this->success(204, $message, $data);
     }
-
 
     /**
      * Success - Reset Content
@@ -210,9 +204,9 @@ trait Success
      * @param null   $data
      *
      * @return JsonResponse
-     * @throws \Songshenzong\Api\Exception\ApiException
+     * @throws ApiException
      */
-    public function resetContent($message = 'Reset Content', $data = null): JsonResponse
+    public function resetContent($message = 'Reset Content', $data = null) : JsonResponse
     {
         return $this->success(205, $message, $data);
     }

@@ -4,8 +4,10 @@ namespace Songshenzong\Api\Exception;
 
 use Exception;
 use ReflectionFunction;
+use ReflectionException;
 use Illuminate\Http\Response;
 use Illuminate\Contracts\Debug\ExceptionHandler;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpFoundation\Response as BaseResponse;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
@@ -56,18 +58,6 @@ class Handler implements ExceptionHandler
     }
 
     /**
-     * Report or log an exception.
-     *
-     * @param Exception $exception
-     *
-     * @return void
-     */
-    public function report(Exception $exception) : void
-    {
-        $this->parentHandler->report($exception);
-    }
-
-    /**
      * Render an exception into an HTTP response.
      *
      * @param            $request
@@ -80,30 +70,6 @@ class Handler implements ExceptionHandler
     public function render($request, Exception $exception)
     {
         return $this->handle($exception);
-    }
-
-    /**
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param Exception                                         $exception
-     */
-    public function renderForConsole($output, Exception $exception) : void
-    {
-        $this->parentHandler->renderForConsole($output, $exception);
-    }
-
-    /**
-     * Register a new exception handler.
-     *
-     * @param callable $callback
-     *
-     * @return void
-     * @throws \ReflectionException
-     */
-    public function register(callable $callback) : void
-    {
-        $hint = $this->handlerHint($callback);
-
-        $this->handlers[$hint] = $callback;
     }
 
     /**
@@ -134,11 +100,28 @@ class Handler implements ExceptionHandler
     }
 
     /**
+     * Get the exception status code.
+     *
+     * @param Exception $exception
+     * @param int       $defaultStatusCode
+     *
+     * @return int
+     */
+    protected function getExceptionStatusCode(Exception $exception, $defaultStatusCode = null) : int
+    {
+        if (null === $defaultStatusCode) {
+            $defaultStatusCode = 500;
+        }
+
+        return ($exception instanceof HttpExceptionInterface) ? $exception->getStatusCode() : $defaultStatusCode;
+    }
+
+    /**
      * Handle a generic error response if there is no handler available.
      *
      * @param Exception $exception
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      * @throws Exception
      *
      */
@@ -147,58 +130,6 @@ class Handler implements ExceptionHandler
         $replacements = $this->prepareReplacements($exception);
 
         return new Response($replacements, $this->getHttpStatusCode($exception), $this->getHeaders($exception));
-    }
-
-    /**
-     * Get the status code from the exception.
-     *
-     * @param Exception $exception
-     *
-     * @return int
-     */
-    protected function getStatusCode(Exception $exception) : int
-    {
-        if ($exception instanceof ApiException) {
-            return $exception->getStatusCode();
-        }
-
-        if ($exception instanceof HttpExceptionInterface && method_exists($exception, 'getStatusCode')) {
-            return $exception->getStatusCode();
-        }
-
-        return 500;
-    }
-
-    /**
-     * Get the Http status code from the exception.
-     *
-     * @param Exception $exception
-     *
-     * @return int
-     */
-    protected function getHttpStatusCode(Exception $exception) : int
-    {
-        if ($exception instanceof ApiException) {
-            return $exception->apiMessage->getHttpStatusCode();
-        }
-
-        if ($exception instanceof HttpExceptionInterface && method_exists($exception, 'getStatusCode')) {
-            return $exception->getStatusCode();
-        }
-
-        return 500;
-    }
-
-    /**
-     * Get the headers from the exception.
-     *
-     * @param Exception $exception
-     *
-     * @return array
-     */
-    protected function getHeaders(Exception $exception) : array
-    {
-        return $exception instanceof ApiException ? $exception->getHeaders() : [];
     }
 
     /**
@@ -246,32 +177,23 @@ class Handler implements ExceptionHandler
     }
 
     /**
-     * Set user defined replacements.
-     *
-     * @param array $replacements
-     *
-     * @return void
-     */
-    public function setReplacements(array $replacements) : void
-    {
-        $this->replacements = $replacements;
-    }
-
-    /**
-     * Get the exception status code.
+     * Get the status code from the exception.
      *
      * @param Exception $exception
-     * @param int       $defaultStatusCode
      *
      * @return int
      */
-    protected function getExceptionStatusCode(Exception $exception, $defaultStatusCode = null) : int
+    protected function getStatusCode(Exception $exception) : int
     {
-        if (null === $defaultStatusCode) {
-            $defaultStatusCode = 500;
+        if ($exception instanceof ApiException) {
+            return $exception->getStatusCode();
         }
 
-        return ($exception instanceof HttpExceptionInterface) ? $exception->getStatusCode() : $defaultStatusCode;
+        if ($exception instanceof HttpExceptionInterface && method_exists($exception, 'getStatusCode')) {
+            return $exception->getStatusCode();
+        }
+
+        return 500;
     }
 
     /**
@@ -285,12 +207,92 @@ class Handler implements ExceptionHandler
     }
 
     /**
+     * Get the Http status code from the exception.
+     *
+     * @param Exception $exception
+     *
+     * @return int
+     */
+    protected function getHttpStatusCode(Exception $exception) : int
+    {
+        if ($exception instanceof ApiException) {
+            return $exception->apiMessage->getHttpStatusCode();
+        }
+
+        if ($exception instanceof HttpExceptionInterface && method_exists($exception, 'getStatusCode')) {
+            return $exception->getStatusCode();
+        }
+
+        return 500;
+    }
+
+    /**
+     * Get the headers from the exception.
+     *
+     * @param Exception $exception
+     *
+     * @return array
+     */
+    protected function getHeaders(Exception $exception) : array
+    {
+        return $exception instanceof ApiException ? $exception->getHeaders() : [];
+    }
+
+    /**
+     * @param OutputInterface $output
+     * @param Exception       $exception
+     */
+    public function renderForConsole($output, Exception $exception) : void
+    {
+        $this->parentHandler->renderForConsole($output, $exception);
+    }
+
+    /**
+     * Report or log an exception.
+     *
+     * @param Exception $exception
+     *
+     * @return void
+     */
+    public function report(Exception $exception) : void
+    {
+        $this->parentHandler->report($exception);
+    }
+
+    /**
+     * Determine if the exception should be reported.
+     *
+     * @param Exception $e
+     *
+     * @return bool
+     */
+    public function shouldReport(Exception $e) : bool
+    {
+        return true;
+    }
+
+    /**
+     * Register a new exception handler.
+     *
+     * @param callable $callback
+     *
+     * @return void
+     * @throws ReflectionException
+     */
+    public function register(callable $callback) : void
+    {
+        $hint = $this->handlerHint($callback);
+
+        $this->handlers[$hint] = $callback;
+    }
+
+    /**
      * Get the hint for an exception handler.
      *
      * @param callable $callback
      *
      * @return string
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     protected function handlerHint(callable $callback) : string
     {
@@ -299,6 +301,18 @@ class Handler implements ExceptionHandler
         $exception = $reflection->getParameters()[0];
 
         return $exception->getClass()->getName();
+    }
+
+    /**
+     * Set user defined replacements.
+     *
+     * @param array $replacements
+     *
+     * @return void
+     */
+    public function setReplacements(array $replacements) : void
+    {
+        $this->replacements = $replacements;
     }
 
     /**
@@ -321,17 +335,5 @@ class Handler implements ExceptionHandler
     public function setDebug($debug) : void
     {
         $this->debug = $debug;
-    }
-
-    /**
-     * Determine if the exception should be reported.
-     *
-     * @param Exception $e
-     *
-     * @return bool
-     */
-    public function shouldReport(Exception $e) : bool
-    {
-        return true;
     }
 }
