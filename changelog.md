@@ -2,15 +2,7 @@
 
 ---
 
-## Version 3.0.3 (2019-09-05)
-
-- Improved design.
-
-## Version 3.0.2 (2019-09-02)
-
-- Improved runningInDebugMode
-
-## Version 3.0.1 (2019-09-02)
+## Version 3.0.0 (2019-09-02)
 
 - Improved Handler
 
